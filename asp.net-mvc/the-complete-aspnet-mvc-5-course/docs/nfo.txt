@@ -1,0 +1,545 @@
+The Complete ASP.NET MVC 5 Course
+
+
+Learn to build fast and secure web applications with ASP.NET MVC 5 - The most popular course with 40,000+ students!
+BESTSELLER
+4.4 (17,065 ratings)
+57,456 students enrolled
+Created by Mosh Hamedani
+Last updated 4/2018
+
+------------------------------------------------------------------------------------------------------------
+-- What you'll learn
+------------------------------------------------------------------------------------------------------------
+
+Understand the MVC architectural pattern
+Implement CRUD operations
+Build forms with server-side and client-side validation
+Build RESTful services using ASP.NET Web API
+Use powerful jQuery plug-ins
+Implement authentication and authorization using ASP.NET Web API
+Use Entity Framework to query or update data
+Understand and apply security best practices
+Build and deploy applications
+Create and customize build configurations
+Manage client / server dependencies
+Test APIs using PostMan
+Use AutoMapper
+
+------------------------------------------------------------------------------------------------------------
+-- Course content
+------------------------------------------------------------------------------------------------------------
+139 lectures
+07:31:37
+
+Getting Started
+26:43
+Introduction 
+Preview
+02:48
+MVC Architectural Pattern 
+Preview
+02:50
+Setting Up the Development Environment 
+Preview
+02:07
+Your First ASP.NET MVC App 
+Preview
+06:55
+MVC in Action 
+Preview
+06:44
+Adding a Theme 
+Preview
+02:50
+Quiz
+6 questions
+Course Layout 
+01:55
+Asking Questions
+00:34
+–
+ASP.NET MVC Fundamentals
+40:50
+Introduction 
+00:22
+Action Results 
+04:58
+Action Parameters 
+05:54
+Convention-based Routing 
+05:16
+Attribute Routing 
+03:28
+Passing Data to Views 
+04:03
+View Models 
+03:48
+Razor Syntax 
+04:19
+Partial Views 
+04:15
+Cheat Sheet 
+00:01
+Exercise 
+02:17
+Solution 
+01:45
+Summary 
+00:24
+–
+Working with Data
+36:37
+Introduction 
+00:31
+Entity Framework 
+01:35
+Database-first vs Code-first 
+03:59
+Code-first Migrations 
+05:21
+Changing the Model 
+05:36
+Seeding the Database 
+04:18
+Overriding Conventions 
+02:38
+Querying Objects 
+04:28
+Eager Loading 
+02:38
+Shortcut to Package Manager Console 
+01:00
+Cheat Sheet 
+00:02
+Exercise 1: Add membership type to list of customers 
+01:38
+Exercise 2: Add birthdate to customer 
+00:56
+Exercise 3: Display the list of movies and their details 
+01:29
+Summary 
+00:28
+–
+Building Forms
+43:21
+Introduction 
+00:16
+The Markup 
+07:39
+Labels 
+02:56
+Drop-down Lists 
+07:33
+Model Binding 
+03:48
+Saving Data 
+01:26
+Edit Form 
+05:43
+Updating Data 
+07:23
+Cheat Sheet 
+00:01
+Exercise 
+02:00
+Troubleshooting Entity Validation Errors 
+04:06
+Summary 
+00:30
+–
+Implementing Validation
+41:07
+Introduction 
+00:24
+Adding Validation 
+03:27
+Styling Validation Errors 
+03:25
+Data Annotations 
+01:05
+Custom Validation 
+06:24
+Refactoring Magic Numbers 
+03:28
+Validation Summary 
+04:05
+Client-side Validation 
+05:35
+Anti-forgery Tokens 
+04:51
+Cheat Sheet 
+00:01
+Exercise 
+01:41
+Code Review 
+06:11
+Summary 
+00:30
+–
+Building RESTful Services with ASP.NET Web API
+38:59
+Introduction 
+00:20
+What is a Web API? 
+03:44
+RESTful Convention 
+01:47
+Building an API 
+09:21
+Testing an API 
+03:58
+Data Transfer Objects 
+03:57
+Auto Mapper 
+07:31
+Using Camel Notation 
+02:09
+IHttpActionResult 
+04:51
+Cheat Sheet 
+00:01
+Exercise 
+00:44
+Summary 
+00:36
+–
+Client-side Development
+36:03
+Introduction 
+00:33
+Calling an API Using jQuery 
+06:47
+Bootbox Plug-in 
+03:36
+Optimizing jQuery Code 
+01:29
+DataTables Plug-in 
+05:32
+DataTables with Ajax Source 
+06:45
+Returning Hierarchical Data 
+03:37
+DataTables: Removing Records 
+02:09
+DataTables: Discussion Points 
+02:08
+Single Page Applications (SPAs) 
+02:31
+Cheat Sheet 
+00:01
+Exercise 
+00:22
+Summary 
+00:33
+–
+Authentication and Authorization
+45:23
+Introduction 
+00:21
+The Problem 
+00:58
+Authentication Options 
+02:33
+ASP.NET Identity 
+04:13
+Restricting Access 
+03:14
+Seeding Users and Roles 
+08:44
+Working with Roles 
+06:08
+Adding Profile Data 
+04:22
+OAuth 
+03:22
+Social Logins 
+09:16
+Cheat Sheet 
+00:01
+Exercise 
+01:31
+Summary 
+00:40
+–
+Performance Optimization
+38:54
+Introduction 
+00:20
+Overview 
+04:50
+Data Tier 
+04:45
+Glimpse 
+06:33
+Output Cache 
+04:53
+Data Cache 
+04:16
+Async 
+03:03
+Release Builds 
+00:38
+Disabling Session 
+01:52
+Client Tier 
+04:52
+Chrome Developer Tools Tip 
+01:15
+Cheat Sheet 
+00:01
+Summary 
+01:36
+–
+Building a Feature End-to-End Systematically
+01:00:03
+Introduction 
+01:12
+Understanding the Problem 
+04:35
+Domain Modelling 
+02:41
+Building the Simplest API 
+01:29
+Adding the Details 
+04:54
+Edge Cases 
+05:41
+Building the Front-end 
+06:09
+Adding Auto-completion 
+08:51
+Updating the DOM 
+03:08
+Improving the Look and Feel 
+03:45
+Filtering Records 
+02:25
+Submitting the Form 
+03:05
+Displaying Toast Notifications 
+01:24
+Implementing Client-side Validation
+04:54
+Code Review 
+03:54
+Summary 
+01:56
++
+Deployment
+11 lectures
+43:38
+Introduction 
+00:23
+Deploying the Application 
+04:42
+Deploying the Database 
+02:31
+Build Configurations 
+04:00
+Application Settings 
+05:25
+Securing Configuration Settings 
+07:04
+Custom Error Pages 
+09:10
+Logging Unhandled Exceptions 
+04:13
+Final Touch 
+03:37
+What's Next? 
+02:10
+Coupons to My Other Courses
+Preview
+00:23
+
+------------------------------------------------------------------------------------------------------------
+-- Description
+------------------------------------------------------------------------------------------------------------
+With over 40,000 happy students and 12,000+ positive reviews, this course is Udemy's most popular course for learning ASP.NET MVC! 
+
+
+
+ASP.NET MVC is a server-side web framework for building dynamic, data-driven web applications. Since its first release in 2009, it has gained a lot of popularity amongst developers using Microsoft technologies. If you want to get employed as a web developer at a company that utilizes Microsoft technologies, you need to master ASP.NET MVC.
+
+
+
+In this course, Mosh, author of several best-selling courses on Udemy, takes you on a fun, hands-on and pragmatic journey to master ASP.NET MVC 5. 
+
+
+
+In 7.5 hours of high-quality content (equivalent to a 500-page book), you'll learn how to build and deploy fast and secure web applications with ASP.NET MVC 5. 
+
+By the end of watching this course, you'll be able to: 
+
+Implement CRUD operations
+Build forms with validation 
+Build RESTful services using ASP.NET Web API
+Use Entity Framework code-first workflow to build a model 
+Implement security, authentication and authorization using ASP.NET Identity
+Use powerful jQuery plugins
+Optimize application's performance  
+Build and deploy your applications 
+And much more...
+
+
+
+
+You'll start building a real-world video rental application within minutes. Every section includes a few bite-sized videos, and concludes with one or more coding exercises to help you master what you learn in that section. Finally, in the last section, you'll learn how to 
+
+Deploy the application
+Deploy the database 
+Create custom build configurations (development, testing, staging, etc)
+Store application settings in web.config and override them for different environments
+Secure application settings and connection strings
+And more...
+
+
+Whether you're new to ASP.NET MVC or have some experience but are looking for a course to fill in the gaps, you'll love this course. On top of all the core features of ASP.NET MVC, Mosh teaches you a systematic way to build a feature end-to-end. And more importantly, he includes you as part of building a sophisticated feature end-to-end. So, he builds some parts and delegates the other parts to you. 
+
+
+
+If you've taken any of Mosh's courses before, you know what you get. He is very passionate, clear and concise in his teaching. Every section and every lecture has been perfectly thought through to lead you on a step-by-step journey from zero to hero with no fluff whatsoever. If you're looking for 10+ hours of wasted time on the content you don't need and a rambling instructor, there are other courses you can enrol in.
+
+
+
+PREREQUISITES
+
+In order to take this course, you should have at least 3 months experience programming in C#. Also, any familiarity with Entity Framework will be helpful but not required. 
+
+If you need to strengthen your C# skills or learn Entity Framework in depth, you can watch Mosh's related courses:
+
+C# Basics for Beginners (essential knowledge)
+C# Intermediate: Classes, interfaces and Object-oriented (essential knowledge)
+C# Advanced (essential knowledge)
+Entity Framework in Depth (nice to have)
+
+
+So, if you watch all the lectures and do all the exercises, by the end of this course, you'll have the necessary skills to build real-world applications with ASP.NET MVC 5, or all your money back (within 30 days of taking the course).
+
+
+So, if you're looking for an ASP.NET MVC course with 
+
+A passionate coder and instructor who knows his craft
+Perfect structure 
+Balanced mix of theory and practice
+Clear, concise and bite-sized videos 
+Lots of real-world examples and coding exercises
+Discussion of best practices 
+World-class audio / video production
+
+
+Don't look further. Enroll in the course now and learn to build and deploy fast and secure web applications with ASP.NET MVC 5.
+
+
+
+FREQUENTLY ASKED QUESTIONS
+
+
+
+1- Does this course cover ASP.NET Core 1.0? 
+
+No! Once you master ASP.NET MVC 5, you can quickly get up to speed with ASP.NET Core. Mosh has a follow up course on Udemy called "Build a Real-world App with ASP.NET Core and Angular". In this course, you'll get up to speed with ASP.NET Core in the context of building a real app from A to Z. 
+
+
+
+2- Why should I pay for this course when there are lots of free tutorials available?
+
+Free tutorials and YouTube videos are free for a reason. They introduce you to a few concepts here and there, but soon you'll find yourself jumping from one tutorial to another to fill the missing gaps. By taking a perfectly-structured course, you'll be confident that you're in good hands, right from the beginning all the way through to the very end. You pay for saving your precious time: the time that you can spend on the things you love. 
+
+Plus, many of these free tutorials, including tutorials published by Microsoft on the official ASP.NET website, teach you poor practices. Throughout this course, Mosh points out some of these poor practices and explains in technical terms why you should avoid them. 
+
+
+
+WHAT OTHER STUDENTS WHO HAVE TAKEN THIS COURSE SAY
+
+
+
+"The is course is very much worth your time and money. Mosh did an outstanding job explaining each aspect of MVC 5 as well as introducing and using other technologies such as Web API. I've been working with MVC since it's release but felt I needed a refresher course and this was excellent. I would also recommend it to developers just getting into MVC as well because Mosh does a great job of explaining the concepts behind what you're learning. I really enjoyed it and highly recommend it." -Scott Smith
+
+
+
+"Course teaches exactly what the title promises to teach. Quality of production, content, and lectures are excellent! Explanations of the how and why are also a nice touch!" -Pierre Gadea
+
+
+
+"Mosh never disappoints. Clear explanations. Exercises that will test you knowledge. Great instruction as always. I also love that he includes shortcuts and best practices. Worth the time and money!" -Lara Caves
+
+
+
+"Amazing course from Mosh! After I finished the C# series, I moved directly to this course and learn so much and even developed a successful web app in my internship! Thanks Mosh for a great course!!" -Menny Atia
+
+
+
+"I've been into web development for more than 15 years, but until recently I was totally new to ASP.NET MVC. Before taking this course I tried other courses, but these were either too complicated for a beginner or didn't cover all the necessery informations needed to get started. This is an excellent course to begin with ASP.NET MVC that covers everything you need to create a real world project. The prerequisites are a good understaning of C# (OOP, Lambdas, LINQ...) , Javascript and JQuery" -Marko Pavic
+
+
+
+"Professionally structured, carefully planned course. Passionate, engaging instructor with great communication skills. Best course I've ever had on Udemy so far. I would love to take the follow-up course on architecture and testing mentioned in the final video." -Istvan Voros
+
+
+
+"One of the best courses i have ever taken,Recommend for every C# developer through his all the courses in Udemy. They are eye-openers and it will change the way you think about Programming.After taking his courses ,with in a span of one month i have a cracked a interview in one of the Big 4 with 70% hike." -Rama Reddy
+
+
+
+
+
+
+
+30-DAY FULL MONEY-BACK GUARANTEE
+
+This course comes with a 30-day full money-back guarantee. Take the course, watch every lecture, and do the exercises, and if you feel like this course is not for you, ask for a full refund within 30 days. All your money back, no questions asked. 
+
+
+
+
+
+ABOUT YOUR INSTRUCTOR 
+
+Mosh (Moshfegh) Hamedani is a software engineer with 17 years of professional experience. He is the author of several best selling Udemy courses with more than 120,000 students in 192 countries. He has a Master of Science in Network Systems and Bachelor of Science in Software Engineering. His students describe him as passionate, pragmatic and motivational in his teaching.
+
+
+
+Do you want to learn how to build and deploy fast and secure web application with ASP.NET MVC 5?
+
+If you enroll in the course now, you'll start building your first ASP.NET MVC app within a few minutes. Join the other 40,000+ students who have taken this course now and get started.
+
+Who this course is for:
+Developers with no knowledge of ASP.NET MVC 5 who want to build web apps with this framework
+Developers with some experience in ASP.NET MVC 5 who are looking for a comprehensive course to fill the gaps
+
+------------------------------------------------------------------------------------------------------------
+-- About the instructor
+------------------------------------------------------------------------------------------------------------
+Mosh Hamedani
+
+4.5	Instructor Rating
+116,967	Reviews
+284,120	Students
+20	Courses
+
+Passionate Software Engineer and Best-selling Author
+Mosh (Moshfegh) Hamedani is a passionate and creative software engineer with a strong focus on pragmatism and simplicity. He started programming at the age of seven on a Commodore 64. Later, during his high school years, he started learning C and C++ . In 2002, along with the first release of .NET, he shifted his focus to C#. Since then, he has been involved in the design and implementation of numerous software projects, including modern web applications, mobile apps, desktop applications and frameworks.
+
+
+
+He started teaching on Udemy in 2014 and currently he has over 100,000 students in 182 countries. He's the author of several best-selling courses on Udemy and #1 ranking course on Pluralsight (Become a Full-stack .NET Developer). 
+
+
+
+Mosh has a Master of Science in Network Systems and a Bachelor of Science in Software Engineering. He is also a Microsoft Certified Application Developer, Technology Specialist (Web Applications) and Professional.
+
+
+
+Outside the software world, Mosh is a photographer, a pianist and a passionate Latin dancer.
+
+------------------------------------------------------------------------------------------------------------
+-- 
+------------------------------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------------------------------
+-- 
+------------------------------------------------------------------------------------------------------------
+
