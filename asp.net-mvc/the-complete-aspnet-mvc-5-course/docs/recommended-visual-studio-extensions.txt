@@ -1,0 +1,87 @@
+----------------------------------------------------------------------------
+-- Productivity Power Tools 2017/2019
+-- Microsoft DevLabs | 387,539 installs | 645,158 downloads | (111) | Free
+-- Installs the individual extensions of Productivity Power Tools 2017/2019
+----------------------------------------------------------------------------
+
+https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerPack2017
+
+This is an extension bundle installer that will install each of the individual components of Productivity Power Tools for Visual Studio 2017 and 2019
+
+It runs in the background and will detect any uninstalled extensions, then download and install them.
+
+The following components will be installed:
+
+    Align Assignments
+    Copy As Html
+    Ctrl+Click GoTo Definition (2017 only)*
+    Custom Document Well (2017 only)
+    Double-Click Maximize
+    Editor Guidelines (2017 only)**
+    Fix Mixed Tabs
+    Match Margin
+    Middle-Click Scroll
+    Peek Help
+    Power Commands for Visual Studio
+    Quick Launch Tasks
+    Shrink Empty Lines
+    Solution Error Visualizer
+    Time Stamp Margin
+
+*In-product support for version 15.7 onwards. **Deprecated in VS2017. Please use the supported version here.
+
+----------------------------------------------------------------------------
+-- Web Essentials 2017
+-- Mads Kristensen | 323,414 installs | 505,731 downloads | (52) | Free 
+-- The easiest way to set up Visual Studio for the ultimate web development experience. 
+-- Requires Visual Studio 2017 Update 8 or newer
+----------------------------------------------------------------------------
+
+https://marketplace.visualstudio.com/items?itemName=MadsKristensen.WebExtensionPack2017
+
+The easiest way to set up Visual Studio for the ultimate web development experience. Requires Visual Studio 2017 Update 8 or newer.
+
+See the change log for changes and road map.
+Extensions
+
+After installing the Web Essentials and restarting Visual Studio, the following extensions will be installed:
+
+    Add New File
+    Browser Reload on Save
+    Browser Sync
+    Bundler & Minifier
+    CSS Tools
+    Editor Enhancements
+    File Icons
+    File Nesting
+    HTML Tools
+    Image Sprites
+    Image Optimizer
+    Markdown Editor
+    Open Command Line
+    Package Installer
+    Package Security Alerts
+    Project File Tools
+    Razor Language Service
+    Syntax Highlighting Pack
+    Vue.js Pack 2017
+    Web Accessibility Checker
+    Web Compiler
+    ZenCoding
+
+If you already have one or more of these extensions installed, Web Essentials will not re-install them. It will simply just skip them.
+Honorable mentions
+
+These extensions are not included, but they are likely to be of interest.
+
+    .ignore
+    NPM Task Runner
+    Client-Side Library Installer
+    Open in VS Code
+    Text Generator
+    Trailing Whitespace Visualizer
+    Browser Link Inspector
+
+Suggest new extensions
+
+If you know of any good extensions that you think would benefit web developers, then log an issue with the suggestion on the GitHub issue tracker.

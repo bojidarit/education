@@ -24,6 +24,7 @@ namespace Vidly
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 					  "~/Content/bootstrap.css",
+					  //"~/Content/bootstrap-lumen.css",	// this brakes the top menue... maybe we need to setup more file?!?!
 					  "~/Content/site.css"));
 		}
 	}
