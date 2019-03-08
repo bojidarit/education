@@ -1,5 +1,13 @@
 ﻿@{
-	IEnumerable<Tuple<string, string, string>> menuItems;
+	IEnumerable<Tuple<string, string, string>> menuItems =
+		new List<Tuple<string, string, string>>
+		{
+			//new Tuple<string, string, string>("Home", "Index", "Home"),
+			//new Tuple<string, string, string>("About", "About", "Home"),
+			//new Tuple<string, string, string>("Contact", "Contact", "Home"),
+			new Tuple<string, string, string>("Customers", "Index", "Customer"),
+			new Tuple<string, string, string>("Movies", "Index", "Movie")
+		};
 }
 
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -14,9 +22,10 @@
 		</div>
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-				<li>@Html.ActionLink("Home", "Index", "Home")</li>
-				<li>@Html.ActionLink("About", "About", "Home")</li>
-				<li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+				@foreach (var item in menuItems)
+				{
+					<li>@Html.ActionLink(item.Item1, item.Item2, item.Item3)</li>
+				}
 			</ul>
 			@Html.Partial("_LoginPartial")
 		</div>
