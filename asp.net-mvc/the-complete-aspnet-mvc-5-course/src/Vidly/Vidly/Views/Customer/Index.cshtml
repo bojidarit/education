@@ -13,15 +13,21 @@
 }
 else
 {
-	<table>
-		<thead><srong>Customer</srong></thead>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>
+					Customer
+				</th>
+			</tr>
+		</thead>
 		<tbody>
 			@foreach (var item in Model)
 			{
 				<tr>
 					<td>
-						@*@Html.ActionLink(item.Name, "Details", "Customer", htmlAttributes: new { id = item.Id })*@
-						<a href=@Url.Action("Details", "Customer", new { id = item.Id })>@item.Name</a>
+						@Html.ActionLink(item.Name, "Details", "Customer", new { id = item.Id }, null)
+						@*<a href=@Url.Action("Details", "Customer", new { id = item.Id })>@item.Name</a>*@
 					</td>
 				</tr>
 			}

@@ -6,19 +6,19 @@
 
 	public class CustomerController : Controller
     {
-		private static IEnumerable<Models.Customer> customers = //new List<Models.Customer>();
+		private static IEnumerable<Models.Customer> _customers = //new List<Models.Customer>();
 			new List<Models.Customer>(Enumerable.Range(1, 5).Select(i => new Models.Customer(i, $"Customer {i}")));
 
         // GET: Customer
         public ActionResult Index()
         {
-			return View(customers);
+			return View(_customers);
         }
 
-		// GET: Customet/Details/{id}
+		// GET: Customer/Details/{id}
 		public ActionResult Details(int id)
 		{
-			Models.Customer customer = customers.FirstOrDefault(c => c.Id == id);
+			Models.Customer customer = _customers.FirstOrDefault(c => c.Id == id);
 
 			if (customer != null)
 			{

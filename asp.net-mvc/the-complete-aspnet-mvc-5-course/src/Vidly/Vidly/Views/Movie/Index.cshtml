@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Vidly.Models.Movie>
+
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	int index = 1;
+}
+
+<h2>Movies</h2>
+
+@if (!Model.Any())
+{
+	<p>We do not have any movies yet.</p>
+}
+else
+{
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>
+					#
+				</th>
+				<th>
+					Movie
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@(index++)
+					</td>
+					<td>
+						@Html.ActionLink(item.Name, "Details", "Movie", new { id = item.Id }, null)
+					</td>
+				</tr>
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td>
+					Total
+				</td>
+				<td>
+					@Model.Count()
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+}
+

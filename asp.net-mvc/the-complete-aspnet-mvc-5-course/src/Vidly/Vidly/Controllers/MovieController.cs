@@ -2,14 +2,43 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Web.Mvc;
 	using Vidly.Models;
 	using Vidly.ViewModels;
 
 	public class MovieController : Controller
 	{
+		private static IEnumerable<Movie> _movies = new List<Movie>()
+		{
+			new Movie(1, "IT Crowd"),
+			new Movie(2, "Shrek"),
+			new Movie(3, "The Shawshank Redemption")
+		};
+
 		// GET: Movie/Index
-		public ActionResult Index(int? pageIndex, string sortBy)
+		public ActionResult Index()
+		{
+			return View(_movies);
+		}
+
+		// GET: Movie/Details
+		public ActionResult Details(int id)
+		{
+			Movie movie = _movies.Where(m => m.Id == id).FirstOrDefault();
+
+			if (movie != null)
+			{
+				return View(movie);
+			}
+			else
+			{
+				return HttpNotFound($"There is no movie with Id = {id}");
+			}
+		}
+
+		// GET: Movie/PagedIndex
+		public ActionResult PagedIndex(int? pageIndex, string sortBy)
 		{
 			if (!pageIndex.HasValue)
 			{
