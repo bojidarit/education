@@ -1,24 +1,37 @@
 ﻿namespace Vidly.Controllers
 {
-	using System.Collections.Generic;
+	using System.Data.Entity;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Vidly.Models;
 
 	public class CustomerController : Controller
     {
-		private static IEnumerable<Models.Customer> _customers = //new List<Models.Customer>();
-			new List<Models.Customer>(Enumerable.Range(1, 5).Select(i => new Models.Customer(i, $"Customer {i}")));
+		private ApplicationDbContext _context;
 
-        // GET: Customer
-        public ActionResult Index()
+		public CustomerController()
+		{
+			_context = new ApplicationDbContext();
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			_context.Dispose();
+		}
+
+		// GET: Customer
+		public ActionResult Index()
         {
-			return View(_customers);
+			var customers = _context.Customers.Include(c => c.MembershipType);
+			return View(customers);
         }
 
 		// GET: Customer/Details/{id}
 		public ActionResult Details(int id)
 		{
-			Models.Customer customer = _customers.FirstOrDefault(c => c.Id == id);
+			Customer customer = _context.Customers
+				.Include(c => c.MembershipType)
+				.SingleOrDefault(c => c.Id == id);
 
 			if (customer != null)
 			{

@@ -1,7 +1,7 @@
 ﻿namespace Vidly.Controllers
 {
-	using System;
 	using System.Collections.Generic;
+	using System.Data.Entity;
 	using System.Linq;
 	using System.Web.Mvc;
 	using Vidly.Models;
@@ -9,23 +9,31 @@
 
 	public class MovieController : Controller
 	{
-		private static IEnumerable<Movie> _movies = new List<Movie>()
+		private ApplicationDbContext _context;
+
+		public MovieController()
 		{
-			new Movie(1, "IT Crowd"),
-			new Movie(2, "Shrek"),
-			new Movie(3, "The Shawshank Redemption")
-		};
+			_context = new ApplicationDbContext();
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			_context.Dispose();
+		}
 
 		// GET: Movie/Index
 		public ActionResult Index()
 		{
-			return View(_movies);
+			var movies = _context.Movies.Include(m => m.Genre);
+			return View(movies);
 		}
 
 		// GET: Movie/Details
 		public ActionResult Details(int id)
 		{
-			Movie movie = _movies.Where(m => m.Id == id).FirstOrDefault();
+			Movie movie = _context.Movies
+				.Include(m => m.Genre)
+				.SingleOrDefault(m => m.Id == id);
 
 			if (movie != null)
 			{
