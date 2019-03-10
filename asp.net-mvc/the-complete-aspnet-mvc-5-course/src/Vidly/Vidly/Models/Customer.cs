@@ -30,8 +30,17 @@
 
 		public MembershipType MembershipType { get; set; }
 
+		[Display(Name = "Membership Type")]
 		public byte MembershipTypeId { get; set; }
 
+		[Display(Name = "Date of Birth")]
 		public DateTime? BirthDate { get; set; }
+
+		#region Methods
+
+		public static Customer GetNewCustomer() =>
+			new Customer(-1, string.Empty);
+
+		#endregion // Methods
 	}
 }
