@@ -8,7 +8,7 @@
 	using ViewModels;
 
 	public class CustomerController : Controller
-    {
+	{
 		private ApplicationDbContext _context;
 
 		public CustomerController()
@@ -23,15 +23,15 @@
 
 		// GET: Customer
 		public ActionResult Index()
-        {
+		{
 			var customers = _context.Customers.Include(c => c.MembershipType);
 			return View(customers);
-        }
+		}
 
 		// Get: Customer/New
 		public ActionResult New()
 		{
-			NewCustomerViewModel viewModel = 
+			NewCustomerViewModel viewModel =
 				new NewCustomerViewModel(_context.MembershipTypes, Customer.GetNewCustomer());
 
 			return View(viewModel);
@@ -62,5 +62,5 @@
 				return HttpNotFound($"There is no customer with Id = {id}.");
 			}
 		}
-    }
+	}
 }

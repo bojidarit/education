@@ -2,16 +2,26 @@
 {
 	using Models;
 	using System.Collections.Generic;
+	using System.Linq;
+	using System.Web.Mvc;
 
 	public class NewCustomerViewModel
 	{
 		public NewCustomerViewModel(IEnumerable<MembershipType> membershipTypes, Customer customer)
 		{
-			this.MembershipTypes = membershipTypes;
+			this.MembershipTypesList =
+				membershipTypes.Select(i => new SelectListItem()
+				{
+					Text = i.Name,
+					Value = i.Id.ToString(),
+					Selected = false
+				});
+
 			this.Customer = customer;
 		}
 
-		public IEnumerable<MembershipType> MembershipTypes { get; private set; }
-		public Customer Customer { get; set; }
+		public IEnumerable<SelectListItem> MembershipTypesList { get; private set; }
+
+		public Customer Customer { get; private set; }
 	}
 }
