@@ -50,7 +50,6 @@
 				// TODO: What to do when model is not valid...
 				//return CreateNew(customer);
 				return Content($"Customer model is NOT valid.{System.Environment.NewLine}{customer}");
-
 			}
 
 			if (customer.Id <= 0)

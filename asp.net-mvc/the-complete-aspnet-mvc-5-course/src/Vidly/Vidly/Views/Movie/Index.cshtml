@@ -36,7 +36,7 @@ else
 						@(index++)
 					</td>
 					<td>
-						@Html.ActionLink(item.Name, "Details", "Movie", new { id = item.Id }, null)
+						@Html.ActionLink(item.Name, "Edit", "Movie", new { id = item.Id }, null)
 					</td>
 					<td>
 						@item.Genre.Name

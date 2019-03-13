@@ -5,7 +5,7 @@
 
 	public class Customer
 	{
-		#region Ctors
+		#region Constructors
 
 		public Customer()
 		{
@@ -18,7 +18,7 @@
 			this.Name = name;
 		}
 
-		#endregion //Ctors
+		#endregion //Constructors
 
 		public int Id { get; set; }
 
