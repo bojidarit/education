@@ -28,22 +28,36 @@
 			return View(customers);
 		}
 
+		private ActionResult CreateNew(Customer customer)
+		{
+			CustomerFormViewModel viewModel =
+				new CustomerFormViewModel(_context.MembershipTypes, customer, "New");
+
+			return View("Manage", viewModel);
+		}
+
 		// Get: Customer/New
 		public ActionResult New()
 		{
-			CustomerFormViewModel viewModel =
-				new CustomerFormViewModel(_context.MembershipTypes, Customer.GetNewCustomer(), "New");
-
-			return View("Manage", viewModel);
+			return CreateNew(Customer.GetNewCustomer());
 		}
 
 		[HttpPost]
 		public async Task<ActionResult> Create(Customer customer)
 		{
-			_context.Customers.Add(customer);
-			await _context.SaveChangesAsync();
+			if (ModelState.IsValid)
+			{
+				_context.Customers.Add(customer);
+				await _context.SaveChangesAsync();
 
-			return RedirectToAction("Index", "Customer");
+				return RedirectToAction("Index", "Customer");
+			}
+			else
+			{
+				// TODO: What to do when model is not valid...
+				//return CreateNew(customer);
+				return Content($"Customer model is NOT valid.{System.Environment.NewLine}{customer}");
+			}
 		}
 
 		// GET: Customer/Details/{id}

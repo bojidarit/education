@@ -41,6 +41,11 @@
 		public static Customer GetNewCustomer() =>
 			new Customer(-1, string.Empty);
 
+		public override string ToString() =>
+			$"{this.GetType().Name} {{ Name = '{this.Name}', " +
+			$"BirthDate = {this.BirthDate?.ToShortDateString() ?? "<NULL>"}, " +
+			$"MembershipTypeId = {this.MembershipTypeId} }} ";
+
 		#endregion // Methods
 	}
 }
