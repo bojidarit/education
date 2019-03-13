@@ -47,10 +47,17 @@
 		[Display(Name = "Gender")]
 		public int GenreId { get; set; }
 
+		#region Methods
+
+		public static Movie CreateMovie() =>
+			new Movie(-1, string.Empty);
+
 		public override string ToString() =>
 			$"{this.GetType().Name} {{ Name = '{this.Name}', " +
 			$"ReleaseDate = {this.ReleaseDate.ToShortDateString()}, " +
 			$"GenreId = {this.GenreId}, " +
 			$"NumberInStock = {this.NumberInStock} }}";
+
+		#endregion //Methods
 	}
 }

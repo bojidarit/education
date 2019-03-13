@@ -133,5 +133,12 @@
 			await _context.SaveChangesAsync();
 			return RedirectToAction("Index", "Movie");
 		}
+
+		// GET: Movie/New
+		public ActionResult New()
+		{
+			var viewModel = new ManageMovieViewModel(_context.Genres, Movie.CreateMovie(), "New");
+			return View("Manage", viewModel);
+		}
 	}
 }
