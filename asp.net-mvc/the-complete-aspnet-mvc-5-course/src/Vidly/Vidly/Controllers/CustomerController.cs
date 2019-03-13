@@ -43,29 +43,41 @@
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Create(Customer customer)
+		public async Task<ActionResult> Save(Customer customer)
 		{
-			if (ModelState.IsValid)
-			{
-				_context.Customers.Add(customer);
-				await _context.SaveChangesAsync();
-
-				return RedirectToAction("Index", "Customer");
-			}
-			else
+			if (!ModelState.IsValid)
 			{
 				// TODO: What to do when model is not valid...
 				//return CreateNew(customer);
 				return Content($"Customer model is NOT valid.{System.Environment.NewLine}{customer}");
+
 			}
+
+			if (customer.Id <= 0)
+			{
+				_context.Customers.Add(customer);
+			}
+			else
+			{
+				Customer customerFromDb = _context.Customers
+					.SingleOrDefault(c => c.Id == customer.Id);
+				if (customerFromDb != null)
+				{
+					customerFromDb.Name = customer.Name;
+					customerFromDb.BirthDate = customer.BirthDate;
+					customerFromDb.MembershipTypeId = customer.MembershipTypeId;
+					customerFromDb.IsSubscribeToNewsletter = customer.IsSubscribeToNewsletter;
+				}
+			}
+
+			await _context.SaveChangesAsync();
+			return RedirectToAction("Index", "Customer");
 		}
 
 		// GET: Customer/Details/{id}
 		public ActionResult Details(int id)
 		{
-			Customer customer = _context.Customers
-				.Include(c => c.MembershipType)
-				.SingleOrDefault(c => c.Id == id);
+			Customer customer = GetCustomerById(id);
 
 			if (customer != null)
 			{
@@ -83,17 +95,28 @@
 			Customer customer = _context.Customers
 				.SingleOrDefault(c => c.Id == id);
 
-			if (customer != null)
-			{
-				CustomerFormViewModel viewModel =
-					new CustomerFormViewModel(_context.MembershipTypes, customer, "Edit");
-
-				return View("Manage", viewModel);
-			}
-			else
+			if (customer == null)
 			{
 				return HttpNotFound($"There is no customer with Id = {id}.");
 			}
+
+			CustomerFormViewModel viewModel =
+				new CustomerFormViewModel(_context.MembershipTypes, customer, "Edit");
+
+			return View("Manage", viewModel);
 		}
+
+		#region Helpers
+
+		private Customer GetCustomerById(int id)
+		{
+			Customer customer = _context.Customers
+				.Include(c => c.MembershipType)
+				.SingleOrDefault(c => c.Id == id);
+
+			return customer;
+		}
+
+		#endregion //HElpers
 	}
 }
