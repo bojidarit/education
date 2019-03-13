@@ -29,7 +29,7 @@ else
 			{
 				<tr>
 					<td>
-						@Html.ActionLink(item.Name, "Details", "Customer", new { id = item.Id }, null)
+						@Html.ActionLink(item.Name, "Edit", "Customer", new { id = item.Id }, null)
 						@*<a href=@Url.Action("Details", "Customer", new { id = item.Id })>@item.Name</a>*@
 					</td>
 					<td>
@@ -40,3 +40,9 @@ else
 		</tbody>
 	</table>
 }
+
+<button type="submit"
+		class="btn btn-primary"
+		onclick="location.href='@Url.Action("New", "Customer")'">
+	New Customer
+</button>

@@ -31,10 +31,10 @@
 		// Get: Customer/New
 		public ActionResult New()
 		{
-			NewCustomerViewModel viewModel =
-				new NewCustomerViewModel(_context.MembershipTypes, Customer.GetNewCustomer());
+			CustomerFormViewModel viewModel =
+				new CustomerFormViewModel(_context.MembershipTypes, Customer.GetNewCustomer(), "New");
 
-			return View(viewModel);
+			return View("Manage", viewModel);
 		}
 
 		[HttpPost]
@@ -56,6 +56,25 @@
 			if (customer != null)
 			{
 				return View(customer);
+			}
+			else
+			{
+				return HttpNotFound($"There is no customer with Id = {id}.");
+			}
+		}
+
+		// GET: Customer/Edit/{id}
+		public ActionResult Edit(int id)
+		{
+			Customer customer = _context.Customers
+				.SingleOrDefault(c => c.Id == id);
+
+			if (customer != null)
+			{
+				CustomerFormViewModel viewModel =
+					new CustomerFormViewModel(_context.MembershipTypes, customer, "Edit");
+
+				return View("Manage", viewModel);
 			}
 			else
 			{

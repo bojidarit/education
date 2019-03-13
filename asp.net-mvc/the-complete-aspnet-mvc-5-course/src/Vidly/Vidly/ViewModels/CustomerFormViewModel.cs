@@ -5,9 +5,10 @@
 	using System.Linq;
 	using System.Web.Mvc;
 
-	public class NewCustomerViewModel
+	public class CustomerFormViewModel
 	{
-		public NewCustomerViewModel(IEnumerable<MembershipType> membershipTypes, Customer customer)
+		public CustomerFormViewModel(IEnumerable<MembershipType> membershipTypes, 
+			Customer customer, string title)
 		{
 			this.MembershipTypesList =
 				membershipTypes.Select(i => new SelectListItem()
@@ -18,10 +19,14 @@
 				});
 
 			this.Customer = customer;
+
+			this.Title = title;
 		}
 
 		public IEnumerable<SelectListItem> MembershipTypesList { get; private set; }
 
 		public Customer Customer { get; private set; }
+
+		public string Title { get; private set; }
 	}
 }
