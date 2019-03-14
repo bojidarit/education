@@ -2,7 +2,9 @@
 {
 	using System.Collections.Generic;
 	using System.Data.Entity;
+	using System.Data.Entity.Validation;
 	using System.Linq;
+	using System.Text;
 	using System.Threading.Tasks;
 	using System.Web.Mvc;
 	using Vidly.Models;
@@ -107,10 +109,10 @@
 		[HttpPost]
 		public async Task<ActionResult> Save(Movie movie)
 		{
-			if (!ModelState.IsValid)
-			{
-				return Content($"Customer model is NOT valid.{System.Environment.NewLine}{movie}");
-			}
+			//if (!ModelState.IsValid)
+			//{
+			//	return Content($"Customer model is NOT valid.{System.Environment.NewLine}{movie}");
+			//}
 
 			if (movie.Id > 0)
 			{
@@ -130,7 +132,15 @@
 				_context.Movies.Add(movie);
 			}
 
-			await _context.SaveChangesAsync();
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbEntityValidationException e)
+			{
+				return Content(GetValidationExceptionInfo(e));
+			}
+
 			return RedirectToAction("Index", "Movie");
 		}
 
@@ -140,5 +150,28 @@
 			var viewModel = new ManageMovieViewModel(_context.Genres, Movie.CreateMovie(), "New");
 			return View("Manage", viewModel);
 		}
+
+		#region Helpers
+
+		private string GetValidationExceptionInfo(DbEntityValidationException e)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			if (e != null)
+			{
+				foreach (var eve in e.EntityValidationErrors)
+				{
+					sb.Append($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");
+					foreach (var ve in eve.ValidationErrors)
+					{
+						sb.Append($"- Property: \"{ve.PropertyName}\", Error: \"{ve.ErrorMessage}\"");
+					}
+				}
+			}
+
+			return sb.ToString();
+		}
+
+		#endregion //Helpers
 	}
 }
