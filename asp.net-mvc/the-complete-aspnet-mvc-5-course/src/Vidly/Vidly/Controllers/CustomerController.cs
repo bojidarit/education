@@ -31,7 +31,7 @@
 		private ActionResult CreateNew(Customer customer)
 		{
 			CustomerFormViewModel viewModel =
-				new CustomerFormViewModel(_context.MembershipTypes, customer, "New");
+				new CustomerFormViewModel(_context.MembershipTypes, customer, GetViewTitle(0));
 
 			return View("Manage", viewModel);
 		}
@@ -47,9 +47,11 @@
 		{
 			if (!ModelState.IsValid)
 			{
-				// TODO: What to do when model is not valid...
-				//return CreateNew(customer);
-				return Content($"Customer model is NOT valid.{System.Environment.NewLine}{customer}");
+				//return Content($"Customer model is NOT valid.{System.Environment.NewLine}{customer}");
+				var viewModel = new CustomerFormViewModel(_context.MembershipTypes, 
+					customer, $"*{GetViewTitle(customer.Id)}");
+
+				return View("Manage", viewModel);
 			}
 
 			if (customer.Id <= 0)
@@ -100,7 +102,7 @@
 			}
 
 			CustomerFormViewModel viewModel =
-				new CustomerFormViewModel(_context.MembershipTypes, customer, "Edit");
+				new CustomerFormViewModel(_context.MembershipTypes, customer, GetViewTitle(customer.Id));
 
 			return View("Manage", viewModel);
 		}
@@ -115,6 +117,9 @@
 
 			return customer;
 		}
+
+		private string GetViewTitle(int id) =>
+			$"{(id > 0 ? "Edit" : "New")} Customer";
 
 		#endregion //HElpers
 	}

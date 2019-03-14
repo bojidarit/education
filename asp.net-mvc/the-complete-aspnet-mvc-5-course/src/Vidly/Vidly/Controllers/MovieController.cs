@@ -101,7 +101,7 @@
 					$"{this.GetType().Name.Replace("Controller", "")} with Id = {id}");
 			}
 
-			ManageMovieViewModel viewModel = new ManageMovieViewModel(_context.Genres, movie, "Edit");
+			ManageMovieViewModel viewModel = new ManageMovieViewModel(_context.Genres, movie, GetViewTitle(id));
 
 			return View("Manage", viewModel);
 		}
@@ -109,10 +109,13 @@
 		[HttpPost]
 		public async Task<ActionResult> Save(Movie movie)
 		{
-			//if (!ModelState.IsValid)
-			//{
-			//	return Content($"Customer model is NOT valid.{System.Environment.NewLine}{movie}");
-			//}
+			if (!ModelState.IsValid)
+			{
+				//return Content($"Movie model is NOT valid.{System.Environment.NewLine}{movie}");
+				var viewModel = new ManageMovieViewModel(_context.Genres, movie, $"*{GetViewTitle(movie.Id)}");
+
+				return View("Manage", viewModel);
+			}
 
 			if (movie.Id > 0)
 			{
@@ -147,7 +150,7 @@
 		// GET: Movie/New
 		public ActionResult New()
 		{
-			var viewModel = new ManageMovieViewModel(_context.Genres, Movie.CreateMovie(), "New");
+			var viewModel = new ManageMovieViewModel(_context.Genres, Movie.CreateMovie(), GetViewTitle(0));
 			return View("Manage", viewModel);
 		}
 
@@ -171,6 +174,9 @@
 
 			return sb.ToString();
 		}
+
+		private string GetViewTitle(int id) =>
+			$"{(id > 0 ? "Edit" : "New")} Movie";
 
 		#endregion //Helpers
 	}
