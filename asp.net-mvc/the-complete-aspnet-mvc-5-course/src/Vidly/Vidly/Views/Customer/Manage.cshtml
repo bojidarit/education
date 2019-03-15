@@ -13,19 +13,21 @@
 	<div class="form-group">
 		@Html.LabelFor(c => c.Customer.Name)
 		@Html.TextBoxFor(c => c.Customer.Name, new { @class = "form-control" })
-		@Html.ValidationMessageFor(m => m.Customer.Name)
+		@Html.ValidationMessageFor(c => c.Customer.Name)
 	</div>
 
 	<!--Date of Birth-->
 	<div class="form-group">
 		@Html.LabelFor(c => c.Customer.BirthDate)
 		@Html.TextBoxFor(c => c.Customer.BirthDate, "{0:dd.MM.yyyy}", new { @class = "form-control" })
+		@Html.ValidationMessageFor(c => c.Customer.BirthDate)
 	</div>
 
 	<!--Membership Type-->
 	<div class="form-group">
 		@Html.LabelFor(c => c.Customer.MembershipTypeId)
 		@Html.DropDownListFor(c => c.Customer.MembershipTypeId, Model.MembershipTypesList, "Select Membership Type", new { @class = "form-control" })
+		@Html.ValidationMessageFor(c => c.Customer.MembershipTypeId)
 	</div>
 
 	<!--Subscribe to Newsletter-->
