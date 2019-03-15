@@ -18,13 +18,13 @@ else
 		<thead>
 			<tr>
 				<th>
-					#
-				</th>
-				<th>
 					Movie
 				</th>
 				<th>
 					Genre
+				</th>
+				<th>
+					Number In Stock
 				</th>
 			</tr>
 		</thead>
@@ -33,13 +33,13 @@ else
 			{
 				<tr>
 					<td>
-						@(index++)
-					</td>
-					<td>
 						@Html.ActionLink(item.Name, "Edit", "Movie", new { id = item.Id }, null)
 					</td>
 					<td>
 						@item.Genre.Name
+					</td>
+					<td>
+						@item.NumberInStock
 					</td>
 				</tr>
 			}
@@ -51,6 +51,9 @@ else
 				</td>
 				<td>
 					@Model.Count()
+				</td>
+				<td>
+					@Model.Sum(c => c.NumberInStock)
 				</td>
 			</tr>
 		</tfoot>

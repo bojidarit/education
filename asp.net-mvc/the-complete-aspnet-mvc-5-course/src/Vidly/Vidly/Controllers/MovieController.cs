@@ -31,6 +31,97 @@
 			return View(movies);
 		}
 
+		// GET: Movie/New
+		public ActionResult New()
+		{
+			var viewModel = new ManageMovieViewModel(_context.Genres, null);
+			return View("ManageMovie", viewModel);
+		}
+
+		// GET: Movie/Edit/{id}
+		public ActionResult Edit(int id)
+		{
+			Movie movie = _context.Movies.SingleOrDefault(m => m.Id == id);
+
+			if (movie == null)
+			{
+				return HttpNotFound($"There is no " +
+					$"{this.GetType().Name.Replace("Controller", "")} with Id = {id}");
+			}
+
+			ManageMovieViewModel viewModel = new ManageMovieViewModel(_context.Genres, movie);
+
+			return View("ManageMovie", viewModel);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> Save(ManageMovieViewModel movieVeiwModel)
+		{
+			Movie model = movieVeiwModel.GetPopulatedMovie();
+
+			if (!ModelState.IsValid)
+			{
+				var viewModel = new ManageMovieViewModel(_context.Genres, model);
+
+				return View("ManageMovie", viewModel);
+			}
+
+			if (model.Id > 0)
+			{
+				// Existing Record
+				Movie movieFromDb = _context.Movies.SingleOrDefault(m => m.Id == model.Id);
+				if (movieFromDb != null)
+				{
+					movieFromDb.Name = model.Name;
+					movieFromDb.ReleaseDate = model.ReleaseDate;
+					movieFromDb.GenreId = model.GenreId;
+					movieFromDb.NumberInStock = model.NumberInStock;
+				}
+			}
+			else
+			{
+				// New Record
+				_context.Movies.Add(model);
+			}
+
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbEntityValidationException e)
+			{
+				return Content(GetValidationExceptionInfo(e));
+			}
+
+			return RedirectToAction("Index", "Movie");
+		}
+
+		#region Helpers
+
+		private string GetValidationExceptionInfo(DbEntityValidationException e)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			if (e != null)
+			{
+				foreach (var eve in e.EntityValidationErrors)
+				{
+					sb.Append($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");
+					foreach (var ve in eve.ValidationErrors)
+					{
+						sb.Append($"- Property: \"{ve.PropertyName}\", Error: \"{ve.ErrorMessage}\"");
+					}
+				}
+			}
+
+			return sb.ToString();
+		}
+
+		#endregion //Helpers
+
+		#region Demo Actions
+
 		// GET: Movie/Details/{id}
 		public ActionResult Details(int id)
 		{
@@ -89,96 +180,6 @@
 				$"month = {month} from {this.GetType().Name}");
 		}
 
-		// GET: Movie/Edit/{id}
-		public ActionResult Edit(int id)
-		{
-			Movie movie = _context.Movies
-				.SingleOrDefault(m => m.Id == id);
-
-			if (movie == null)
-			{
-				return HttpNotFound($"There is no " +
-					$"{this.GetType().Name.Replace("Controller", "")} with Id = {id}");
-			}
-
-			ManageMovieViewModel viewModel = new ManageMovieViewModel(_context.Genres, movie, GetViewTitle(id));
-
-			return View("ManageMovie", viewModel);
-		}
-
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Save(Movie movie)
-		{
-			if (!ModelState.IsValid)
-			{
-				//return Content($"Movie model is NOT valid.{System.Environment.NewLine}{movie}");
-				var viewModel = new ManageMovieViewModel(_context.Genres, movie, $"*{GetViewTitle(movie.Id)}");
-
-				return View("ManageMovie", viewModel);
-			}
-
-			if (movie.Id > 0)
-			{
-				// Existing Record
-				Movie movieFromDb = _context.Movies.SingleOrDefault(m => m.Id == movie.Id);
-				if (movieFromDb != null)
-				{
-					movieFromDb.Name = movie.Name;
-					movieFromDb.ReleaseDate = movie.ReleaseDate;
-					movieFromDb.GenreId = movie.GenreId;
-					movieFromDb.NumberInStock = movie.NumberInStock;
-				}
-			}
-			else
-			{
-				// New Record
-				_context.Movies.Add(movie);
-			}
-
-			try
-			{
-				await _context.SaveChangesAsync();
-			}
-			catch (DbEntityValidationException e)
-			{
-				return Content(GetValidationExceptionInfo(e));
-			}
-
-			return RedirectToAction("Index", "Movie");
-		}
-
-		// GET: Movie/New
-		public ActionResult New()
-		{
-			var viewModel = new ManageMovieViewModel(_context.Genres, Movie.CreateMovie(), GetViewTitle(0));
-			return View("ManageMovie", viewModel);
-		}
-
-		#region Helpers
-
-		private string GetValidationExceptionInfo(DbEntityValidationException e)
-		{
-			StringBuilder sb = new StringBuilder();
-
-			if (e != null)
-			{
-				foreach (var eve in e.EntityValidationErrors)
-				{
-					sb.Append($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");
-					foreach (var ve in eve.ValidationErrors)
-					{
-						sb.Append($"- Property: \"{ve.PropertyName}\", Error: \"{ve.ErrorMessage}\"");
-					}
-				}
-			}
-
-			return sb.ToString();
-		}
-
-		private string GetViewTitle(int id) =>
-			$"{(id > 0 ? "Edit" : "New")} Movie";
-
-		#endregion //Helpers
+		#endregion //Demo Actions
 	}
 }
