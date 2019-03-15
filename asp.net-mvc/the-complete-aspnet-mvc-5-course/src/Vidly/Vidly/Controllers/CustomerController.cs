@@ -33,7 +33,7 @@
 			CustomerFormViewModel viewModel =
 				new CustomerFormViewModel(_context.MembershipTypes, customer, GetViewTitle(0));
 
-			return View("Manage", viewModel);
+			return View("ManageCustomer", viewModel);
 		}
 
 		// Get: Customer/New
@@ -51,7 +51,7 @@
 				var viewModel = new CustomerFormViewModel(_context.MembershipTypes, 
 					customer, $"*{GetViewTitle(customer.Id)}");
 
-				return View("Manage", viewModel);
+				return View("ManageCustomer", viewModel);
 			}
 
 			if (customer.Id <= 0)
@@ -104,7 +104,7 @@
 			CustomerFormViewModel viewModel =
 				new CustomerFormViewModel(_context.MembershipTypes, customer, GetViewTitle(customer.Id));
 
-			return View("Manage", viewModel);
+			return View("ManageCustomer", viewModel);
 		}
 
 		#region Helpers
