@@ -43,6 +43,7 @@
 		}
 
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Save(Customer customer)
 		{
 			if (!ModelState.IsValid)
