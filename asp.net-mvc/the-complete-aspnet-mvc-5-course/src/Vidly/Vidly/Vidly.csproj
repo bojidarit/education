@@ -334,7 +334,7 @@
     <Content Include="Views\Movie\Index.cshtml" />
     <Content Include="Views\Movie\Details.cshtml" />
     <Content Include="Views\Customer\ManageCustomer.cshtml" />
-    <Content Include="Views\Movie\Manage.cshtml" />
+    <Content Include="Views\Movie\ManageMovie.cshtml" />
     <Content Include="Views\Shared\_GoBackButton.cshtml" />
   </ItemGroup>
   <ItemGroup>

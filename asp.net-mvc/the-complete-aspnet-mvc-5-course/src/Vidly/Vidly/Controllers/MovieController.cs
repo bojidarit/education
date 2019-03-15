@@ -103,10 +103,11 @@
 
 			ManageMovieViewModel viewModel = new ManageMovieViewModel(_context.Genres, movie, GetViewTitle(id));
 
-			return View("Manage", viewModel);
+			return View("ManageMovie", viewModel);
 		}
 
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Save(Movie movie)
 		{
 			if (!ModelState.IsValid)
@@ -114,7 +115,7 @@
 				//return Content($"Movie model is NOT valid.{System.Environment.NewLine}{movie}");
 				var viewModel = new ManageMovieViewModel(_context.Genres, movie, $"*{GetViewTitle(movie.Id)}");
 
-				return View("Manage", viewModel);
+				return View("ManageMovie", viewModel);
 			}
 
 			if (movie.Id > 0)
@@ -151,7 +152,7 @@
 		public ActionResult New()
 		{
 			var viewModel = new ManageMovieViewModel(_context.Genres, Movie.CreateMovie(), GetViewTitle(0));
-			return View("Manage", viewModel);
+			return View("ManageMovie", viewModel);
 		}
 
 		#region Helpers

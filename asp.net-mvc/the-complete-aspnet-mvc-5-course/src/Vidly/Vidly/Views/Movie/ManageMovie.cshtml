@@ -7,10 +7,10 @@
 
 <h2>@ViewBag.Title</h2>
 
-@*@Html.ValidationSummary()*@
-
 @using (Html.BeginForm("Save", "Movie"))
 {
+	<!--General validation message-->
+	@Html.ValidationSummary(excludePropertyErrors: true, message: "Please fix the following errors.")
 
 	<!--Name-->
 	<div class="form-group">
@@ -42,7 +42,14 @@
 
 	<!--Hidden fields-->
 	@Html.HiddenFor(m => m.Movie.Id);
+	@Html.AntiForgeryToken()
 
 	<button type="submit" class="btn btn-primary">Save</button>
 	@Html.Partial("_GoBackButton", "Cancel")
+}
+
+
+@section scripts
+{
+	@Scripts.Render("~/bundles/jqueryval")
 }
