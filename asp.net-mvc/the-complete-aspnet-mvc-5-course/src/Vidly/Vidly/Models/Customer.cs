@@ -36,7 +36,7 @@
 
 		[Display(Name = "Date of Birth")]
 		[Min18YearsIfAMember]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = General.Constants.DateFormat)]
+		[DisplayFormat(DataFormatString = General.Constants.DateFormat, NullDisplayText = "no date")]
 		public DateTime? BirthDate { get; set; }
 
 		#region Methods
