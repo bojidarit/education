@@ -7,8 +7,7 @@
 
 	public class CustomerFormViewModel
 	{
-		public CustomerFormViewModel(IEnumerable<MembershipType> membershipTypes, 
-			Customer customer, string title)
+		public CustomerFormViewModel(IEnumerable<MembershipType> membershipTypes, Customer customer)
 		{
 			this.MembershipTypesList =
 				membershipTypes.Select(i => new SelectListItem()
@@ -20,7 +19,7 @@
 
 			this.Customer = customer;
 
-			this.Title = title;
+			this.Title = $"{(customer.Id > 0 ? "Edit" : "New")} Customer";
 		}
 
 		public IEnumerable<SelectListItem> MembershipTypesList { get; private set; }

@@ -30,8 +30,7 @@
 
 		private ActionResult CreateNew(Customer customer)
 		{
-			CustomerFormViewModel viewModel =
-				new CustomerFormViewModel(_context.MembershipTypes, customer, GetViewTitle(0));
+			CustomerFormViewModel viewModel = new CustomerFormViewModel(_context.MembershipTypes, customer);
 
 			return View("ManageCustomer", viewModel);
 		}
@@ -49,8 +48,7 @@
 			if (!ModelState.IsValid)
 			{
 				//return Content($"Customer model is NOT valid.{System.Environment.NewLine}{customer}");
-				var viewModel = new CustomerFormViewModel(_context.MembershipTypes, 
-					customer, $"*{GetViewTitle(customer.Id)}");
+				var viewModel = new CustomerFormViewModel(_context.MembershipTypes,	customer);
 
 				return View("ManageCustomer", viewModel);
 			}
@@ -102,8 +100,7 @@
 				return HttpNotFound($"There is no customer with Id = {id}.");
 			}
 
-			CustomerFormViewModel viewModel =
-				new CustomerFormViewModel(_context.MembershipTypes, customer, GetViewTitle(customer.Id));
+			CustomerFormViewModel viewModel = new CustomerFormViewModel(_context.MembershipTypes, customer);
 
 			return View("ManageCustomer", viewModel);
 		}
@@ -119,9 +116,6 @@
 			return customer;
 		}
 
-		private string GetViewTitle(int id) =>
-			$"{(id > 0 ? "Edit" : "New")} Customer";
-
-		#endregion //HElpers
+		#endregion //Helpers
 	}
 }

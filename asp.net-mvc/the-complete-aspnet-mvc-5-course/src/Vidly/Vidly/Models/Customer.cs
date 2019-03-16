@@ -30,12 +30,13 @@
 
 		public MembershipType MembershipType { get; set; }
 
-		// Inplisitly requered because of the not-nullable type
+		// Implicitly required because of the not-nullable type
 		[Display(Name = "Membership Type")]
 		public byte MembershipTypeId { get; set; }
 
 		[Display(Name = "Date of Birth")]
 		[Min18YearsIfAMember]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = General.Constants.DateFormat)]
 		public DateTime? BirthDate { get; set; }
 
 		#region Methods

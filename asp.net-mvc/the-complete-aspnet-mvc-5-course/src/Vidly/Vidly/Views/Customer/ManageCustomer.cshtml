@@ -29,7 +29,7 @@
 	<!--Date of Birth-->
 	<div class="form-group">
 		@Html.LabelFor(c => c.Customer.BirthDate)
-		@Html.TextBoxFor(c => c.Customer.BirthDate, "{0:dd.MM.yyyy}", new { @class = "form-control" })
+		@Html.TextBoxFor(c => c.Customer.BirthDate, Vidly.General.Constants.DateFormat, new { @class = "form-control" })
 		@Html.ValidationMessageFor(c => c.Customer.BirthDate)
 	</div>
 

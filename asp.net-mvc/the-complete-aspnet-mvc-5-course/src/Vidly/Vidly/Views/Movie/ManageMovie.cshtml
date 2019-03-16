@@ -22,7 +22,7 @@
 	<!--Release Date (Nullable)-->
 	<div class="form-group">
 		@Html.LabelFor(m => m.ReleaseDateNullable)
-		@Html.TextBoxFor(m => m.ReleaseDateNullable, "{0:dd.MM.yyyy}", new { @class = "form-control" })
+		@Html.TextBoxFor(m => m.ReleaseDateNullable, Vidly.General.Constants.DateFormat, new { @class = "form-control" })
 		@Html.ValidationMessageFor(m => m.ReleaseDateNullable)
 	</div>
 

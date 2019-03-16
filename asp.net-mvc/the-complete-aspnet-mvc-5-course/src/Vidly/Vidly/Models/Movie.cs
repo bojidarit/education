@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.ComponentModel.DataAnnotations;
+	using Vidly.General;
 
 	public class Movie
 	{
@@ -31,6 +32,7 @@
 
 		[Required]
 		[Display(Name = "Release Date")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = Constants.DateFormat)]
 		public DateTime ReleaseDate { get; set; }
 
 		[Editable(false)]
