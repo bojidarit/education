@@ -32,7 +32,7 @@
 
 		[Required]
 		[Display(Name = "Release Date")]
-		[DisplayFormat(DataFormatString = Constants.DateFormat)]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = Constants.DateFormat)]
 		public DateTime ReleaseDate { get; set; }
 
 		[Editable(false)]
