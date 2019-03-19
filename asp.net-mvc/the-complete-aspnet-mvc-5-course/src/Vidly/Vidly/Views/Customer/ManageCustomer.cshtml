@@ -30,7 +30,7 @@
 	<div class="form-group">
 		@Html.LabelFor(c => c.Customer.BirthDate)
 		@*@Html.TextBoxFor(c => c.Customer.BirthDate, Vidly.General.Constants.DateFormat, new { @class = "form-control" })*@
-		@Html.EditorFor(c => c.Customer.BirthDate, new { htmlAttributes = new { @class = "form-control" } })
+		@Html.EditorFor(c => c.Customer.BirthDate)
 		@Html.ValidationMessageFor(c => c.Customer.BirthDate)
 	</div>
 

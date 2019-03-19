@@ -22,7 +22,7 @@
 
 		public int Id { get; set; }
 
-		[Required(ErrorMessage ="Please enter customer's name.")]
+		[Required(ErrorMessage = "Please enter customer's name.")]
 		[StringLength(255)]
 		public string Name { get; set; }
 
@@ -36,7 +36,6 @@
 
 		[Display(Name = "Date of Birth")]
 		[Min18YearsIfAMember]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = General.Constants.DateFormat, NullDisplayText = "no date")]
 		public DateTime? BirthDate { get; set; }
 
 		#region Methods

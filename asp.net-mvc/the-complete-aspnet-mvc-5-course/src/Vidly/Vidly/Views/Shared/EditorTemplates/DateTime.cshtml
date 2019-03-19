@@ -1,0 +1,3 @@
+﻿@model System.DateTime?
+
+@Html.TextBoxFor(m => m, Vidly.Extensions.DateTimeExtensions.ShortDateFormattingString, new { @class = "form-control", Title = Vidly.Extensions.DateTimeExtensions.ShortDateFormat })

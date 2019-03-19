@@ -10,6 +10,7 @@
 @using (Html.BeginForm("Save", "Movie"))
 {
 	<!--General validation message-->
+	@*@Html.ValidationSummary()*@
 	@Html.ValidationSummary(excludePropertyErrors: true, message: "Please fix the following errors.")
 
 	<!--Name-->
@@ -22,8 +23,9 @@
 	<!--Release Date (Nullable)-->
 	<div class="form-group">
 		@Html.LabelFor(m => m.ReleaseDateNullable)
-		@*@Html.TextBoxFor(m => m.ReleaseDateNullable, Vidly.General.Constants.DateFormat, new { @class = "form-control" })*@
-		@Html.EditorFor(m => m.ReleaseDateNullable, new { htmlAttributes = new { @class = "form-control" } })
+		@*@Html.TextBoxFor(m => m.ReleaseDateNullable, Vidly.Extensions.DateTimeExtensions.ShortDateFormattingString, new { @class = "form-control" })*@
+		@*@Html.EditorFor(m => m.ReleaseDateNullable, new { htmlAttributes = new { @class = "form-control" } })*@
+		@Html.EditorFor(m => m.ReleaseDateNullable)
 		@Html.ValidationMessageFor(m => m.ReleaseDateNullable)
 	</div>
 
@@ -41,6 +43,7 @@
 		@Html.ValidationMessageFor(m => m.NumberInStockNullable)
 	</div>
 
+	<!--Date Added-->
 	<div class="form-group">
 		@Html.LabelFor(m => m.Movie.DateAdded)
 		@Html.DisplayFor(m => m.Movie.DateAdded)
@@ -57,6 +60,6 @@
 
 
 @section scripts
-{
+		{
 	@Scripts.Render("~/bundles/jqueryval")
 }

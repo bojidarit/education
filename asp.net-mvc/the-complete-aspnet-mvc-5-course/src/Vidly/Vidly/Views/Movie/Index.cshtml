@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Vidly.Models.Movie>
+﻿@using Vidly.Extensions
+
+@model IEnumerable<Vidly.Models.Movie>
 
 @{
 	ViewBag.Title = "Index";
@@ -24,6 +26,9 @@ else
 					Genre
 				</th>
 				<th>
+					Release Date
+				</th>
+				<th>
 					Number In Stock
 				</th>
 			</tr>
@@ -39,6 +44,9 @@ else
 						@item.Genre.Name
 					</td>
 					<td>
+						@item.ReleaseDate.FormatDateShort()
+					</td>
+					<td>
 						@item.NumberInStock
 					</td>
 				</tr>
@@ -49,7 +57,7 @@ else
 				<td>
 					Total
 				</td>
-				<td>
+				<td colspan="2">
 					@Model.Count()
 				</td>
 				<td>

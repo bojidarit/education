@@ -32,18 +32,15 @@
 
 		[Required]
 		[Display(Name = "Release Date")]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = Constants.DateFormat)]
 		public DateTime ReleaseDate { get; set; }
 
 		[Editable(false)]
 		[Required]
 		[Display(Name = "Date Added")]
-		[DisplayFormat(DataFormatString = Constants.DateFormat)]
 		public DateTime DateAdded { get; set; }
 
 		[Required]
 		[Display(Name = "Number In Stock")]
-		[Range(1, 20)]
 		public int NumberInStock { get; set; }
 
 		[Required]

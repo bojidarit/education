@@ -339,6 +339,8 @@
     <Content Include="Views\Movie\ManageMovie.cshtml" />
     <Content Include="Views\Shared\_GoBackButton.cshtml" />
     <Content Include="Scripts\jquery.validate.date.js" />
+    <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -48,7 +48,6 @@
 
 		[Required]
 		[Display(Name = "Release Date")]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = General.Constants.DateFormat)]
 		public DateTime? ReleaseDateNullable { get; set; }
 
 		[Required]

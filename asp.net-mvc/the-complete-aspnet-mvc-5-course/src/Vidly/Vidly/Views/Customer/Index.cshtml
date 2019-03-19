@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Vidly.Models.Customer>
+﻿@using Vidly.Extensions
+
+@model IEnumerable<Vidly.Models.Customer>
 
 @{
 	ViewBag.Title = "Customers";
@@ -22,6 +24,9 @@ else
 				<th>
 					Membership Type
 				</th>
+				<th>
+					Date of birth
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -34,6 +39,9 @@ else
 					</td>
 					<td>
 						@item.MembershipType.Name
+					</td>
+					<td>
+						@item.BirthDate.FormatDateShort()
 					</td>
 				</tr>
 			}
