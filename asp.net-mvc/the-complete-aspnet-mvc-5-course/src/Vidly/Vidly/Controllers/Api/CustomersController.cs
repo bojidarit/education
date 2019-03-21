@@ -5,6 +5,8 @@
 	using System.Linq;
 	using System.Web.Http;
 	using Models;
+	using Dtos;
+	using AutoMapper;
 
 	public class CustomersController : ApiController
 	{
@@ -21,13 +23,13 @@
 		}
 
 		// GET: /api/customers
-		public IEnumerable<Customer> GetCustomers()
+		public IEnumerable<CustomerDto> GetCustomers()
 		{
-			return _context.Customers.Include(c => c.MembershipType);
+			return _context.Customers.ToList().Select(Mapper.Map<Customer, CustomerDto>);
 		}
 
 		// GET: /api/customer/{id}
-		public Customer GetCustomer(int id)
+		public CustomerDto GetCustomer(int id)
 		{
 			Customer customer = _context.Customers.SingleOrDefault(c => c.Id == id);
 
@@ -36,27 +38,31 @@
 				throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
 			}
 
-			return customer;
+			return Mapper.Map<Customer, CustomerDto>(customer);
 		}
 
 		// POST: /api/customers
 		[HttpPost]
-		public Customer CreateCustomer(Customer customer)
+		public CustomerDto CreateCustomer(CustomerDto customerDto)
 		{
 			if (!ModelState.IsValid)
 			{
 				throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest);
 			}
 
+			var customer = Mapper.Map<CustomerDto, Customer>(customerDto);
+
 			_context.Customers.Add(customer);
 			_context.SaveChanges();
 
-			return customer;
+			customerDto.Id = customer.Id;
+
+			return customerDto;
 		}
 
 		// PUT: /api/customers/{id}
 		[HttpPut]
-		public void UpdateCustomers(int id, Customer customer)
+		public void UpdateCustomers(int id, CustomerDto customerDto)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -69,10 +75,7 @@
 				throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
 			}
 
-			customerFromDb.Name = customer.Name;
-			customerFromDb.BirthDate = customer.BirthDate;
-			customerFromDb.IsSubscribeToNewsletter = customer.IsSubscribeToNewsletter;
-			customerFromDb.MembershipTypeId = customer.MembershipTypeId;
+			Mapper.Map(customerDto, customerFromDb);
 
 			_context.SaveChanges();
 		}
