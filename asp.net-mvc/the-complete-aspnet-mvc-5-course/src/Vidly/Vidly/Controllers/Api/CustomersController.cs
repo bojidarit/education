@@ -1,6 +1,7 @@
 ﻿namespace Vidly.Controllers.Api
 {
 	using System.Collections.Generic;
+	using System.Data.Entity;
 	using System.Linq;
 	using System.Web.Http;
 	using Models;
@@ -22,13 +23,13 @@
 		// GET: /api/customers
 		public IEnumerable<Customer> GetCustomers()
 		{
-			return _context.Customers;
+			return _context.Customers.Include(c => c.MembershipType);
 		}
 
-		// GET: /api/customers/{id}
-		public Customer GetCustomers(int id)
+		// GET: /api/customer/{id}
+		public Customer GetCustomer(int id)
 		{
-			Customer customer = _context.Customers.SingleOrDefault();
+			Customer customer = _context.Customers.SingleOrDefault(c => c.Id == id);
 
 			if (customer == null)
 			{
@@ -38,7 +39,7 @@
 			return customer;
 		}
 
-		// GET: /api/customers
+		// POST: /api/customers
 		[HttpPost]
 		public Customer CreateCustomer(Customer customer)
 		{
@@ -76,7 +77,7 @@
 			_context.SaveChanges();
 		}
 
-		// PUT: /api/customers/{id}
+		// DELETE: /api/customers/{id}
 		[HttpDelete]
 		public void DeleteCustomers(int id)
 		{
