@@ -24,8 +24,9 @@
 		// GET: /api/movies
 		public IHttpActionResult GetMovies()
 		{
-			IEnumerable<MovieDto> movies = 
-				_context.Movies.ToList().Select(Mapper.Map<Movie, MovieDto>);
+			IEnumerable<MovieDto> mappedMovies = _context.Movies.ToList().Select(Mapper.Map<Movie, MovieDto>);
+
+			var movies = mappedMovies.Select(m => m.GenerateLinks<MovieDto>(base.Request.RequestUri, m.Id.ToString()));
 
 			return Ok(movies);
 		}
