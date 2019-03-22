@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.ComponentModel.DataAnnotations;
-	using Vidly.General;
 
 	public class Movie
 	{
