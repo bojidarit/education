@@ -30,5 +30,40 @@
 
 			return Ok(movies);
 		}
+
+		// GET: /api/movies/{id}
+		public IHttpActionResult GetMovie(int id)
+		{
+			Movie movie = _context.Movies.SingleOrDefault(m => m.Id == id);
+
+			if(movie == null)
+			{
+				return NotFound();
+			}
+
+			var movieDto = Mapper.Map<Movie, MovieDto>(movie);
+
+			return Ok(movieDto.GenerateLinks<MovieDto>(base.Request.RequestUri));
+		}
+
+		// POST: /api/movies
+		[HttpPost]
+		public IHttpActionResult CreateMovie(MovieDto dto)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			var movie = Mapper.Map<MovieDto, Movie>(dto);
+
+			_context.Movies.Add(movie);
+			_context.SaveChanges();
+
+			dto.Id = movie.Id;
+			dto.GenerateLinks<MovieDto>(base.Request.RequestUri, dto.Id.ToString());
+
+			return Created(dto.Href, dto);
+		}
 	}
 }

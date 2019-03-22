@@ -8,20 +8,21 @@
 	/// </summary>
 	public abstract class HateoasDtoBase
 	{
-		List<LinkDto> Links { get; set; } = new List<LinkDto>();
+		public string Href { get; private set; }
+		public List<LinkDto> Links { get; private set; } = new List<LinkDto>();
 
 		/// <summary>
 		/// Generates HATEOAS links
 		/// </summary>
-		public T GenerateLinks<T>(Uri uri, string id)
+		public T GenerateLinks<T>(Uri uri, string id = null)
 			where T : HateoasDtoBase
 		{
-			string href = uri.ToString() + (!string.IsNullOrWhiteSpace(id) ? $"/{id}" : string.Empty);
+			this.Href = uri.ToString() + (!string.IsNullOrWhiteSpace(id) ? $"{id}" : string.Empty);
 
-			this.Links.Add(new LinkDto(href, "self", "GET"));
-			this.Links.Add(new LinkDto(href, "create", "POST"));
-			this.Links.Add(new LinkDto(href, "update", "PUT"));
-			this.Links.Add(new LinkDto(href, "delete", "DELETE"));
+			this.Links.Add(new LinkDto(this.Href, "self", "GET"));
+			this.Links.Add(new LinkDto(this.Href, "create", "POST"));
+			this.Links.Add(new LinkDto(this.Href, "update", "PUT"));
+			this.Links.Add(new LinkDto(this.Href, "delete", "DELETE"));
 
 			return (T)this;
 		}
