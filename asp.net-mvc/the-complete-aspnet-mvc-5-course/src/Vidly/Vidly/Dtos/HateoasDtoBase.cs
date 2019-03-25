@@ -1,5 +1,6 @@
 ﻿namespace Vidly.Dtos
 {
+	using Flurl;
 	using System;
 	using System.Collections.Generic;
 
@@ -17,14 +18,20 @@
 		public T GenerateLinks<T>(Uri uri, string id = null)
 			where T : HateoasDtoBase
 		{
-			this.Href = uri.ToString() + (!string.IsNullOrWhiteSpace(id) ? $"{id}" : string.Empty);
+			this.Href = Url.Combine(uri.ToString(), (!string.IsNullOrWhiteSpace(id) ? $"{id}" : string.Empty));
 
 			this.Links.Add(new LinkDto(this.Href, "self", "GET"));
-			this.Links.Add(new LinkDto(this.Href, "create", "POST"));
+			this.Links.Add(new LinkDto(RemoveId(this.Href), "create", "POST"));
 			this.Links.Add(new LinkDto(this.Href, "update", "PUT"));
 			this.Links.Add(new LinkDto(this.Href, "delete", "DELETE"));
 
 			return (T)this;
+		}
+
+		public static string RemoveId(string href)
+		{
+			int lastIndex = href.LastIndexOf('/');
+			return href.Substring(0, lastIndex);
 		}
 	}
 }
