@@ -65,5 +65,44 @@
 
 			return Created(dto.Href, dto);
 		}
+
+		// PUT: /api/movies/{id}
+		[HttpPut]
+		public IHttpActionResult UpdateMovie(int id, MovieDto dto)
+		{
+			if(!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			Movie movieFromDb = _context.Movies.SingleOrDefault(m => m.Id == id);
+			if(movieFromDb == null)
+			{
+				return NotFound();
+			}
+
+			Mapper.Map(dto, movieFromDb);
+
+			_context.SaveChanges();
+
+			return StatusCode(System.Net.HttpStatusCode.NoContent);
+		}
+
+		// DELETE: /api/movies/{id}
+		[HttpDelete]
+		public IHttpActionResult DeleteMovie(int id)
+		{
+			Movie movie = _context.Movies.SingleOrDefault(m => m.Id == id);
+			if (movie == null)
+			{
+				return NotFound();
+			}
+
+			_context.Movies.Remove(movie);
+
+			_context.SaveChanges();
+
+			return StatusCode(System.Net.HttpStatusCode.NoContent);
+		}
 	}
 }
