@@ -3,34 +3,43 @@
 	using System.Data.Entity;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using System.Web;
 	using System.Web.Mvc;
+	using Microsoft.AspNet.Identity.Owin;
 	using Models;
 	using ViewModels;
 
 	public class CustomerController : Controller
 	{
-		private ApplicationDbContext _context;
+		private ApplicationDbContext _dbContext;
 
 		public CustomerController()
 		{
-			_context = new ApplicationDbContext();
 		}
 
-		protected override void Dispose(bool disposing)
+		public ApplicationDbContext DbContext
 		{
-			_context.Dispose();
+			get
+			{
+				if (_dbContext == null)
+				{
+					_dbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+				}
+
+				return _dbContext;
+			}
 		}
 
 		// GET: Customer
 		public ActionResult Index()
 		{
-			var customers = _context.Customers.Include(c => c.MembershipType);
+			var customers = this.DbContext.Customers.Include(c => c.MembershipType);
 			return View(customers);
 		}
 
 		private ActionResult CreateNew(Customer customer)
 		{
-			CustomerFormViewModel viewModel = new CustomerFormViewModel(_context.MembershipTypes, customer);
+			CustomerFormViewModel viewModel = new CustomerFormViewModel(this.DbContext.MembershipTypes, customer);
 
 			return View("ManageCustomer", viewModel);
 		}
@@ -48,18 +57,18 @@
 			if (!ModelState.IsValid)
 			{
 				//return Content($"Customer model is NOT valid.{System.Environment.NewLine}{customer}");
-				var viewModel = new CustomerFormViewModel(_context.MembershipTypes,	customer);
+				var viewModel = new CustomerFormViewModel(this.DbContext.MembershipTypes, customer);
 
 				return View("ManageCustomer", viewModel);
 			}
 
 			if (customer.Id <= 0)
 			{
-				_context.Customers.Add(customer);
+				this.DbContext.Customers.Add(customer);
 			}
 			else
 			{
-				Customer customerFromDb = _context.Customers
+				Customer customerFromDb = this.DbContext.Customers
 					.SingleOrDefault(c => c.Id == customer.Id);
 				if (customerFromDb != null)
 				{
@@ -70,7 +79,7 @@
 				}
 			}
 
-			await _context.SaveChangesAsync();
+			await this.DbContext.SaveChangesAsync();
 			return RedirectToAction("Index", "Customer");
 		}
 
@@ -92,7 +101,7 @@
 		// GET: Customer/Edit/{id}
 		public ActionResult Edit(int id)
 		{
-			Customer customer = _context.Customers
+			Customer customer = this.DbContext.Customers
 				.SingleOrDefault(c => c.Id == id);
 
 			if (customer == null)
@@ -100,7 +109,7 @@
 				return HttpNotFound($"There is no customer with Id = {id}.");
 			}
 
-			CustomerFormViewModel viewModel = new CustomerFormViewModel(_context.MembershipTypes, customer);
+			CustomerFormViewModel viewModel = new CustomerFormViewModel(this.DbContext.MembershipTypes, customer);
 
 			return View("ManageCustomer", viewModel);
 		}
@@ -109,7 +118,7 @@
 
 		private Customer GetCustomerById(int id)
 		{
-			Customer customer = _context.Customers
+			Customer customer = this.DbContext.Customers
 				.Include(c => c.MembershipType)
 				.SingleOrDefault(c => c.Id == id);
 
