@@ -1,0 +1,367 @@
+Accelerated JavaScript Training
+https://www.udemy.com/javascript-bootcamp-2016
+
+Take a deep dive into JavaScript, a Must-Know Language in Web Development, with a Hands-on, Example-driven approach
+4.7 (2,826 ratings)
+11,021 students enrolled
+Created by Maximilian Schwarzmüller
+Last updated 2/2019
+
+What you'll learn
+Use JavaScript to write modern, reactive Websites
+Understand how JavaScript works and how to use its many advantages
+Dive into JavaScript Libraries like jQuery or Frameworks like Angular 2 or React
+
+----------------------------------------------------------------------------------
+-- Course content
+----------------------------------------------------------------------------------
+Getting Started
+10:47
+Introduction 
+Preview
+04:34
+How to Execute JavaScript (Where does JS run?) 
+Preview
+01:25
+JavaScript Versions (ES5 vs ES6) 
+Preview
+01:52
+Course Format 
+Preview
+02:56
+–
+Language Basics
+02:09:46
+Introduction 
+Preview
+00:46
+Using JavaScript - Inline HTML 
+Preview
+05:20
+Using JavaScript - HTML Import 
+07:43
+Variables - Basics 
+06:48
+Variables - null, undefined and NaN 
+08:18
+Variables - Objects 
+Preview
+02:51
+Strict Mode 
+05:30
+Dynamic Typing 
+03:26
+Hoisting 
+04:27
+Functions - Creating and Calling Them 
+06:05
+Functions - Arguments & Returning Data 
+05:53
+Control Structures - If Statement 
+Preview
+04:19
+Control Structures - If Statement Advanced 
+05:03
+Control Structures - Switch 
+03:22
+Control Structures - Switch & Break 
+01:41
+Control Structures - For Loop 
+Preview
+03:12
+Control Structures - Nested Loops 
+02:11
+Control Structures - Controlling Loops with break & continue 
+04:15
+Control Structures - For Loop Variations 
+02:10
+Control Structures - Looping through Arrays 
+02:48
+Control Structures - While Loop 
+05:32
+Operators - Addition 
+07:07
+Operators - Subtraction 
+02:47
+Operators - Multiplication & Floating Point Problems 
+04:41
+Operators - Division & Modulus 
+03:59
+Operators - Comparing Values 
+03:48
+Operators - Important Rules 
+03:00
+Operators - Boolean 
+06:49
+Operators - Ternary Operator 
+02:42
+Operators - Precedence 
+02:30
+Wrap Up 
+00:40
+Module Resources
+00:03
+–
+Types & Scope
+16:46
+Primitive vs Reference Types 
+03:13
+Primitive vs Reference Types - Exercise 
+05:54
+Global vs Local Scope 
+02:36
+Global vs Local Scope - Exercise 
+05:02
+Module Resources
+00:01
+–
+Arrays
+26:25
+Introduction 
+Preview
+00:59
+Basics & Managing Elements 
+Preview
+03:33
+The forEach() Method 
+02:17
+Working with Elements: Push, Pop, Unshift and Shift 
+03:59
+Working with Parts of an Array: IndexOf, Splice and Slice 
+04:59
+Filtering, Mapping and Reversing Array Elements 
+04:14
+The Difference between Concat and Join 
+02:24
+Reducing Arrays 
+03:22
+Wrap Up 
+00:37
+Module Resources
+00:01
+–
+Objects
+01:14:06
+Object Basics & Literal Notation 
+09:36
+Properties & "this" 
+04:14
+Alternative Way of Creating Objects: Using the Object Constructor 
+02:07
+Objects are Reference Types (Refresher) 
+02:08
+Object.create() 
+03:55
+Prototypes Introduction 
+05:44
+Prototypes in Action 
+04:32
+Prototypes Summary 
+03:19
+Constructor Functions 
+12:17
+Constructor Functions & Arguments 
+01:30
+Object Creation & Prototypes Summary 
+02:49
+The "this" Keyword and why it might behave strangely 
+04:37
+Handling "this" with bind(), call() & apply() 
+02:46
+Creating Properties with defineProperty() 
+09:28
+Important built-in Methods and Properties 
+03:21
+Wrap Up 
+01:42
+Module Resources
+00:01
+–
+Errors & Debugging
+13:59
+Debugging with the Browser Developer Tools
+10:14
+Logging Data to the Console 
+00:31
+Handling Errors with try and catch 
+03:13
+Module Resources
+00:01
+–
+Functions
+18:59
+Introduction 
+00:26
+Closures 
+05:15
+Immediately Invoked Function Executions (IIFEs) 
+05:31
+Built-in Methods & Properties 
+07:46
+Module Resources
+00:01
+–
+Built-in Objects & Functions
+35:49
+Introduction 
+00:40
+Timers & Intervals 
+05:58
+Transforming Formats & Values 
+04:04
+String Functions 
+04:56
+The Math Object 
+07:17
+The Date Object 
+06:04
+Regular Expressions 
+06:49
+Module Resources
+00:01
+–
+Working with the Window and Document Object Model (DOM)
+50:19
+Introduction 
+02:43
+The Window Object 
+07:23
+The Location Object 
+03:30
+The Document Object and How to Interact with It 
+07:17
+Traversing the DOM 
+04:22
+Selecting Elements 
+03:54
+Selecting Elements with the Query Selector 
+04:22
+Selecting Elements - Exercises 
+03:10
+Creating and Inserting Elements 
+05:23
+Deleting Elements 
+02:24
+Elements and Nodes 
+01:07
+DOM Interaction Summary 
+01:35
+Dialogs 
+03:08
+Module Resources
+00:01
+–
+Events
+21:01
+Introduction 
+00:41
+The Event Object 
+00:56
+Event Handlers 
+05:05
+Event Listeners 
+03:40
+Event Behavior 
+05:53
+Event Object Properties 
+03:06
+Changing Propagation Order 
+01:39
+Module Resources
+00:01
+–
+JavaScript and Http Requests (AJAX)
+11:28
+Introduction 
+01:13
+Setup and Sending a GET Request 
+07:06
+POST Request 
+03:06
+Further Resources
+00:03
+–
+Libraries, Frameworks and Modules
+08:15
+Introduction 
+01:08
+Libraries & jQuery 
+01:36
+Frameworks 
+01:33
+Writing Modular Code 
+03:37
+Further Resources
+00:06
+DOM Properties & Methods 
+00:14
+–
+Course Project
+33:26
+Introduction 
+00:50
+Setup 
+03:58
+Fetching User Input 
+04:38
+Http Request Setup 
+05:37
+Creating a Weather Object 
+05:38
+Fetching & Handling Weather Data 
+04:35
+Displaying Data 
+08:08
+Complete Code
+00:02
+–
+Course Wrap Up
+01:45
+Wrap Up
+01:19
+Bonus: More Content!
+00:26
+
+
+----------------------------------------------------------------------------------
+-- Requirements
+----------------------------------------------------------------------------------
+
+Nothing but a basic understanding about how web pages work (HTML, CSS)
+
+----------------------------------------------------------------------------------
+-- Description
+----------------------------------------------------------------------------------
+
+Learn one of the most important Languages in Web Development
+
+JavaScript is one of the most important parts of every modern, reactive, user-friendly Web Pages or Applications. Despite that fact, you might yourself know many tutorials which leave you with a lot of open questions or are good, but also a couple of years old!
+
+Hands-on, Example-driven Course
+
+Join this course to receive a hands-on, example-driven JavaScript Bootcamp, which will guide you through the amazing language of JavaScript. Beginning at the very basics, we will walk through the various characteristics and features, JavaScript offers.
+
+Experienced Instructor
+
+As a freelance web developer I use JavaScript a lot but I know that using it doesn't necessarily qualify you to teach it well. That's why I'm also proud to host three 5-star rated courses here on Udemy as well as a successful learning YouTube channel.
+
+I not only offer high quality videos and examples, I'm also there to help whenever you're facing problems or do have open questions. Indeed, telling by the reviews of my other courses, I offer one of the best support services you will find on Udemy!
+
+Pay once, benefit a Lifetime!
+
+It's best to have a look at the course content, to find out what you will learn - but to give you a quick overview:
+
+All the basics about variables, functions, operators, language features, built-in objects and much more!
+In-depth modules on Arrays, Objects & Prototypes, Functions, DOM Interaction, Events, AJAX and all the other core features that make JavaScript so important!
+Hundreds of examples, showing all the concepts taught, allowing you to see them in action immediately
+A complete project to practice the skills gained throughout this course
+World-class support in case of any course-related questions or problems
+
+
+----------------------------------------------------------------------------------
+-- Who this course is for:
+----------------------------------------------------------------------------------
+
+This course is meant for students who never touched JavaScript before or everyone interested into refreshing knowledge about specific topics
+No prior JavaScript knowledge is required, though you may very well use this course to simply train your skills and practice with JavaScript if you already have some basic experience
+
