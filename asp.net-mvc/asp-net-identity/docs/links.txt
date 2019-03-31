@@ -1,0 +1,10 @@
+Introduction to ASP.NET Identity
+ASP.NET Identity API is used for managing user credentials. It replaces the older ASP.NET Membership system. The new ASP.NET Identity 2.1  version brings some of the cool new features.
+https://www.tektutorialshub.com/asp-net/asp-net-introduction-to-asp-net-identity/
+
+ASP.NET Identity 2.1 Custom Database
+https://www.jamessturtevant.com/posts/ASPNET-Identity2.0-Custom-Database/
+
+
+MS Docs - A Guide to Claims-Based Identity and Access Control (2nd Edition)
+https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff423674(v%3dpandp.10)
