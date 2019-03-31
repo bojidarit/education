@@ -11,12 +11,26 @@
 
 	public class CustomerController : Controller
 	{
+		private ApplicationDbContext _dbContext;
+
 		public CustomerController()
 		{
 		}
 
-		public ApplicationDbContext DbContext =>
-			HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+		/// <summary>
+		/// Constructor for testing this controller
+		/// </summary>
+		/// <param name="dbContext">Gets a mocked instance of the DB context</param>
+		public CustomerController(ApplicationDbContext dbContext)
+		{
+			_dbContext = dbContext;
+		}
+
+		public ApplicationDbContext DbContext
+		{
+			get => _dbContext ?? HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+			set => _dbContext = value;
+		}
 
 		// GET: Customer
 		public ActionResult Index()
