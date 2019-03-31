@@ -11,24 +11,12 @@
 
 	public class CustomerController : Controller
 	{
-		private ApplicationDbContext _dbContext;
-
 		public CustomerController()
 		{
 		}
 
-		public ApplicationDbContext DbContext
-		{
-			get
-			{
-				if (_dbContext == null)
-				{
-					_dbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
-				}
-
-				return _dbContext;
-			}
-		}
+		public ApplicationDbContext DbContext =>
+			HttpContext.GetOwinContext().Get<ApplicationDbContext>();
 
 		// GET: Customer
 		public ActionResult Index()
