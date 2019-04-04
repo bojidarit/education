@@ -15,7 +15,7 @@
 }
 else
 {
-	<table class="table table-bordered table-hover">
+	<table id="customersTable" class="table table-bordered table-hover">
 		<thead>
 			<tr>
 				<th>
@@ -26,6 +26,9 @@ else
 				</th>
 				<th>
 					Date of birth
+				</th>
+				<th>
+					Action
 				</th>
 			</tr>
 		</thead>
@@ -43,6 +46,9 @@ else
 					<td>
 						@item.BirthDate.FormatDateShort()
 					</td>
+					<td>
+						<button data-customer-id="@item.Id" class="btn-link js-delete">Delete</button>
+					</td>
 				</tr>
 			}
 		</tbody>
@@ -54,3 +60,35 @@ else
 		onclick="location.href='@Url.Action("New", "Customer")'">
 	New Customer
 </button>
+
+@section scripts
+{
+	<script>
+		$(document).ready(function () {
+			$("#customersTable .js-delete").on("click", deleteClick);
+		});
+
+		function deleteClick() {
+			var button = $(this);
+			var id = button.attr('data-customer-id');
+
+			var message = "Do you want to delete customer with id = " + id + "?";
+			//var ok = confirm(message);
+			bootbox.confirm(message, deleteRequest);
+
+			function deleteRequest(ok) {
+				console.log(ok);
+				if (ok) {
+					$.ajax({
+						url: "/api/customers/" + button.attr('data-customer-id'),
+						method: "DELETE",
+						success: function () {
+							console.log(`Customer with id = ${id} was deleted successfully.`);
+							button.parents("tr").remove();
+						}
+					})
+				}
+			}
+		}
+	</script>
+}
