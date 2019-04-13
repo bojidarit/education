@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Products API Demo Web Client</title>
+	<script src="Scripts/jquery-3.3.1.js"></script>
+	<style>
+		table, th, td {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<h1>Products API Demo Web Client</h1>
+
+	<div>
+		<h2>All Products</h2>
+		<table id="products_table">
+		</table>
+	</div>
+
+	<div>
+		<h2>Search by Id</h2>
+		<input type="text" id="productId" size="5" />
+		<input type="button" value="Search" onclick="find();" />
+		<p id="foundProduct" />
+	</div>
+
+	<script type="text/javascript">
+		var uri = "api/products";
+
+		$(document).ready(onLoad());
+
+		function onLoad() {
+			$.getJSON(uri).done(fillTable);
+		}
+
+		function fillTable(data) {
+			$table = $('#products_table');
+			$table.html('');
+			var $header = $('<tr>').append(
+				$('<th>').text('#'),
+				$('<th>').text('Name'),
+				$('<th>').text('Category'),
+				$('<th>').text('Price'),
+				$('<th>').html('Action')
+				);
+			$table.append($header);
+
+			$.each(data, addRowToProductsTable)
+		}
+
+		function addRowToProductsTable(key, item) {
+			var $button = $('<button/>').text('Delete').click(function () { deleteItem(item); });
+
+			var $tr = $('<tr>').append(
+				$('<td>').text(item.Id),
+				$('<td>').text(item.Name),
+				$('<td>').text(item.Category),
+				$('<td>').text(item.Price),
+				$('<td>').html($button)
+				);
+
+			$('#products_table').append($tr);
+		}
+
+		function deleteItem(item) {
+			var message = `Do you want to delete product '${item.Name}'?`;
+			var ok = confirm(message);
+			if (ok) {
+				console.log('delete...');
+				var deleteUri = `${uri}/${item.Id}`;
+				$.ajax({
+					url: deleteUri,
+					method: "DELETE",
+					success: fillTable
+				});
+			}
+		}
+
+		function find() {
+			var id = $("#productId").val();
+			var findUri = `${uri}/${id}`;
+			foundProduct.text('');
+			$.getJSON(findUri).done(showFoundItem).fail(findError);
+		}
+
+		var foundProduct = $('#foundProduct');
+
+		function showFoundItem(item) {
+			foundProduct.text(`Name: '${item.Name}'; Category: '${item.Category}'; Price: ${item.Price}`);
+		}
+
+		function findError(jqXHR, textStatus, err) {
+			foundProduct.text('Error: ' + err);
+		}
+	</script>
+</body>
+</html>
