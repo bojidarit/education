@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.539
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductsApi", "ProductsApi\ProductsApi.csproj", "{7945D2E9-B6C2-47DC-9ACA-6234B0DBE0A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFClientApp", "WPFClientApp\WPFClientApp.csproj", "{BD5B57B7-E3F9-4C5C-A176-7CD3F6D41A5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7945D2E9-B6C2-47DC-9ACA-6234B0DBE0A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7945D2E9-B6C2-47DC-9ACA-6234B0DBE0A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7945D2E9-B6C2-47DC-9ACA-6234B0DBE0A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5B57B7-E3F9-4C5C-A176-7CD3F6D41A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5B57B7-E3F9-4C5C-A176-7CD3F6D41A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5B57B7-E3F9-4C5C-A176-7CD3F6D41A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5B57B7-E3F9-4C5C-A176-7CD3F6D41A5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
