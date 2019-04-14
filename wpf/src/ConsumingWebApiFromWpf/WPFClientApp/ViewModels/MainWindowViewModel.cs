@@ -13,6 +13,10 @@
 
 	public class MainWindowViewModel : ViewModelBase
 	{
+		/// <summary>
+		/// MS Docs: Call a Web API From a .NET Client (C#)
+		/// https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
+		/// </summary>
 		private static HttpClient _client = new HttpClient();
 		private static string _apiPath = "api/products/";
 

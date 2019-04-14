@@ -1,0 +1,18 @@
+Get Started with ASP.NET Web API 2 (C#)
+https://docs.microsoft.com/en-us/aspnet/web-api/overview/getting-started-with-aspnet-web-api/tutorial-your-first-web-api
+
+In this tutorial, you will use ASP.NET Web API to create a web API that returns a list of products.
+---------------------------------------------------------------------------------------------------------------------
+
+Call a Web API From a .NET Client (C#)
+https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
+
+This tutorial shows how to call a web API from a .NET application, using System.Net.Http.HttpClient.
+Install the Web API Client Libraries: Install-Package Microsoft.AspNet.WebApi.Client
+---------------------------------------------------------------------------------------------------------------------
+
+TODO: Using Web API 2 with Entity Framework 6
+https://docs.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-1
+
+This tutorial teaches you the basics of creating a web application with an ASP.NET Web API back end. The tutorial uses Entity Framework 6 for the data layer, and Knockout.js for the client-side JavaScript application. The tutorial also shows how to deploy the app to Azure App Service Web Apps.
+---------------------------------------------------------------------------------------------------------------------
