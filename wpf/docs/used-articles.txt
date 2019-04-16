@@ -23,6 +23,19 @@ https://docs.microsoft.com/en-us/aspnet/mvc/overview/getting-started/getting-sta
 
 In this series of tutorials, you learn how to build an ASP.NET MVC 5 application that uses Entity Framework 6 for data access. This tutorial uses the Code First workflow.
 ---------------------------------------------------------------------------------------------------------------------
+
+Code First Migrations
+https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/index
+
+Code First Migrations is the recommended way to evolve your application's database schema if you are using the Code First workflow. Migrations provide a set of tools that allow:
+
+    Create an initial database that works with your EF model
+    Generating migrations to keep track of changes you make to your EF model
+    Keep your database up to date with those changes
+
+The following walkthrough will provide an overview Code First Migrations in Entity Framework.
 ---------------------------------------------------------------------------------------------------------------------
+
 ---------------------------------------------------------------------------------------------------------------------
+
 ---------------------------------------------------------------------------------------------------------------------
