@@ -56,7 +56,7 @@
 			var $tr = $('<tr>').append(
 				$('<td>').text(item.Id),
 				$('<td>').text(item.Name),
-				$('<td>').text(item.Category),
+				$('<td>').text(item.Category.Name),
 				$('<td>').text(item.Price),
 				$('<td>').html($button)
 				);
@@ -73,7 +73,7 @@
 				$.ajax({
 					url: deleteUri,
 					method: "DELETE",
-					success: fillTable
+					success: onLoad
 				});
 			}
 		}
@@ -88,7 +88,7 @@
 		var foundProduct = $('#foundProduct');
 
 		function showFoundItem(item) {
-			foundProduct.text(`Name: '${item.Name}'; Category: '${item.Category}'; Price: ${item.Price}`);
+			foundProduct.text(`Name: '${item.Name}'; Category: '${item.Category.Name}'; Price: ${item.Price}`);
 		}
 
 		function findError(jqXHR, textStatus, err) {
