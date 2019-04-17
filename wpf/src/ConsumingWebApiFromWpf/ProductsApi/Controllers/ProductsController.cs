@@ -14,7 +14,7 @@
 	/// https://docs.microsoft.com/en-us/aspnet/mvc/overview/getting-started/getting-started-with-ef-using-mvc/creating-an-entity-framework-data-model-for-an-asp-net-mvc-application
 	/// </summary>
 	public class ProductsController : ApiController
-    {
+	{
 		StoreContext _context;
 
 		public ProductsController()
@@ -50,7 +50,7 @@
 		[HttpPost]
 		public IHttpActionResult CreateProduct(Product product)
 		{
-			if(!ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
@@ -69,13 +69,13 @@
 		[HttpPut]
 		public IHttpActionResult UpdateProduct(int id, Product product)
 		{
-			if(!ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
 
 			Product productFormDb = _context.Products.SingleOrDefault(p => p.Id == product.Id);
-			if(productFormDb == null)
+			if (productFormDb == null)
 			{
 				return NotFound();
 			}
@@ -100,7 +100,6 @@
 			}
 
 			_context.Products.Remove(product);
-
 
 			_context.SaveChanges();
 
