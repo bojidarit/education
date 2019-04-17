@@ -3,6 +3,7 @@
 	using Catel.IoC;
 	using Catel.MVVM;
 	using Catel.Services;
+	using System;
 	using System.Threading.Tasks;
 
 	public static class ViewModelExtensions
@@ -17,12 +18,30 @@
 				var uiVisualizerService = dependencyResolver.Resolve<IUIVisualizerService>();
 				result = await uiVisualizerService.ShowDialogAsync(viewModelDialog);
 			}
-			catch (System.Exception ex)
+			catch (Exception ex)
 			{
-				//TODO: Log error...
+				await viewModelParent.ShowError(ex);
 			}
 
 			return result;
 		}
+
+		public static IMessageService GetMessageService(this ViewModelBase viewModel)
+		{
+			var dependencyResolver = viewModel.GetDependencyResolver();
+			return dependencyResolver.Resolve<IMessageService>();
+		}
+
+		public async static Task<MessageResult> ShowMessage(this ViewModelBase viewModel,
+			string message, string caption = "", MessageButton button = MessageButton.OK,
+			MessageImage icon = MessageImage.None) =>
+			await viewModel.GetMessageService().ShowAsync(message, caption, button, icon);
+
+		public async static Task<MessageResult> ShowError(this ViewModelBase viewModel, Exception exception) =>
+			await viewModel.GetMessageService().ShowErrorAsync(exception);
+
+		public async static Task<MessageResult> ShowErrorAsync(this ViewModelBase viewModel, 
+			string message, string caption = "") =>
+			await viewModel.GetMessageService().ShowErrorAsync(message, caption);
 	}
 }

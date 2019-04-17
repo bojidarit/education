@@ -3,7 +3,7 @@
 	using AutoMapper;
 	using Catel.Data;
 	using Catel.MVVM;
-	using Flurl;
+	using Catel.Services;
 	using Newtonsoft.Json;
 	using System;
 	using System.Collections.Generic;
@@ -22,7 +22,8 @@
 		/// https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
 		/// </summary>
 		private static HttpClient _client = new HttpClient();
-		private static string _apiPath = "api/products/";
+		private static string _apiProductsPath = "api/products/";
+		private static string _apiCategoriesPath = "api/categories";
 
 		public MainWindowViewModel()
 		{
@@ -186,12 +187,16 @@
 
 		public Command<object> DeleteCommand { get; private set; }
 
-		private void OnDeleteCommandExecute(object item)
+		private async void OnDeleteCommandExecute(object item)
 		{
 			ProductModel model = item as ProductModel;
 			if (model != null)
 			{
-				// TODO: Save changes using Products WEB API...
+				if (await this.ShowMessage($"Do you really want to delete product '{model.Name}'?", "Please Confirm",
+					MessageButton.YesNo, MessageImage.Question) == MessageResult.Yes)
+				{
+					// TODO: Save changes using Products WEB API...
+				}
 			}
 		}
 
@@ -218,16 +223,16 @@
 			}
 			catch (Exception ex)
 			{
-				this.Message = ex.Message;
+				this.ShowError(ex).GetAwaiter().GetResult();
 			}
 		}
+
+		#region GET requests
 
 		private async Task<IEnumerable<Category>> GetAllCategoriesAsync()
 		{
 			IEnumerable<Category> categories = null;
-			string path = Url.Combine(_client.BaseAddress.ToString(), "api/categories");
-
-			this.Message = path;
+			string path = Flurl.Url.Combine(_client.BaseAddress.ToString(), _apiCategoriesPath);
 
 			try
 			{
@@ -240,7 +245,7 @@
 			}
 			catch (Exception ex)
 			{
-				this.Message = ex.Message;
+				await HandleHttpException(ex);
 			}
 
 			return categories;
@@ -249,9 +254,7 @@
 		private async Task<IEnumerable<Product>> GetAllProductAsync()
 		{
 			IEnumerable<Product> products = null;
-			string path = Url.Combine(_client.BaseAddress.ToString(), _apiPath);
-
-			this.Message = path;
+			string path = Flurl.Url.Combine(_client.BaseAddress.ToString(), _apiProductsPath);
 
 			try
 			{
@@ -264,7 +267,7 @@
 			}
 			catch (Exception ex)
 			{
-				this.Message = ex.Message;
+				await HandleHttpException(ex);
 			}
 
 			return products;
@@ -273,18 +276,31 @@
 		private async Task<Product> GetProductAsync(int productId)
 		{
 			Product product = null;
-			string path = Url.Combine(_client.BaseAddress.ToString(), _apiPath, productId.ToString());
+			string path = Flurl.Url.Combine(_client.BaseAddress.ToString(), _apiProductsPath, productId.ToString());
 
-			this.Message = path;
-
-			HttpResponseMessage response = await _client.GetAsync(path);
-			if (response.IsSuccessStatusCode)
+			try
 			{
-				string data = await response.Content.ReadAsStringAsync();
-				product = JsonConvert.DeserializeObject<Product>(data);
+				HttpResponseMessage response = await _client.GetAsync(path);
+				if (response.IsSuccessStatusCode)
+				{
+					string data = await response.Content.ReadAsStringAsync();
+					product = JsonConvert.DeserializeObject<Product>(data);
+				}
+			}
+			catch (Exception ex)
+			{
+				await HandleHttpException(ex);
 			}
 
 			return product;
+		}
+
+		#endregion //GET request
+
+		private async Task HandleHttpException(Exception exception)
+		{
+			// TODO: Show inner exceptions
+			await this.ShowError(exception);
 		}
 
 		#endregion //Methods
