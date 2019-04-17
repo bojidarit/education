@@ -1,0 +1,63 @@
+﻿<catel:DataWindow x:Class="WPFClientApp.Views.ManageProductWindow"
+				  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				  xmlns:catel="http://schemas.catelproject.com"
+				  WindowStartupLocation="CenterOwner"
+				  SizeToContent="Manual"
+				  MinWidth="450"
+				  MinHeight="185"
+				  Width="450"
+				  Height="185">
+
+	<Border BorderThickness="1"
+			BorderBrush="DimGray"
+			Margin="5,5,5,0">
+		<Grid Margin="5,5,5,0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="0" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="0" />
+				<ColumnDefinition Width="2*" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="3*" />
+			</Grid.ColumnDefinitions>
+
+			<!--Name-->
+			<TextBlock Grid.Row="1"
+					   Grid.Column="1"
+					   Text="Name" />
+			<TextBox Grid.Row="1"
+					 Grid.Column="3"
+					 Height="{Binding Path=ActualHeight, ElementName=cbCategories}"
+					 Text="{Binding WorkModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+			<!--Category-->
+			<TextBlock Grid.Row="3"
+					   Grid.Column="1"
+					   Text="Category" />
+			<ComboBox Grid.Row="3"
+					  Grid.Column="3"
+					  x:Name="cbCategories"
+					  ItemsSource="{Binding Categories}"
+					  DisplayMemberPath="Name"
+					  SelectedValuePath="Id"
+					  SelectedValue="{Binding WorkModel.CategoryId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+			<!--Price-->
+			<TextBlock Grid.Row="5"
+					   Grid.Column="1"
+					   Text="Price" />
+			<TextBox Grid.Row="5"
+					 Grid.Column="3"
+					 Height="{Binding Path=ActualHeight, ElementName=cbCategories}"
+					 Text="{Binding WorkModel.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+		</Grid>
+	</Border>
+</catel:DataWindow>

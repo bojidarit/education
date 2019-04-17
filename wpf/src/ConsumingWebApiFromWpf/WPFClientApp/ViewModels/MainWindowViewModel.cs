@@ -1,5 +1,6 @@
 ﻿namespace WPFClientApp.ViewModels
 {
+	using AutoMapper;
 	using Catel.Data;
 	using Catel.MVVM;
 	using Flurl;
@@ -7,9 +8,12 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
+	using System.Linq;
 	using System.Net.Http;
 	using System.Threading.Tasks;
 	using WPFClientApp.Dtos;
+	using WPFClientApp.Extensions;
+	using WPFClientApp.Models;
 
 	public class MainWindowViewModel : ViewModelBase
 	{
@@ -23,12 +27,23 @@
 		public MainWindowViewModel()
 		{
 			LoadCommand = new Command(OnLoadCommandExecute, OnLoadCommandCanExecute);
+			NewCommand = new Command(OnNewCommandExecute, OnNewCommandCanExecute);
+			EditCommand = new Command<object>(OnEditCommandExecute, OnEditCommandCanExecute);
 			DeleteCommand = new Command<object>(OnDeleteCommandExecute);
+
+			this.Location = @"http://localhost:50118/";
 		}
 
 		#region Properties
 
 		public override string Title => "WPFClientApp";
+
+		public ObservableCollection<IdNameModel> Categories
+		{
+			get { return GetValue<ObservableCollection<IdNameModel>>(CategoriesProperty); }
+			set { SetValue(CategoriesProperty, value); }
+		}
+		public static readonly PropertyData CategoriesProperty = RegisterProperty("Categories", typeof(ObservableCollection<IdNameModel>), null);
 
 		public bool IsBusy
 		{
@@ -42,7 +57,7 @@
 			get { return GetValue<bool>(HttpClientInitializedProperty); }
 			set { SetValue(HttpClientInitializedProperty, value); }
 		}
-		public static readonly PropertyData HttpClientInitializedProperty = 
+		public static readonly PropertyData HttpClientInitializedProperty =
 			RegisterProperty(nameof(HttpClientInitialized), typeof(bool), false);
 
 		public bool CanChangeLocation
@@ -50,7 +65,7 @@
 			get { return GetValue<bool>(CanChangeLocationProperty); }
 			set { SetValue(CanChangeLocationProperty, value); }
 		}
-		public static readonly PropertyData CanChangeLocationProperty = 
+		public static readonly PropertyData CanChangeLocationProperty =
 			RegisterProperty(nameof(CanChangeLocation), typeof(bool), true);
 
 		#region Location Base URL
@@ -74,13 +89,13 @@
 
 		#endregion //Location Base URL
 
-		public ObservableCollection<Product> Products
+		public ObservableCollection<ProductModel> Products
 		{
-			get { return GetValue<ObservableCollection<Product>>(ProductsProperty); }
+			get { return GetValue<ObservableCollection<ProductModel>>(ProductsProperty); }
 			set { SetValue(ProductsProperty, value); }
 		}
 		public static readonly PropertyData ProductsProperty =
-			RegisterProperty(nameof(Products), typeof(ObservableCollection<Product>), null);
+			RegisterProperty(nameof(Products), typeof(ObservableCollection<ProductModel>), null);
 
 		public string Message
 		{
@@ -105,13 +120,67 @@
 		private async void OnLoadCommandExecute()
 		{
 			this.IsBusy = true;
+
+			var categories = await GetAllCategoriesAsync();
+			this.Categories = new ObservableCollection<IdNameModel>(
+				categories.Select(c => new IdNameModel(c.Id, c.Name)));
+
 			IEnumerable<Product> products = await GetAllProductAsync();
-			this.Products = new ObservableCollection<Product>(products);
+			this.Products = new ObservableCollection<ProductModel>(products.Select(p => Mapper.Map<Product, ProductModel>(p)));
+
 			this.IsBusy = false;
 			this.CanChangeLocation = false;
 		}
 
 		#endregion //LoadCommand
+
+		#region NewCommand
+
+		public Command NewCommand { get; private set; }
+
+		private bool OnNewCommandCanExecute()
+		{
+			return !this.IsBusy && this.Categories != null;
+		}
+
+		private async void OnNewCommandExecute()
+		{
+			var vm = new ManageProductViewModel(this.Categories);
+			var result = await this.ShowDialogAsync(vm);
+
+			if (result ?? false)
+			{
+				// TODO: Save changes using Products WEB API...
+			}
+		}
+
+		#endregion //NewCommand
+
+		#region EditCommand
+
+		public Command<object> EditCommand { get; private set; }
+
+		private bool OnEditCommandCanExecute(object item)
+		{
+			return !this.IsBusy;
+		}
+
+		private async void OnEditCommandExecute(object item)
+		{
+			ProductModel model = item as ProductModel;
+			if (model != null)
+			{
+				var vm = new ManageProductViewModel(this.Categories, model);
+				var result = await this.ShowDialogAsync(vm);
+
+				if (result ?? false)
+				{
+					// TODO: Save changes using Products WEB API...
+				}
+			}
+		}
+
+		#endregion //EditCommand
 
 		#region DeleteCommand
 
@@ -119,10 +188,10 @@
 
 		private void OnDeleteCommandExecute(object item)
 		{
-			Product model = item as Product;
+			ProductModel model = item as ProductModel;
 			if (model != null)
 			{
-				// TODO: Handle command logic here
+				// TODO: Save changes using Products WEB API...
 			}
 		}
 
@@ -151,6 +220,30 @@
 			{
 				this.Message = ex.Message;
 			}
+		}
+
+		private async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+		{
+			IEnumerable<Category> categories = null;
+			string path = Url.Combine(_client.BaseAddress.ToString(), "api/categories");
+
+			this.Message = path;
+
+			try
+			{
+				HttpResponseMessage response = await _client.GetAsync(path);
+				if (response.IsSuccessStatusCode)
+				{
+					string data = await response.Content.ReadAsStringAsync();
+					categories = JsonConvert.DeserializeObject<IEnumerable<Category>>(data);
+				}
+			}
+			catch (Exception ex)
+			{
+				this.Message = ex.Message;
+			}
+
+			return categories;
 		}
 
 		private async Task<IEnumerable<Product>> GetAllProductAsync()

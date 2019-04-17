@@ -43,6 +43,8 @@
 
 			Log.Info("Calling base.OnStartup");
 
+			AutoMapper.Mapper.Initialize(p => p.AddProfile<MappingProfile>());
+
 			base.OnStartup(e);
 		}
 
