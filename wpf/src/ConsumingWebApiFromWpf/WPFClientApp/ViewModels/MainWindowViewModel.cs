@@ -10,6 +10,7 @@
 	using System.Collections.ObjectModel;
 	using System.Linq;
 	using System.Net.Http;
+	using System.Text;
 	using System.Threading.Tasks;
 	using WPFClientApp.Dtos;
 	using WPFClientApp.Extensions;
@@ -123,11 +124,19 @@
 			this.IsBusy = true;
 
 			var categories = await GetAllCategoriesAsync();
-			this.Categories = new ObservableCollection<IdNameModel>(
-				categories.Select(c => new IdNameModel(c.Id, c.Name)));
 
-			IEnumerable<Product> products = await GetAllProductAsync();
-			this.Products = new ObservableCollection<ProductModel>(products.Select(p => Mapper.Map<Product, ProductModel>(p)));
+			if (categories != null)
+			{
+				this.Categories = new ObservableCollection<IdNameModel>(
+					categories.Select(c => new IdNameModel(c.Id, c.Name)));
+
+				IEnumerable<Product> products = await GetAllProductAsync();
+				if (products != null)
+				{
+					this.Products = new ObservableCollection<ProductModel>(
+						products.Select(p => Mapper.Map<Product, ProductModel>(p)));
+				}
+			}
 
 			this.IsBusy = false;
 			this.CanChangeLocation = false;
@@ -245,7 +254,7 @@
 			}
 			catch (Exception ex)
 			{
-				await HandleHttpException(ex);
+				await HandleHttpException(ex, path);
 			}
 
 			return categories;
@@ -267,7 +276,7 @@
 			}
 			catch (Exception ex)
 			{
-				await HandleHttpException(ex);
+				await HandleHttpException(ex, path);
 			}
 
 			return products;
@@ -289,7 +298,7 @@
 			}
 			catch (Exception ex)
 			{
-				await HandleHttpException(ex);
+				await HandleHttpException(ex, path);
 			}
 
 			return product;
@@ -297,10 +306,20 @@
 
 		#endregion //GET request
 
-		private async Task HandleHttpException(Exception exception)
+		private async Task HandleHttpException(Exception exception, string requestUri)
 		{
-			// TODO: Show inner exceptions
-			await this.ShowError(exception);
+			StringBuilder stringBuilder = new StringBuilder($"Request Uri: {requestUri} {Environment.NewLine}");
+			GetInnerExceptions(exception, stringBuilder);
+			await this.ShowError(stringBuilder.ToString(), exception.GetType().Name);
+		}
+
+		private void GetInnerExceptions(Exception exception, StringBuilder stringBuilder)
+		{
+			stringBuilder.Append($"{exception.Message} {Environment.NewLine}");
+			if (exception.InnerException != null)
+			{
+				GetInnerExceptions(exception.InnerException, stringBuilder);
+			}
 		}
 
 		#endregion //Methods

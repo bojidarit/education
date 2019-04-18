@@ -40,7 +40,7 @@
 		public async static Task<MessageResult> ShowError(this ViewModelBase viewModel, Exception exception) =>
 			await viewModel.GetMessageService().ShowErrorAsync(exception);
 
-		public async static Task<MessageResult> ShowErrorAsync(this ViewModelBase viewModel, 
+		public async static Task<MessageResult> ShowError(this ViewModelBase viewModel, 
 			string message, string caption = "") =>
 			await viewModel.GetMessageService().ShowErrorAsync(message, caption);
 	}
