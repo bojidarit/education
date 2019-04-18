@@ -9,6 +9,7 @@
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.Linq;
+	using System.Net;
 	using System.Net.Http;
 	using System.Text;
 	using System.Threading.Tasks;
@@ -210,7 +211,14 @@
 				if (await this.ShowMessage($"Do you really want to delete product '{model.Name}'?", "Please Confirm",
 					MessageButton.YesNo, MessageImage.Question) == MessageResult.Yes)
 				{
-					// TODO: Save changes using Products WEB API...
+					int statusCode = await DeleteProductAsync(model.Id);
+					if (statusCode >= 0)
+					{
+						HttpStatusCode httpStatus = (HttpStatusCode)statusCode;
+						await this.ShowMessage($"Status Code '{httpStatus}'", "DELETE HTTP Request", MessageButton.OK);
+					}
+
+					OnLoadCommandExecute();
 				}
 			}
 		}
@@ -355,6 +363,28 @@
 			}
 
 			return failed ? null : response.Headers.Location;
+		}
+
+		private async Task<int> DeleteProductAsync(int productId)
+		{
+			int statusCode = -1;
+			string path = MakeRequestUri(_apiProductsPath, productId.ToString());
+
+			try
+			{
+				HttpResponseMessage response = await _client.DeleteAsync(path);
+
+				// throws an exception if the status code falls outside the range 200–299
+				response.EnsureSuccessStatusCode();
+
+				statusCode = (int)response.StatusCode;
+			}
+			catch (Exception ex)
+			{
+				await HandleHttpException(ex, MakeRequestUri(_apiProductsPath));
+			}
+
+			return statusCode;
 		}
 
 		private string MakeRequestUri(string apiPath, string parameter = "") =>
