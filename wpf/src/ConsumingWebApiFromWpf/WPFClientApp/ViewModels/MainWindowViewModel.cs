@@ -222,10 +222,12 @@
 					{
 						HttpStatusCode httpStatus = (HttpStatusCode)statusCode;
 						await this.ShowMessage($"Status Code '{httpStatus}'", "DELETE HTTP Request", MessageButton.OK);
+
+						// Remove product only when the delete is successful
+						this.Products.Remove(model);
 					}
 
 					//OnLoadCommandExecute();
-					this.Products.Remove(model);
 				}
 			}
 		}
