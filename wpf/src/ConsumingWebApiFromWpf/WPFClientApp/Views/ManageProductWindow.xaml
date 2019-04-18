@@ -5,59 +5,81 @@
 				  WindowStartupLocation="CenterOwner"
 				  SizeToContent="Manual"
 				  MinWidth="450"
-				  MinHeight="185"
+				  MinHeight="225"
 				  Width="450"
-				  Height="185">
+				  Height="225">
 
-	<Border BorderThickness="1"
-			BorderBrush="DimGray"
-			Margin="5,5,5,0">
-		<Grid Margin="5,5,5,0">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="0" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="5" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="5" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
+	<DockPanel LastChildFill="True">
 
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="0" />
-				<ColumnDefinition Width="2*" />
-				<ColumnDefinition Width="5" />
-				<ColumnDefinition Width="3*" />
-			</Grid.ColumnDefinitions>
+		<!--Footer with buttons-->
+		<StackPanel DockPanel.Dock="Bottom"
+					Margin="5"
+					Orientation="Horizontal"
+					HorizontalAlignment="Right">
+			<Button Content="OK"
+					Command="{Binding OkCommand}"
+					Width="120"
+					Height="25"
+					Margin="0,0,5,0" />
+			<Button Content="Cancel"
+					Width="120"
+					Height="25"
+					Command="{Binding CancelCommand}" />
+		</StackPanel>
 
-			<!--Name-->
-			<TextBlock Grid.Row="1"
-					   Grid.Column="1"
-					   Text="Name" />
-			<TextBox Grid.Row="1"
-					 Grid.Column="3"
-					 Height="{Binding Path=ActualHeight, ElementName=cbCategories}"
-					 Text="{Binding WorkModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+		<!--Main content-->
+		<Border BorderThickness="1"
+				BorderBrush="DimGray"
+				Margin="5,5,5,10">
+			<Grid Margin="5,5,5,0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="0" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="5" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="5" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
 
-			<!--Category-->
-			<TextBlock Grid.Row="3"
-					   Grid.Column="1"
-					   Text="Category" />
-			<ComboBox Grid.Row="3"
-					  Grid.Column="3"
-					  x:Name="cbCategories"
-					  ItemsSource="{Binding Categories}"
-					  DisplayMemberPath="Name"
-					  SelectedValuePath="Id"
-					  SelectedValue="{Binding WorkModel.CategoryId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0" />
+					<ColumnDefinition Width="2*" />
+					<ColumnDefinition Width="5" />
+					<ColumnDefinition Width="3*" />
+				</Grid.ColumnDefinitions>
 
-			<!--Price-->
-			<TextBlock Grid.Row="5"
-					   Grid.Column="1"
-					   Text="Price" />
-			<TextBox Grid.Row="5"
-					 Grid.Column="3"
-					 Height="{Binding Path=ActualHeight, ElementName=cbCategories}"
-					 Text="{Binding WorkModel.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-		</Grid>
-	</Border>
+				<!--Name-->
+				<TextBlock Grid.Row="1"
+						   Grid.Column="1"
+						   Text="Name" />
+				<TextBox Grid.Row="1"
+						 Grid.Column="3"
+						 Height="{Binding Path=ActualHeight, ElementName=cbCategories}"
+						 Text="{Binding WorkModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+				<!--Category-->
+				<TextBlock Grid.Row="3"
+						   Grid.Column="1"
+						   Text="Category" />
+				<ComboBox Grid.Row="3"
+						  Grid.Column="3"
+						  x:Name="cbCategories"
+						  ItemsSource="{Binding Categories}"
+						  DisplayMemberPath="Name"
+						  SelectedValuePath="Id"
+						  SelectedValue="{Binding WorkModel.CategoryId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+				<!--Price-->
+				<TextBlock Grid.Row="5"
+						   Grid.Column="1"
+						   Text="Price" />
+				<TextBox Grid.Row="5"
+						 Grid.Column="3"
+						 Height="{Binding Path=ActualHeight, ElementName=cbCategories}"
+						 Text="{Binding WorkModel.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+			</Grid>
+		</Border>
+		
+	</DockPanel>
 </catel:DataWindow>

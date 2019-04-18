@@ -160,7 +160,13 @@
 
 			if (result ?? false)
 			{
-				// TODO: Save changes using Products WEB API...
+				Product product = Mapper.Map<Product>(vm.WorkModel);
+				Uri uri = await CreateProductAsync(product);
+				if (uri != null)
+				{
+					Product newOne = await GetProductAsync(uri);
+					this.Products.Add(Mapper.Map<ProductModel>(newOne));
+				}
 			}
 		}
 
@@ -241,7 +247,7 @@
 		private async Task<IEnumerable<Category>> GetAllCategoriesAsync()
 		{
 			IEnumerable<Category> categories = null;
-			string path = Flurl.Url.Combine(_client.BaseAddress.ToString(), _apiCategoriesPath);
+			string path = MakeRequestUri(_apiCategoriesPath);
 
 			try
 			{
@@ -263,7 +269,7 @@
 		private async Task<IEnumerable<Product>> GetAllProductAsync()
 		{
 			IEnumerable<Product> products = null;
-			string path = Flurl.Url.Combine(_client.BaseAddress.ToString(), _apiProductsPath);
+			string path = MakeRequestUri(_apiProductsPath);
 
 			try
 			{
@@ -285,7 +291,7 @@
 		private async Task<Product> GetProductAsync(int productId)
 		{
 			Product product = null;
-			string path = Flurl.Url.Combine(_client.BaseAddress.ToString(), _apiProductsPath, productId.ToString());
+			string path = MakeRequestUri(_apiProductsPath, productId.ToString());
 
 			try
 			{
@@ -304,7 +310,55 @@
 			return product;
 		}
 
+		private async Task<Product> GetProductAsync(Uri uri)
+		{
+			Product product = null;
+
+			try
+			{
+				HttpResponseMessage response = await _client.GetAsync(uri.PathAndQuery);
+				if (response.IsSuccessStatusCode)
+				{
+					string data = await response.Content.ReadAsStringAsync();
+					product = JsonConvert.DeserializeObject<Product>(data);
+				}
+			}
+			catch (Exception ex)
+			{
+				await HandleHttpException(ex, uri.PathAndQuery);
+			}
+
+			return product;
+		}
+
 		#endregion //GET request
+
+		/// <summary>
+		/// Makes a POST request to create new Product
+		/// </summary>
+		/// <returns>return URI of the created resource</returns>
+		private async Task<Uri> CreateProductAsync(Product product)
+		{
+			HttpResponseMessage response = null;
+			bool failed = false;
+
+			try
+			{
+				response = await _client.PostAsJsonAsync(_apiProductsPath, product);
+				// throws an exception if the status code falls outside the range 200–299
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception ex)
+			{
+				failed = true;
+				await HandleHttpException(ex, MakeRequestUri(_apiProductsPath));
+			}
+
+			return failed ? null : response.Headers.Location;
+		}
+
+		private string MakeRequestUri(string apiPath, string parameter = "") =>
+			Flurl.Url.Combine(_client.BaseAddress.ToString(), apiPath, parameter);
 
 		private async Task HandleHttpException(Exception exception, string requestUri)
 		{
