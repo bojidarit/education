@@ -192,7 +192,13 @@
 
 				if (result ?? false)
 				{
-					// TODO: Save changes using Products WEB API...
+					Product product = Mapper.Map<Product>(vm.WorkModel);
+					bool output = await UpdateProductAsync(product);
+
+					if (!output)
+					{
+						//TODO: Revert changes...
+					}
 				}
 			}
 		}
@@ -218,7 +224,8 @@
 						await this.ShowMessage($"Status Code '{httpStatus}'", "DELETE HTTP Request", MessageButton.OK);
 					}
 
-					OnLoadCommandExecute();
+					//OnLoadCommandExecute();
+					this.Products.Remove(model);
 				}
 			}
 		}
@@ -363,6 +370,29 @@
 			}
 
 			return failed ? null : response.Headers.Location;
+		}
+
+		public async Task<bool> UpdateProductAsync(Product product)
+		{
+			bool result = true;
+			string path = MakeRequestUri(_apiProductsPath, product.Id.ToString());
+
+			try
+			{
+				HttpResponseMessage response = await _client.PutAsJsonAsync(path, product);
+				response.EnsureSuccessStatusCode();
+
+				// ??? De-serialize the updated product from the response body.
+				//string json = await response.Content.ReadAsStringAsync();
+				//result = JsonConvert.DeserializeObject<Product>(json);
+			}
+			catch (Exception ex)
+			{
+				result = false;
+				await HandleHttpException(ex, path);
+			}
+
+			return result;
 		}
 
 		private async Task<int> DeleteProductAsync(int productId)
