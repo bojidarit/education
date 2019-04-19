@@ -16,16 +16,15 @@
 	using WPFClientApp.Dtos;
 	using WPFClientApp.Extensions;
 	using WPFClientApp.Models;
+	using WPFClientApp.WebApiClient;
 
-	public class MainWindowViewModel : ViewModelBase
+	public class MainWindowViewModel : ViewModelBase, IDisposable
 	{
-		/// <summary>
-		/// MS Docs: Call a Web API From a .NET Client (C#)
-		/// https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
-		/// </summary>
 		private static HttpClient _client = new HttpClient();
 		private static string _apiProductsPath = "api/products/";
 		private static string _apiCategoriesPath = "api/categories";
+
+		private WebApiHttpClient _webApiClient = null;
 
 		public MainWindowViewModel()
 		{
@@ -35,6 +34,15 @@
 			DeleteCommand = new Command<object>(OnDeleteCommandExecute);
 
 			this.Location = @"http://localhost:50118/";
+			this.CanChangeLocation = false;
+
+			_webApiClient = new WebApiHttpClient(this.Location);
+			_webApiClient.ErrorEventHandler += (sender, e) => this.ShowError(e.HierarchyExceptionMessages, e.ExceptionType).GetAwaiter().GetResult();
+		}
+
+		public void Dispose()
+		{
+			_webApiClient?.Dispose();
 		}
 
 		#region Properties
@@ -86,7 +94,7 @@
 		{
 			if (!string.IsNullOrWhiteSpace(this.Location))
 			{
-				InitializeHttpClient();
+				//InitializeHttpClient();
 			}
 		}
 
@@ -117,21 +125,24 @@
 
 		private bool OnLoadCommandCanExecute()
 		{
-			return !this.IsBusy && this.HttpClientInitialized;
+			//return !this.IsBusy && this.HttpClientInitialized;
+			return !this.IsBusy;
 		}
 
 		private async void OnLoadCommandExecute()
 		{
 			this.IsBusy = true;
 
-			var categories = await GetAllCategoriesAsync();
+			var categories = await _webApiClient.GetAsync<IEnumerable<Category>>(_apiCategoriesPath);
+			//var categories = await GetAllCategoriesAsync();
 
 			if (categories != null)
 			{
 				this.Categories = new ObservableCollection<IdNameModel>(
 					categories.Select(c => new IdNameModel(c.Id, c.Name)));
 
-				IEnumerable<Product> products = await GetAllProductAsync();
+				//IEnumerable<Product> products = await GetAllProductAsync();
+				IEnumerable<Product> products = await _webApiClient.GetAsync<IEnumerable<Product>>(_apiProductsPath);
 				if (products != null)
 				{
 					this.Products = new ObservableCollection<ProductModel>(
@@ -162,11 +173,13 @@
 			if (result ?? false)
 			{
 				Product product = Mapper.Map<Product>(vm.WorkModel);
-				Uri uri = await CreateProductAsync(product);
+				//Uri uri = await CreateProductAsync(product);
+				Uri uri = await _webApiClient.CreateAsync(_apiProductsPath, product);
 				if (uri != null)
 				{
-					Product newOne = await GetProductAsync(uri);
-					this.Products.Add(Mapper.Map<ProductModel>(newOne));
+					// TODO: Fix WEB API to return well formatted path... 
+					//Product newOne = await GetProductAsync(uri);
+					//this.Products.Add(Mapper.Map<ProductModel>(newOne));
 				}
 			}
 		}

@@ -112,6 +112,8 @@
     <Compile Include="Views\ManageProductWindow.xaml.cs">
       <DependentUpon>ManageProductWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WebApiClient\HttpErrorEventArgs.cs" />
+    <Compile Include="WebApiClient\WebApiHttpClient.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
