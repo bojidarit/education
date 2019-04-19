@@ -5,15 +5,15 @@
 				  WindowStartupLocation="CenterOwner"
 				  SizeToContent="Manual"
 				  MinWidth="450"
-				  MinHeight="225"
+				  MinHeight="190"
 				  Width="450"
-				  Height="225">
+				  Height="190">
 
 	<DockPanel LastChildFill="True">
 
 		<!--Footer with buttons-->
 		<StackPanel DockPanel.Dock="Bottom"
-					Margin="5"
+					Margin="5,0,5,10"
 					Orientation="Horizontal"
 					HorizontalAlignment="Right">
 			<Button Content="OK"
