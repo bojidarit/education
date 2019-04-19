@@ -62,7 +62,9 @@
 			Category category = _context.Categories.SingleOrDefault(c => c.Id == product.CategoryId);
 			product.Category = category;
 
-			return Created($"{base.Request.RequestUri}/{product.Id}", product);
+			var location = Flurl.Url.Combine(base.Request.RequestUri.ToString(), product.Id.ToString());
+
+			return Created(location, product);
 		}
 
 		//PUT: /api/products/{id}

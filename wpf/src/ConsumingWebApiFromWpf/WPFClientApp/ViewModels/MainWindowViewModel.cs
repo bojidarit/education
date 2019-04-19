@@ -4,15 +4,10 @@
 	using Catel.Data;
 	using Catel.MVVM;
 	using Catel.Services;
-	using Newtonsoft.Json;
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Text;
-	using System.Threading.Tasks;
 	using WPFClientApp.Dtos;
 	using WPFClientApp.Extensions;
 	using WPFClientApp.Models;
@@ -20,11 +15,32 @@
 
 	public class MainWindowViewModel : ViewModelBase, IDisposable
 	{
-		private static HttpClient _client = new HttpClient();
+		#region Fields
+
 		private static string _apiProductsPath = "api/products/";
 		private static string _apiCategoriesPath = "api/categories";
 
+		private Uri _baseUri = null;
 		private WebApiHttpClient _webApiClient = null;
+		private WebApiHttpClient WebApiClient
+		{
+			get
+			{
+				if (_baseUri == null)
+				{
+					this.ShowError("The base URI is null!", "Invalid argument").GetAwaiter().GetResult();
+				}
+				else if (_webApiClient == null)
+				{
+					_webApiClient = new WebApiHttpClient(_baseUri,
+						(sender, e) => this.ShowError(e.HierarchyExceptionMessages, e.ExceptionType).GetAwaiter().GetResult());
+				}
+
+				return _webApiClient;
+			}
+		}
+
+		#endregion //Fields
 
 		public MainWindowViewModel()
 		{
@@ -33,11 +49,8 @@
 			EditCommand = new Command<object>(OnEditCommandExecute, OnEditCommandCanExecute);
 			DeleteCommand = new Command<object>(OnDeleteCommandExecute);
 
+			// TODO: Let the user enter the location...
 			this.Location = @"http://localhost:50118/";
-			this.CanChangeLocation = false;
-
-			_webApiClient = new WebApiHttpClient(this.Location);
-			_webApiClient.ErrorEventHandler += (sender, e) => this.ShowError(e.HierarchyExceptionMessages, e.ExceptionType).GetAwaiter().GetResult();
 		}
 
 		public void Dispose()
@@ -92,9 +105,12 @@
 
 		private void OnLocationChanged()
 		{
-			if (!string.IsNullOrWhiteSpace(this.Location))
+			if (!string.IsNullOrWhiteSpace(this.Location) &&
+				this.Location.ValidateUrl())
 			{
-				//InitializeHttpClient();
+				_baseUri = new Uri(this.Location);
+				this.CanChangeLocation = false;
+				ViewModelCommandManager.InvalidateCommands(true);
 			}
 		}
 
@@ -125,24 +141,21 @@
 
 		private bool OnLoadCommandCanExecute()
 		{
-			//return !this.IsBusy && this.HttpClientInitialized;
-			return !this.IsBusy;
+			return !this.IsBusy && _baseUri != null;
 		}
 
 		private async void OnLoadCommandExecute()
 		{
 			this.IsBusy = true;
 
-			var categories = await _webApiClient.GetAsync<IEnumerable<Category>>(_apiCategoriesPath);
-			//var categories = await GetAllCategoriesAsync();
+			var categories = await WebApiClient.GetAsync<IEnumerable<Category>>(_apiCategoriesPath);
 
 			if (categories != null)
 			{
 				this.Categories = new ObservableCollection<IdNameModel>(
 					categories.Select(c => new IdNameModel(c.Id, c.Name)));
 
-				//IEnumerable<Product> products = await GetAllProductAsync();
-				IEnumerable<Product> products = await _webApiClient.GetAsync<IEnumerable<Product>>(_apiProductsPath);
+				IEnumerable<Product> products = await WebApiClient.GetAsync<IEnumerable<Product>>(_apiProductsPath);
 				if (products != null)
 				{
 					this.Products = new ObservableCollection<ProductModel>(
@@ -173,13 +186,11 @@
 			if (result ?? false)
 			{
 				Product product = Mapper.Map<Product>(vm.WorkModel);
-				//Uri uri = await CreateProductAsync(product);
-				Uri uri = await _webApiClient.CreateAsync(_apiProductsPath, product);
+				Uri uri = await WebApiClient.CreateAsync(_apiProductsPath, product);
 				if (uri != null)
 				{
-					// TODO: Fix WEB API to return well formatted path... 
-					//Product newOne = await GetProductAsync(uri);
-					//this.Products.Add(Mapper.Map<ProductModel>(newOne));
+					Product newOne = await WebApiClient.GetAsync<Product>(uri);
+					this.Products.Add(Mapper.Map<ProductModel>(newOne));
 				}
 			}
 		}
@@ -206,7 +217,7 @@
 				if (result ?? false)
 				{
 					Product product = Mapper.Map<Product>(vm.WorkModel);
-					bool output = await UpdateProductAsync(product);
+					bool output = await WebApiClient.UpdateAsync<Product>(_apiProductsPath, product, product.Id);
 
 					if (!output)
 					{
@@ -230,17 +241,11 @@
 				if (await this.ShowMessage($"Do you really want to delete product '{model.Name}'?", "Please Confirm",
 					MessageButton.YesNo, MessageImage.Question) == MessageResult.Yes)
 				{
-					int statusCode = await DeleteProductAsync(model.Id);
-					if (statusCode >= 0)
+					bool output = await WebApiClient.DeleteAsync(_apiProductsPath, model.Id);
+					if (output)
 					{
-						HttpStatusCode httpStatus = (HttpStatusCode)statusCode;
-						await this.ShowMessage($"Status Code '{httpStatus}'", "DELETE HTTP Request", MessageButton.OK);
-
-						// Remove product only when the delete is successful
 						this.Products.Remove(model);
 					}
-
-					//OnLoadCommandExecute();
 				}
 			}
 		}
@@ -248,209 +253,5 @@
 		#endregion //DeleteCommand
 
 		#endregion //Commands
-
-		#region Methods
-
-		/// <summary>
-		/// This instance has already started one or more requests. 
-		/// Properties can only be modified before sending the first request.
-		/// </summary>
-		private void InitializeHttpClient()
-		{
-			try
-			{
-				_client.BaseAddress = new Uri(this.Location);
-				_client.DefaultRequestHeaders.Accept.Clear();
-				_client.DefaultRequestHeaders.Accept.Add(
-					new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-				this.HttpClientInitialized = true;
-			}
-			catch (Exception ex)
-			{
-				this.ShowError(ex).GetAwaiter().GetResult();
-			}
-		}
-
-		#region GET requests
-
-		private async Task<IEnumerable<Category>> GetAllCategoriesAsync()
-		{
-			IEnumerable<Category> categories = null;
-			string path = MakeRequestUri(_apiCategoriesPath);
-
-			try
-			{
-				HttpResponseMessage response = await _client.GetAsync(path);
-				if (response.IsSuccessStatusCode)
-				{
-					string data = await response.Content.ReadAsStringAsync();
-					categories = JsonConvert.DeserializeObject<IEnumerable<Category>>(data);
-				}
-			}
-			catch (Exception ex)
-			{
-				await HandleHttpException(ex, path);
-			}
-
-			return categories;
-		}
-
-		private async Task<IEnumerable<Product>> GetAllProductAsync()
-		{
-			IEnumerable<Product> products = null;
-			string path = MakeRequestUri(_apiProductsPath);
-
-			try
-			{
-				HttpResponseMessage response = await _client.GetAsync(path);
-				if (response.IsSuccessStatusCode)
-				{
-					string data = await response.Content.ReadAsStringAsync();
-					products = JsonConvert.DeserializeObject<IEnumerable<Product>>(data);
-				}
-			}
-			catch (Exception ex)
-			{
-				await HandleHttpException(ex, path);
-			}
-
-			return products;
-		}
-
-		private async Task<Product> GetProductAsync(int productId)
-		{
-			Product product = null;
-			string path = MakeRequestUri(_apiProductsPath, productId.ToString());
-
-			try
-			{
-				HttpResponseMessage response = await _client.GetAsync(path);
-				if (response.IsSuccessStatusCode)
-				{
-					string data = await response.Content.ReadAsStringAsync();
-					product = JsonConvert.DeserializeObject<Product>(data);
-				}
-			}
-			catch (Exception ex)
-			{
-				await HandleHttpException(ex, path);
-			}
-
-			return product;
-		}
-
-		private async Task<Product> GetProductAsync(Uri uri)
-		{
-			Product product = null;
-
-			try
-			{
-				HttpResponseMessage response = await _client.GetAsync(uri.PathAndQuery);
-				if (response.IsSuccessStatusCode)
-				{
-					string data = await response.Content.ReadAsStringAsync();
-					product = JsonConvert.DeserializeObject<Product>(data);
-				}
-			}
-			catch (Exception ex)
-			{
-				await HandleHttpException(ex, uri.PathAndQuery);
-			}
-
-			return product;
-		}
-
-		#endregion //GET request
-
-		/// <summary>
-		/// Makes a POST request to create new Product
-		/// </summary>
-		/// <returns>return URI of the created resource</returns>
-		private async Task<Uri> CreateProductAsync(Product product)
-		{
-			HttpResponseMessage response = null;
-			bool failed = false;
-
-			try
-			{
-				response = await _client.PostAsJsonAsync(_apiProductsPath, product);
-				// throws an exception if the status code falls outside the range 200–299
-				response.EnsureSuccessStatusCode();
-			}
-			catch (Exception ex)
-			{
-				failed = true;
-				await HandleHttpException(ex, MakeRequestUri(_apiProductsPath));
-			}
-
-			return failed ? null : response.Headers.Location;
-		}
-
-		public async Task<bool> UpdateProductAsync(Product product)
-		{
-			bool result = true;
-			string path = MakeRequestUri(_apiProductsPath, product.Id.ToString());
-
-			try
-			{
-				HttpResponseMessage response = await _client.PutAsJsonAsync(path, product);
-				response.EnsureSuccessStatusCode();
-
-				// ??? De-serialize the updated product from the response body.
-				//string json = await response.Content.ReadAsStringAsync();
-				//result = JsonConvert.DeserializeObject<Product>(json);
-			}
-			catch (Exception ex)
-			{
-				result = false;
-				await HandleHttpException(ex, path);
-			}
-
-			return result;
-		}
-
-		private async Task<int> DeleteProductAsync(int productId)
-		{
-			int statusCode = -1;
-			string path = MakeRequestUri(_apiProductsPath, productId.ToString());
-
-			try
-			{
-				HttpResponseMessage response = await _client.DeleteAsync(path);
-
-				// throws an exception if the status code falls outside the range 200–299
-				response.EnsureSuccessStatusCode();
-
-				statusCode = (int)response.StatusCode;
-			}
-			catch (Exception ex)
-			{
-				await HandleHttpException(ex, MakeRequestUri(_apiProductsPath));
-			}
-
-			return statusCode;
-		}
-
-		private string MakeRequestUri(string apiPath, string parameter = "") =>
-			Flurl.Url.Combine(_client.BaseAddress.ToString(), apiPath, parameter);
-
-		private async Task HandleHttpException(Exception exception, string requestUri)
-		{
-			StringBuilder stringBuilder = new StringBuilder($"Request Uri: {requestUri} {Environment.NewLine}");
-			GetInnerExceptions(exception, stringBuilder);
-			await this.ShowError(stringBuilder.ToString(), exception.GetType().Name);
-		}
-
-		private void GetInnerExceptions(Exception exception, StringBuilder stringBuilder)
-		{
-			stringBuilder.Append($"{exception.Message} {Environment.NewLine}");
-			if (exception.InnerException != null)
-			{
-				GetInnerExceptions(exception.InnerException, stringBuilder);
-			}
-		}
-
-		#endregion //Methods
 	}
 }

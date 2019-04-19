@@ -15,18 +15,20 @@
 		public CustomErrorEventHandler ErrorEventHandler;
 		private static HttpClient _client = new HttpClient();
 
-		public WebApiHttpClient(string baseAddress)
+		public WebApiHttpClient(Uri baseAddress, CustomErrorEventHandler eventHandler)
 		{
+			ErrorEventHandler += eventHandler;
+
 			try
 			{
-				_client.BaseAddress = new Uri(baseAddress);
+				_client.BaseAddress = baseAddress;
 				_client.DefaultRequestHeaders.Accept.Clear();
 				_client.DefaultRequestHeaders.Accept.Add(
 					new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 			}
 			catch (Exception ex)
 			{
-				OnErrorOccured(new HttpErrorEventArgs(ex, baseAddress));
+				OnErrorOccured(new HttpErrorEventArgs(ex, baseAddress.ToString()));
 			}
 		}
 
@@ -37,19 +39,24 @@
 
 		#region Methods
 
-		protected virtual void OnErrorOccured(HttpErrorEventArgs eventArgs)
-		{
+		protected virtual void OnErrorOccured(HttpErrorEventArgs eventArgs) =>
 			ErrorEventHandler?.Invoke(this, eventArgs);
-		}
 
-		public async Task<T> GetAsync<T>(string apiPath, object parameter = null)
+		private string MakeRequestUri(string apiPath) =>
+			Flurl.Url.Combine(_client.BaseAddress.ToString(), apiPath);
+
+		private string MakeRequestUri(string apiPath, object parameter) =>
+			Flurl.Url.Combine(_client.BaseAddress.ToString(), apiPath, parameter?.ToString() ?? string.Empty);
+
+		#region Public interface
+
+		public async Task<T> GetAsync<T>(Uri requestUri)
 		{
 			T result = default(T);
-			string path = MakeRequestUri(apiPath, parameter);
 
 			try
 			{
-				HttpResponseMessage response = await _client.GetAsync(path);
+				HttpResponseMessage response = await _client.GetAsync(requestUri);
 				if (response.IsSuccessStatusCode)
 				{
 					string data = await response.Content.ReadAsStringAsync();
@@ -58,10 +65,24 @@
 			}
 			catch (Exception ex)
 			{
-				OnErrorOccured(new HttpErrorEventArgs(ex, path));
+				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString()));
 			}
 
 			return result;
+		}
+
+		public async Task<T> GetAsync<T>(string apiPath, object parameter = null)
+		{
+			string path = MakeRequestUri(apiPath, parameter);
+
+			Uri uri = null;
+
+			if (Uri.TryCreate(path, UriKind.Absolute, out uri))
+			{
+				return await GetAsync<T>(uri);
+			}
+
+			return await Task.FromResult(default(T));
 		}
 
 		/// <summary>
@@ -89,7 +110,7 @@
 			return success ? response?.Headers.Location : null;
 		}
 
-		public async Task<bool> UpdateAsync<T>(string apiPath, T item, object parameter = null)
+		public async Task<bool> UpdateAsync<T>(string apiPath, T item, object parameter)
 		{
 			bool result = false;
 			string path = MakeRequestUri(apiPath, parameter);
@@ -108,7 +129,7 @@
 			return result;
 		}
 
-		public async Task<bool> DeleteAsync(string apiPath, object parameter = null)
+		public async Task<bool> DeleteAsync(string apiPath, object parameter)
 		{
 			bool result = false;
 			string path = MakeRequestUri(apiPath, parameter);
@@ -130,11 +151,7 @@
 			return result;
 		}
 
-		private string MakeRequestUri(string apiPath) =>
-			Flurl.Url.Combine(_client.BaseAddress.ToString(), apiPath);
-
-		private string MakeRequestUri(string apiPath, object parameter) =>
-			Flurl.Url.Combine(_client.BaseAddress.ToString(), apiPath, parameter?.ToString() ?? string.Empty);
+		#endregion //Public interface
 
 		#endregion //Methods
 	}
