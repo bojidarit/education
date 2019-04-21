@@ -26,11 +26,17 @@
 			return result;
 		}
 
-		public static IMessageService GetMessageService(this ViewModelBase viewModel)
+		private static T GetService<T>(this ViewModelBase viewModel)
 		{
 			var dependencyResolver = viewModel.GetDependencyResolver();
-			return dependencyResolver.Resolve<IMessageService>();
+			return dependencyResolver.Resolve<T>();
 		}
+
+		public static IMessageService GetMessageService(this ViewModelBase viewModel) =>
+			viewModel.GetService<IMessageService>();
+
+		public static IPleaseWaitService GetPleaseWaitService(this ViewModelBase viewModel) =>
+			viewModel.GetService<IPleaseWaitService>();
 
 		public async static Task<MessageResult> ShowMessage(this ViewModelBase viewModel,
 			string message, string caption = "", MessageButton button = MessageButton.OK,
@@ -40,7 +46,7 @@
 		public async static Task<MessageResult> ShowError(this ViewModelBase viewModel, Exception exception) =>
 			await viewModel.GetMessageService().ShowErrorAsync(exception);
 
-		public async static Task<MessageResult> ShowError(this ViewModelBase viewModel, 
+		public async static Task<MessageResult> ShowError(this ViewModelBase viewModel,
 			string message, string caption = "") =>
 			await viewModel.GetMessageService().ShowErrorAsync(message, caption);
 	}

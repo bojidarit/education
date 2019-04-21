@@ -6,6 +6,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using WPFClientApp.Extensions;
 	using WPFClientApp.Models;
 	using WPFClientApp.WebApiClient;
 
@@ -85,12 +86,31 @@
 		}
 		public static readonly PropertyData UriProperty = RegisterProperty(nameof(Uri), typeof(Uri), null);
 
+		#region IsBusy
+
 		public bool IsBusy
 		{
 			get { return GetValue<bool>(IsBusyProperty); }
 			set { SetValue(IsBusyProperty, value); }
 		}
-		public static readonly PropertyData IsBusyProperty = RegisterProperty(nameof(IsBusy), typeof(bool), false);
+		public static readonly PropertyData IsBusyProperty =
+			RegisterProperty(nameof(IsBusy), typeof(bool), null,
+				(sender, e) => ((ManageProductViewModel)sender).OnIsBusyChanged());
+
+		private void OnIsBusyChanged()
+		{
+			var pleaseWait = this.GetPleaseWaitService();
+			if (this.IsBusy)
+			{
+				pleaseWait.Show("Please Wait...");
+			}
+			else
+			{
+				pleaseWait.Hide();
+			}
+		}
+
+		#endregion //IsBusy
 
 		#endregion //Properties
 

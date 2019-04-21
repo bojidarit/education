@@ -7,6 +7,7 @@
 	using Catel.IoC;
 	using Catel.Logging;
 	using Catel.Reflection;
+	using Catel.Services;
 	using Catel.Windows;
 
 	/// <summary>
@@ -44,6 +45,9 @@
 			Log.Info("Calling base.OnStartup");
 
 			AutoMapper.Mapper.Initialize(p => p.AddProfile<MappingProfile>());
+
+			ServiceLocator.Default.RegisterType<IPleaseWaitService, Catel.Services.PleaseWaitService>(
+				RegistrationType.Singleton);
 
 			base.OnStartup(e);
 		}

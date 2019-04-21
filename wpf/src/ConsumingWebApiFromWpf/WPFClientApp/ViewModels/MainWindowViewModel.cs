@@ -66,12 +66,31 @@
 		}
 		public static readonly PropertyData CategoriesProperty = RegisterProperty("Categories", typeof(ObservableCollection<IdNameModel>), null);
 
+		#region IsBusy
+
 		public bool IsBusy
 		{
 			get { return GetValue<bool>(IsBusyProperty); }
 			set { SetValue(IsBusyProperty, value); }
 		}
-		public static readonly PropertyData IsBusyProperty = RegisterProperty(nameof(IsBusy), typeof(bool), false);
+		public static readonly PropertyData IsBusyProperty = 
+			RegisterProperty(nameof(IsBusy), typeof(bool), null, 
+				(sender, e) => ((MainWindowViewModel)sender).OnIsBusyChanged());
+
+		private void OnIsBusyChanged()
+		{
+			var pleaseWait = this.GetPleaseWaitService();
+			if (this.IsBusy)
+			{
+				pleaseWait.Show("Please Wait...");
+			}
+			else
+			{
+				pleaseWait.Hide();
+			}
+		}
+
+		#endregion //IsBusy
 
 		public bool HttpClientInitialized
 		{
