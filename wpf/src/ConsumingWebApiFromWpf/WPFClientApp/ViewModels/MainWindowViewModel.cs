@@ -17,9 +17,6 @@
 	{
 		#region Fields
 
-		private static string _apiProductsPath = "api/products/";
-		private static string _apiCategoriesPath = "api/categories";
-
 		private Uri _baseUri = null;
 		private WebApiHttpClient _webApiClient = null;
 		private WebApiHttpClient WebApiClient
@@ -148,14 +145,14 @@
 		{
 			this.IsBusy = true;
 
-			var categories = await WebApiClient.GetAsync<IEnumerable<Category>>(_apiCategoriesPath);
+			var categories = await WebApiClient.GetAsync<IEnumerable<Category>>(Constants.ApiCategoriesPath);
 
 			if (categories != null)
 			{
 				this.Categories = new ObservableCollection<IdNameModel>(
 					categories.Select(c => new IdNameModel(c.Id, c.Name)));
 
-				IEnumerable<Product> products = await WebApiClient.GetAsync<IEnumerable<Product>>(_apiProductsPath);
+				IEnumerable<Product> products = await WebApiClient.GetAsync<IEnumerable<Product>>(Constants.ApiProductsPath);
 				if (products != null)
 				{
 					this.Products = new ObservableCollection<ProductModel>(
@@ -180,17 +177,19 @@
 
 		private async void OnNewCommandExecute()
 		{
-			var vm = new ManageProductViewModel(this.Categories);
+			var vm = new ManageProductViewModel(this.Categories, WebApiClient);
 			var result = await this.ShowDialogAsync(vm);
 
 			if (result ?? false)
 			{
-				Product product = Mapper.Map<Product>(vm.WorkModel);
-				Uri uri = await WebApiClient.CreateAsync(_apiProductsPath, product);
-				if (uri != null)
+				if (vm.Uri != null)
 				{
-					Product newOne = await WebApiClient.GetAsync<Product>(uri);
+					this.IsBusy = true;
+
+					Product newOne = await WebApiClient.GetAsync<Product>(vm.Uri);
 					this.Products.Add(Mapper.Map<ProductModel>(newOne));
+
+					this.IsBusy = false;
 				}
 			}
 		}
@@ -211,19 +210,8 @@
 			ProductModel model = item as ProductModel;
 			if (model != null)
 			{
-				var vm = new ManageProductViewModel(this.Categories, model);
+				var vm = new ManageProductViewModel(this.Categories, WebApiClient, model);
 				var result = await this.ShowDialogAsync(vm);
-
-				if (result ?? false)
-				{
-					Product product = Mapper.Map<Product>(vm.WorkModel);
-					bool output = await WebApiClient.UpdateAsync<Product>(_apiProductsPath, product, product.Id);
-
-					if (!output)
-					{
-						//TODO: Revert changes...
-					}
-				}
 			}
 		}
 
@@ -241,11 +229,15 @@
 				if (await this.ShowMessage($"Do you really want to delete product '{model.Name}'?", "Please Confirm",
 					MessageButton.YesNo, MessageImage.Question) == MessageResult.Yes)
 				{
-					bool output = await WebApiClient.DeleteAsync(_apiProductsPath, model.Id);
+					this.IsBusy = true;
+
+					bool output = await WebApiClient.DeleteAsync(Constants.ApiProductsPath, model.Id);
 					if (output)
 					{
 						this.Products.Remove(model);
 					}
+
+					this.IsBusy = false;
 				}
 			}
 		}

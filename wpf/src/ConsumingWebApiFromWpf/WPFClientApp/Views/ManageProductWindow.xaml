@@ -5,7 +5,7 @@
 				  WindowStartupLocation="CenterOwner"
 				  SizeToContent="Manual"
 				  ResizeMode="CanResizeWithGrip"
-				  CanCloseUsingEscape="True"
+				  CanCloseUsingEscape="False"
 				  MinWidth="450"
 				  MinHeight="190"
 				  Width="450"
