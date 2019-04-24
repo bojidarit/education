@@ -7,9 +7,10 @@
 
 	public class ExecuteController : ApiController
 	{
-		// GET: /api/execute
-		// Example: http://localhost:50118/api/execute?method=MethodName&p1=1&p2=2&p3=3
-		public IHttpActionResult GetResult()
+		// GET: api/execute/
+		// Example: http://localhost:50118/api/execute/oblp_users/getuser?apikey=00000&p1=1
+		[Route("api/execute/{library}/{method}")]
+		public IHttpActionResult GetResult(string library, string method)
 		{
 			// TODO: Do we need the type of the parameters?!?...
 
@@ -25,6 +26,8 @@
 			}
 
 			var dictionary = parameters.ToDictionary(i => i.Key, i => i.Value.FirstOrDefault());
+			dictionary.Add("library", library);
+			dictionary.Add("method", method);
 
 			// TODO: Execute method with parameters that came from the query string ... 
 
