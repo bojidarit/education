@@ -54,10 +54,10 @@
 			var $button = $('<button/>').text('Delete').click(function () { deleteItem(item); });
 
 			var $tr = $('<tr>').append(
-				$('<td>').text(item.Id),
-				$('<td>').text(item.Name),
-				$('<td>').text(item.Category.Name),
-				$('<td>').text(item.Price),
+				$('<td>').text(item.id),
+				$('<td>').text(item.name),
+				$('<td>').text(item.category.name),
+				$('<td>').text(item.price),
 				$('<td>').html($button)
 				);
 
@@ -65,11 +65,11 @@
 		}
 
 		function deleteItem(item) {
-			var message = `Do you want to delete product '${item.Name}'?`;
+			var message = `Do you want to delete product '${item.name}'?`;
 			var ok = confirm(message);
 			if (ok) {
 				console.log('delete...');
-				var deleteUri = `${uri}/${item.Id}`;
+				var deleteUri = `${uri}/${item.id}`;
 				$.ajax({
 					url: deleteUri,
 					method: "DELETE",
@@ -88,7 +88,7 @@
 		var foundProduct = $('#foundProduct');
 
 		function showFoundItem(item) {
-			foundProduct.text(`Name: '${item.Name}'; Category: '${item.Category.Name}'; Price: ${item.Price}`);
+			foundProduct.text(`Name: '${item.name}'; Category: '${item.category.name}'; Price: ${item.price}`);
 		}
 
 		function findError(jqXHR, textStatus, err) {
