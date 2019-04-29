@@ -2,9 +2,9 @@
 {
 	using System.Collections.Generic;
 
-	public class DplanList<T>
+	public class DataListModel<T>
 	{
-		public DplanList(IEnumerable<T> list)
+		public DataListModel(IEnumerable<T> list)
 		{
 			this.Data = list;
 		}

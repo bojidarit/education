@@ -75,7 +75,7 @@
 
 				if(users.Any())
 				{
-					return Ok(new DplanList<User>(users));
+					return Ok(new DataListModel<User>(users));
 				}
 				else
 				{
