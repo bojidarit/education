@@ -65,17 +65,13 @@
 				return BadRequest(ex.Message);
 			}
 
-			if (parameters != null && parameters.Any(i => i.Key.StartsWith("p")))
+			if (parameters != null)
 			{
-				//parameters.Add("library", library);
-				//parameters.Add("method", method);
-				//return Ok(parameters);
+				var users = GetUsers(parameters.FirstOrDefault(i => i.Key.StartsWith("p")));
 
-				var users = GetUsers(parameters.First(i => i.Key.StartsWith("p")));
-
-				if(users.Any())
+				if (users.Any())
 				{
-					return Ok(new DataListModel<User>(users));
+					return Ok(new DataListModel<User>(library, method, users));
 				}
 				else
 				{
@@ -89,13 +85,20 @@
 		private IEnumerable<User> GetUsers(KeyValuePair<string, string> parameter)
 		{
 			List<User> result = new List<User>();
-			int id = 0;
+			int id = -1;
 
 			Int32.TryParse(parameter.Value, out id);
 
-			if (id > 0 && _users.Any(u => u.Id == id))
+			if (id > 0)
 			{
-				result.AddRange(_users.Where(u => u.Id == id));
+				if (_users.Any(u => u.Id == id))
+				{
+					result.AddRange(_users.Where(u => u.Id == id));
+				}
+			}
+			else
+			{
+				result.AddRange(_users);
 			}
 
 			return result;
