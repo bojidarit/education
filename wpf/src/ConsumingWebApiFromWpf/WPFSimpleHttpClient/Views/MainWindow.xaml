@@ -1,0 +1,42 @@
+﻿<catel:Window x:Class="WPFSimpleHttpClient.Views.MainWindow"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:catel="http://schemas.catelproject.com"
+              ResizeMode="CanResize">
+
+
+	<DockPanel LastChildFill="True"
+			   Margin="5">
+
+		<!--Header-->
+		<WrapPanel DockPanel.Dock="Top">
+			<!--Location-->
+			<TextBlock Text="Location"/>
+			<TextBox Text="{Binding Location, UpdateSourceTrigger=LostFocus}"
+					 IsReadOnly="True"
+					 Margin="5,0" />
+
+			<!--Execute-->
+			<Button Command="{Binding ExecuteCommand}"
+					Content="Execute"
+					Margin="5,0" />
+		</WrapPanel>
+
+		<!--Footer-->
+		<DockPanel DockPanel.Dock="Bottom"
+				   LastChildFill="True">
+			<TextBox Text="{Binding Message}" />
+		</DockPanel>
+
+		<DataGrid Grid.Row="1"
+				  Margin="0,5"
+				  x:Name="dataGrid"
+				  ItemsSource="{Binding Items}"
+				  AutoGenerateColumns="True"
+				  SelectionMode="Single"
+				  CanUserAddRows="False"
+				  CanUserDeleteRows="False">
+		</DataGrid>
+	</DockPanel>
+
+</catel:Window>
