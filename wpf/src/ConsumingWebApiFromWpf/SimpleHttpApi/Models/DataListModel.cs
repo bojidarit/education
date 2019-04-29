@@ -1,4 +1,4 @@
-﻿namespace ProductsApi.Models
+﻿namespace SimpleHttpApi.Models
 {
 	using System.Collections.Generic;
 

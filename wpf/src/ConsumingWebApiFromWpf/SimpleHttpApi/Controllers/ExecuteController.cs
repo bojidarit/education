@@ -1,6 +1,6 @@
-﻿namespace ProductsApi.Controllers
+﻿namespace SimpleHttpApi.Controllers
 {
-	using ProductsApi.Models;
+	using SimpleHttpApi.Models;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
