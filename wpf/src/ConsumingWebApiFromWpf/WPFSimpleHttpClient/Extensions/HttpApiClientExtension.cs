@@ -11,10 +11,10 @@
 
 	public static class HttpApiClientExtension
 	{
-		public static async Task<IEnumerable<JToken>> GetDataListAsync(this HttpApiClient client, 
+		public static async Task<JToken[]> GetDataListAsync(this HttpApiClient client, 
 			string library, string method, object[] values)
 		{
-			IEnumerable<JToken> result = null;
+			JToken[] result = null;
 			Uri uri = MakeJServerRequestUri(client, library, method, values);
 
 			string data = await client.GetAsync(uri);
@@ -35,7 +35,7 @@
 				// Get "data" object as enumerable
 				try
 				{
-					result = GetDataList(jObject);
+					result = GetDataArray(jObject);
 				}
 				catch (Exception ex)
 				{
@@ -49,7 +49,7 @@
 		public static async Task<DataTable> GetDataTableAsync(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
-			IEnumerable<JToken> data = null;
+			JToken[] data = null;
 
 			try
 			{
@@ -63,6 +63,11 @@
 			return JCollectionToDataTable(data);
 		}
 
+		/// <summary>
+		/// Generates a pure JSON string from collection of JTokens and De-serialize it to a DataTable
+		/// </summary>
+		/// <param name="collection">Collection of JTokens</param>
+		/// <returns>DataTable with all the item(s) in the collection</returns>
 		private static DataTable JCollectionToDataTable(IEnumerable<JToken> collection)
 		{
 			DataTable result = null;
@@ -79,6 +84,33 @@
 			return result;
 		}
 
+		/// <summary>
+		/// Gets only "data" object as array from the parsed JSON object
+		/// </summary>
+		/// <param name="jObject"></param>
+		/// <returns></returns>
+		private static JToken[] GetDataArray(JObject jObject)
+		{
+			JToken[] result = null;
+
+			if (jObject != null)
+			{
+				JToken jToken = null;
+
+				if (jObject.TryGetValue("data", out jToken))
+				{
+					result = jToken.ToArray();
+				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Gets only "data" object as enumerable collection from the parsed JSON object
+		/// </summary>
+		/// <param name="jObject"></param>
+		/// <returns></returns>
 		private static IEnumerable<JToken> GetDataList(JObject jObject)
 		{
 			IEnumerable<JToken> result = null;
