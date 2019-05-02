@@ -1,16 +1,17 @@
 ﻿namespace SimpleHttpApi.Controllers
 {
-	using SimpleHttpApi.Models;
+	using SimpleHttpApi.Extensions;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Net.Http;
 	using System.Web.Http;
 
-	using Data = SimpleHttpApi.DataLogic;
-
 	public class ExecuteController : ApiController
 	{
+		private static string _apiKeyParamName = "apikey";
+		private static string _apiKeyParamValue = "00000";
+
 		// GET: api/execute/{library}/{method}
 		// Example: http://localhost:50118/api/execute/oblp_users/getuser?apikey=00000&p1=1
 		[Route("api/execute/{library}/{method}")]
@@ -48,9 +49,19 @@
 					$"The current one is '{target}'");
 			}
 
+			// There is only one library for now
+			Type dataLogicType = typeof(DataLogic.Users);
+
 			string library = targetArray[0];
 			string method = targetArray[1];
 
+			// Check for the only library
+			if (string.Compare(library, dataLogicType.Name, true) != 0)
+			{
+				return BadRequest("Wrong library");
+			}
+
+			// Get parameters from query string
 			try
 			{
 				parameters = QueryStringToDictionaty(this.ActionContext.Request.GetQueryNameValuePairs(), true);
@@ -60,31 +71,43 @@
 				return BadRequest(ex.Message);
 			}
 
+			// Check parameters
 			if (parameters != null)
 			{
-				// TODO: needed refactoring...
-				string param = parameters.FirstOrDefault(i => i.Key.StartsWith("p")).Value;
-				if (!string.IsNullOrWhiteSpace(param))
+				if (!CheckApiKey(parameters))
 				{
-					var users = Data.Users.GetUser(param);
+					return BadRequest("Wrong or missing API Key");
+				}
 
-					if (users.Any())
-					{
-						return Ok(new DataListModel<User>(library, method, users));
-					}
-					else
+				object result = null;
+
+				try
+				{
+					// Filter ApiKey parameter
+					var paramValues = parameters.Where(p => p.Key != _apiKeyParamName)
+						.Select(p => p.Value).ToArray();
+
+					result = ObjectExtensions.ExecuteStaticMethod(dataLogicType, method, paramValues);
+
+					if (result == null)
 					{
 						return NotFound();
 					}
+					else
+					{
+						return Ok(result);
+					}
 				}
-				else
+				catch (Exception ex)
 				{
-					return Ok(new DataListModel<User>(library, method, Data.Users.GetUsers()));
+					return BadRequest(ex.Message);
 				}
 			}
 
 			return BadRequest("No parameters");
 		}
+
+		#region Helpers
 
 		private Dictionary<string, string> QueryStringToDictionaty(
 			IEnumerable<KeyValuePair<string, string>> queryKeyValuePairs, bool checkForDuplicates)
@@ -103,7 +126,20 @@
 				}
 			}
 
-			return parameters.ToDictionary(i => i.Key, i => i.Value.FirstOrDefault());
+			return parameters.ToDictionary(i => i.Key.ToLower(), i => i.Value.FirstOrDefault());
 		}
+
+		private bool CheckApiKey(Dictionary<string, string> parameters)
+		{
+			bool result = parameters.ContainsKey(_apiKeyParamName);
+
+			{
+				result = string.Compare(parameters[_apiKeyParamName], _apiKeyParamValue) == 0;
+			}
+
+			return result;
+		}
+
+		#endregion //Helpers
 	}
 }

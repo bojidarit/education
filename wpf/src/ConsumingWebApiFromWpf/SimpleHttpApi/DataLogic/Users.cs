@@ -5,8 +5,9 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
 
-	public class Users
+	public static class Users
 	{
 		private static IEnumerable<User> _users = new List<User>()
 		{
@@ -15,19 +16,25 @@
 			new User(3, "User 3", new DateTime(2018, 3, 18), 4.56789M, true),
 		};
 
-		public static IEnumerable<User> GetUsers() => _users;
-
-		public static IEnumerable<User> GetUser(string parameter)
+		public static DataListModel<User> GetUsers()
 		{
-			List<User> result = new List<User>();
+			MethodBase method = MethodBase.GetCurrentMethod();
+			return new DataListModel<User>(method.DeclaringType.Name, method.Name, _users);
+		}
 
+		public static DataListModel<User> GetUser(string parameter)
+		{
 			var user = GetUserById(parameter);
 			if (user != null)
 			{
+				List<User> result = new List<User>();
 				result.Add(user);
+
+				MethodBase method = MethodBase.GetCurrentMethod();
+				return new DataListModel<User>(method.DeclaringType.Name, method.Name, result);
 			}
 
-			return result;
+			return null;
 		}
 
 		public static bool IsPowerUser(string parameter)
