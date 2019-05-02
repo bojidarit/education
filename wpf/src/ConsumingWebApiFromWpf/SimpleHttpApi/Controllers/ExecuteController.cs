@@ -79,7 +79,7 @@
 				}
 				else
 				{
-					return Ok(Data.Users.GetUsers());
+					return Ok(new DataListModel<User>(library, method, Data.Users.GetUsers()));
 				}
 			}
 

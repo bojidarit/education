@@ -1,6 +1,7 @@
 ﻿namespace SimpleHttpApi.DataLogic
 {
 	using Models;
+	using SimpleHttpApi.Extensions;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -37,6 +38,19 @@
 			if (user != null)
 			{
 				result = user.IsPower;
+			}
+
+			return result;
+		}
+
+		public static object GetUserProperty(string parameter, string property)
+		{
+			object result = null;
+
+			var user = GetUserById(parameter);
+			if (user != null)
+			{
+				result = user.GetPropertyValue(property);
 			}
 
 			return result;
