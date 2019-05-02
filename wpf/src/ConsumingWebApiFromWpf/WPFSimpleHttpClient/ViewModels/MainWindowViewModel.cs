@@ -6,11 +6,10 @@
 	using HttpClientWrapper;
 	using System.Configuration;
 	using Catel.Data;
-	using System.Collections.Generic;
-	using Newtonsoft.Json.Linq;
-	using Newtonsoft.Json;
 	using System.Data;
-	using System.Linq;
+	using System.Collections.ObjectModel;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
 	public class MainWindowViewModel : ViewModelBase
 	{
@@ -28,6 +27,17 @@
 			this.Location = uriFromConfig;
 			SetBaseUri(uriFromConfig);
 
+			this.Params = new ObservableCollection<string>(new string[10]);
+
+			IEnumerable<string> methods = null;
+			Task task = Task.Run(async () => methods = await this.HttpApiClient.GetMethodsAsync("Users"));
+			task.ContinueWith(t =>
+			{
+				if (methods != null)
+				{
+					this.Methods = new ObservableCollection<string>(methods);
+				}
+			}, TaskScheduler.FromCurrentSynchronizationContext());
 		}
 
 		#region Properties
@@ -104,6 +114,27 @@
 		}
 		public static readonly PropertyData ItemsProperty = RegisterProperty(nameof(Items), typeof(DataView), null);
 
+		public ObservableCollection<string> Methods
+		{
+			get { return GetValue<ObservableCollection<string>>(MethodsProperty); }
+			set { SetValue(MethodsProperty, value); }
+		}
+		public static readonly PropertyData MethodsProperty = RegisterProperty(nameof(Methods), typeof(ObservableCollection<string>), null);
+
+		public string SelectedMethod
+		{
+			get { return GetValue<string>(SelectedMethodProperty); }
+			set { SetValue(SelectedMethodProperty, value); }
+		}
+		public static readonly PropertyData SelectedMethodProperty = RegisterProperty(nameof(SelectedMethod), typeof(string), null);
+
+		public ObservableCollection<string> Params
+		{
+			get { return GetValue<ObservableCollection<string>>(ParamsProperty); }
+			set { SetValue(ParamsProperty, value); }
+		}
+		public static readonly PropertyData ParamsProperty = RegisterProperty(nameof(Params), typeof(ObservableCollection<string>), null);
+
 		#endregion //Properties
 
 		#region Commands
@@ -113,7 +144,7 @@
 		private bool OnExecuteCommandCanExecute()
 		{
 			return !this.IsBusy;
-		}	
+		}
 
 		private async void OnExecuteCommandExecute()
 		{

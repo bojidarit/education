@@ -1,8 +1,8 @@
 ﻿<catel:Window x:Class="WPFSimpleHttpClient.Views.MainWindow"
-              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:catel="http://schemas.catelproject.com"
-              ResizeMode="CanResize">
+			  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			  xmlns:catel="http://schemas.catelproject.com"
+			  ResizeMode="CanResize">
 
 
 	<DockPanel LastChildFill="True"
@@ -11,9 +11,30 @@
 		<!--Header-->
 		<WrapPanel DockPanel.Dock="Top">
 			<!--Location-->
-			<TextBlock Text="Location"/>
-			<TextBox Text="{Binding Location, UpdateSourceTrigger=LostFocus}"
+			<TextBlock Text="Location" />
+			<TextBox Text="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 					 IsReadOnly="True"
+					 Margin="5,0" />
+
+			<TextBlock Text="Method" />
+			<ComboBox ItemsSource="{Binding Methods}"
+					  SelectedItem="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					  Width="120"
+					  Margin="5,0" />
+
+			<TextBlock Text="P1" />
+			<TextBox Text="{Binding Params[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					 Width="50"
+					 Margin="5,0" />
+
+			<TextBlock Text="P2" />
+			<TextBox Text="{Binding Params[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					 Width="50"
+					 Margin="5,0" />
+
+			<TextBlock Text="P3" />
+			<TextBox Text="{Binding Params[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					 Width="50"
 					 Margin="5,0" />
 
 			<!--Execute-->

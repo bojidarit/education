@@ -6,6 +6,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Net.Http;
+	using System.Reflection;
 	using System.Web.Http;
 
 	public class ExecuteController : ApiController
@@ -26,7 +27,7 @@
 			}
 			catch (Exception ex)
 			{
-				return BadRequest(ex.Message);
+				return BadRequest(FormatException(ex));
 			}
 
 			// TODO: Execute method with parameters that came from the query string ... 
@@ -34,6 +35,22 @@
 			parameters.Add("method", method);
 
 			return Ok(parameters);
+		}
+
+		// GET: client/methods/{library}
+		[Route("client/methods/{library}")]
+		public IHttpActionResult GetMethods(string library)
+		{
+			Assembly currentAssembly = Assembly.GetExecutingAssembly();
+			try
+			{
+				Type type = currentAssembly.GetType($"SimpleHttpApi.DataLogic.{library}");
+				return Ok(type.GetStaticMethods());
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(FormatException(ex));
+			}
 		}
 
 		// GET: client/{target}
@@ -148,6 +165,9 @@
 
 			return result;
 		}
+
+		private string FormatException(Exception exception) =>
+			$"{exception.GetType().Name}: '{exception.Message}'";
 
 		#endregion //Helpers
 	}

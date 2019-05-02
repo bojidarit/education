@@ -1,6 +1,7 @@
 ﻿namespace SimpleHttpApi.Extensions
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 
@@ -39,5 +40,8 @@
 
 			return result;
 		}
+
+		public static IEnumerable<string> GetStaticMethods(this Type type) =>
+			type.GetMethods().Select(m => m.Name);
 	}
 }

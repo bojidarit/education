@@ -11,11 +11,31 @@
 
 	public static class HttpApiClientExtension
 	{
-		public static async Task<JToken[]> GetDataListAsync(this HttpApiClient client, 
+		private static string _apiPath = "client/";
+
+		public static async Task<IEnumerable<string>> GetMethodsAsync(this HttpApiClient client, string library)
+		{
+			string path = Flurl.Url.Combine(client.GetRequestUriString(_apiPath), "methods", library);
+
+			Uri uri = null;
+			if (Uri.TryCreate(path, UriKind.Absolute, out uri))
+			{
+				string data = await client.GetAsync(uri);
+
+				if (!string.IsNullOrWhiteSpace(data))
+				{
+					return JsonConvert.DeserializeObject<IEnumerable<string>>(data);
+				}
+			}
+
+			return null;
+		}
+
+		public static async Task<JToken[]> GetDataListAsync(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
 			JToken[] result = null;
-			Uri uri = MakeJServerRequestUri(client, library, method, values);
+			Uri uri = MakeSpecialRequestUri(client, library, method, values);
 
 			string data = await client.GetAsync(uri);
 
@@ -129,9 +149,9 @@
 			return result;
 		}
 
-		private static Uri MakeJServerRequestUri(HttpApiClient client, string library, string method, params object[] values)
+		private static Uri MakeSpecialRequestUri(HttpApiClient client, string library, string method, params object[] values)
 		{
-			string path = $"{client.GetRequestUriString("client/")}{library.ToLower()}.{method.ToLower()}?apikey=00000";
+			string path = $"{client.GetRequestUriString(_apiPath)}{library.ToLower()}.{method.ToLower()}?apikey=00000";
 
 			if (values != null && values.Any())
 			{
