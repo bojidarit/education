@@ -1,5 +1,6 @@
 ﻿namespace SimpleHttpApi.Controllers
 {
+	using Models;
 	using SimpleHttpApi.Extensions;
 	using System;
 	using System.Collections.Generic;
@@ -95,6 +96,11 @@
 					}
 					else
 					{
+						// PATCH: XML serialized cannot manage reference types inside of an object
+						if( result.GetType() == typeof(DataListModel<User>))
+						{
+							return Ok((DataListModel<User>)result);
+						}
 						return Ok(result);
 					}
 				}
@@ -108,6 +114,9 @@
 		}
 
 		#region Helpers
+
+		private T CastToType<T>(object data) =>
+			(T)Convert.ChangeType(data, typeof(T));
 
 		private Dictionary<string, string> QueryStringToDictionaty(
 			IEnumerable<KeyValuePair<string, string>> queryKeyValuePairs, bool checkForDuplicates)
