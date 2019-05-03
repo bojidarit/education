@@ -105,7 +105,7 @@
 					var paramValues = parameters.Where(p => p.Key != _apiKeyParamName)
 						.Select(p => p.Value).ToArray();
 
-					result = ObjectExtensions.ExecuteStaticMethod(dataLogicType, method, paramValues);
+					result = dataLogicType.ExecuteStaticMethod(method, paramValues);
 
 					if (result == null)
 					{

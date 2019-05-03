@@ -89,6 +89,7 @@
     <Compile Include="Controllers\ExecuteController.cs" />
     <Compile Include="DataLogic\Users.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
