@@ -13,6 +13,12 @@
 	{
 		private static string _apiPath = "client/";
 
+		/// <summary>
+		/// Get all public methods of the library
+		/// </summary>
+		/// <param name="client">this</param>
+		/// <param name="library">Data logic class name (it is not fully classified)</param>
+		/// <returns></returns>
 		public static async Task<IEnumerable<string>> GetMethodsAsync(this HttpApiClient client, string library)
 		{
 			string path = Flurl.Url.Combine(client.GetRequestUriString(_apiPath), "methods", library);
@@ -31,13 +37,18 @@
 			return null;
 		}
 
+		public static async Task<string> GetRawDataAsync(this HttpApiClient client,
+			string library, string method, object[] values)
+		{
+			Uri uri = MakeSpecialRequestUri(client, library, method, values);
+			return await client.GetAsync(uri);
+		}
+
 		public static async Task<JToken[]> GetDataListAsync(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
 			JToken[] result = null;
-			Uri uri = MakeSpecialRequestUri(client, library, method, values);
-
-			string data = await client.GetAsync(uri);
+			string data = await client.GetRawDataAsync(library, method, values);
 
 			if (!string.IsNullOrWhiteSpace(data))
 			{

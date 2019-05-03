@@ -10,12 +10,14 @@
 	using System.Collections.ObjectModel;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using System.Linq;
 
 	public class MainWindowViewModel : ViewModelBase
 	{
 		#region Fields
 
 		private Uri _baseUri = null;
+		private readonly string _testLibrary = "Users";
 
 		#endregion //Fields
 
@@ -29,15 +31,7 @@
 
 			this.Params = new ObservableCollection<string>(new string[10]);
 
-			IEnumerable<string> methods = null;
-			Task task = Task.Run(async () => methods = await this.HttpApiClient.GetMethodsAsync("Users"));
-			task.ContinueWith(t =>
-			{
-				if (methods != null)
-				{
-					this.Methods = new ObservableCollection<string>(methods);
-				}
-			}, TaskScheduler.FromCurrentSynchronizationContext());
+			LoadMethodsAsync();
 		}
 
 		#region Properties
@@ -114,6 +108,8 @@
 		}
 		public static readonly PropertyData ItemsProperty = RegisterProperty(nameof(Items), typeof(DataView), null);
 
+		#region Methods To Execute
+
 		public ObservableCollection<string> Methods
 		{
 			get { return GetValue<ObservableCollection<string>>(MethodsProperty); }
@@ -126,7 +122,14 @@
 			get { return GetValue<string>(SelectedMethodProperty); }
 			set { SetValue(SelectedMethodProperty, value); }
 		}
-		public static readonly PropertyData SelectedMethodProperty = RegisterProperty(nameof(SelectedMethod), typeof(string), null);
+		public static readonly PropertyData SelectedMethodProperty = RegisterProperty(nameof(SelectedMethod), typeof(string), null, (sender, e) => ((MainWindowViewModel)sender).OnSelectedMethodChanged());
+
+		private void OnSelectedMethodChanged()
+		{
+			base.ViewModelCommandManager.InvalidateCommands(true);
+		}
+
+		#endregion //Methods To Execute
 
 		public ObservableCollection<string> Params
 		{
@@ -143,14 +146,17 @@
 
 		private bool OnExecuteCommandCanExecute()
 		{
-			return !this.IsBusy;
+			return !this.IsBusy && !string.IsNullOrWhiteSpace(this.SelectedMethod);
 		}
 
 		private async void OnExecuteCommandExecute()
 		{
 			this.IsBusy = true;
 
-			DataTable data = await this.HttpApiClient.GetDataTableAsync("client", "getUser", new object[] { });
+			DataTable data = await this.HttpApiClient.GetDataTableAsync(
+				_testLibrary, 
+				this.SelectedMethod, 
+				this.PrepareParameters());
 
 			if (data != null)
 			{
@@ -171,6 +177,28 @@
 			{
 				_baseUri = new Uri(uri);
 			}
+		}
+
+		private void LoadMethodsAsync()
+		{
+			IEnumerable<string> methods = null;
+			Task task = Task.Run(async () => methods = await this.HttpApiClient.GetMethodsAsync(_testLibrary));
+			task.ContinueWith(t =>
+			{
+				if (methods != null && methods.Any())
+				{
+					this.Methods = new ObservableCollection<string>(methods);
+					this.SelectedMethod = this.Methods.First();
+				}
+			}, TaskScheduler.FromCurrentSynchronizationContext());
+		}
+
+		private object[] PrepareParameters()
+		{
+			List<string> result = new List<string>(
+				this.Params.Where(p => !string.IsNullOrWhiteSpace(p)));
+
+			return result.ToArray();
 		}
 
 		#endregion //Methods
