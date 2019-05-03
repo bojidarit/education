@@ -138,6 +138,13 @@
 		}
 		public static readonly PropertyData ParamsProperty = RegisterProperty(nameof(Params), typeof(ObservableCollection<string>), null);
 
+		public bool IsPureString
+		{
+			get { return GetValue<bool>(IsPureStringProperty); }
+			set { SetValue(IsPureStringProperty, value); }
+		}
+		public static readonly PropertyData IsPureStringProperty = RegisterProperty(nameof(IsPureString), typeof(bool), false);
+
 		#endregion //Properties
 
 		#region Commands
@@ -153,14 +160,13 @@
 		{
 			this.IsBusy = true;
 
-			DataTable data = await this.HttpApiClient.GetDataTableAsync(
-				_testLibrary, 
-				this.SelectedMethod, 
-				this.PrepareParameters());
-
-			if (data != null)
+			if (this.IsPureString)
 			{
-				this.Items = data.DefaultView;
+				await GetString();
+			}
+			else
+			{
+				await GetTable();
 			}
 
 			this.IsBusy = false;
@@ -169,6 +175,32 @@
 		#endregion //Commands
 
 		#region Methods
+
+		private async Task GetString()
+		{
+			string data = await this.HttpApiClient.GetRawDataAsync(
+				_testLibrary,
+				this.SelectedMethod,
+				this.PrepareParameters());
+
+			if (!string.IsNullOrWhiteSpace(data))
+			{
+				await this.ShowMessage(data, "Pure data");
+			}
+		}
+
+		private async Task GetTable()
+		{
+			DataTable data = await this.HttpApiClient.GetDataTableAsync(
+				_testLibrary,
+				this.SelectedMethod,
+				this.PrepareParameters());
+
+			if (data != null)
+			{
+				this.Items = data.DefaultView;
+			}
+		}
 
 		private void SetBaseUri(string uri)
 		{

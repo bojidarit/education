@@ -16,26 +16,31 @@
 					 IsReadOnly="True"
 					 Margin="5,0" />
 
+			<!--Method name-->
 			<TextBlock Text="Method" />
 			<ComboBox ItemsSource="{Binding Methods}"
 					  SelectedItem="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					  Width="120"
 					  Margin="5,0" />
 
+			<!--Parameters-->
 			<TextBlock Text="P1" />
 			<TextBox Text="{Binding Params[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					 Width="50"
 					 Margin="5,0" />
-
 			<TextBlock Text="P2" />
 			<TextBox Text="{Binding Params[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					 Width="50"
 					 Margin="5,0" />
-
 			<TextBlock Text="P3" />
 			<TextBox Text="{Binding Params[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					 Width="50"
 					 Margin="5,0" />
+
+			<!--Expected Result type-->
+			<CheckBox IsChecked="{Binding IsPureString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					  Content="Get Pure String"
+					  Margin="5,0" />
 
 			<!--Execute-->
 			<Button Command="{Binding ExecuteCommand}"
