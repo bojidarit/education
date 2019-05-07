@@ -17,7 +17,7 @@
 		#region Fields
 
 		private Uri _baseUri = null;
-		private readonly string _testLibrary = "Users";
+		private readonly string _testLibrary = "oblp_users";	//"Users";
 
 		#endregion //Fields
 
@@ -31,12 +31,30 @@
 
 			this.Params = new ObservableCollection<string>(new string[10]);
 
-			LoadMethodsAsync();
+			int loadMethods = 0;
+			Int32.TryParse(ConfigurationManager.AppSettings.Get("LoadMethods"), out loadMethods);
+
+			if (loadMethods > 0)
+			{
+				LoadMethodsAsync();
+			}
+			else
+			{
+				//this.Methods = new ObservableCollection<string>();
+				this.IsMethodEditable = true;
+			}
 		}
 
 		#region Properties
 
 		public override string Title => "WPF Simple HTTP Client";
+
+		public bool IsMethodEditable
+		{
+			get { return GetValue<bool>(IsMethodEditableProperty); }
+			set { SetValue(IsMethodEditableProperty, value); }
+		}
+		public static readonly PropertyData IsMethodEditableProperty = RegisterProperty("IsMethodEditable", typeof(bool), false);
 
 		#region IsBusy
 
@@ -178,15 +196,12 @@
 
 		private async Task GetString()
 		{
-			string data = await this.HttpApiClient.GetRawDataAsync(
+			HttpData data = await this.HttpApiClient.GetRawDataAsync(
 				_testLibrary,
 				this.SelectedMethod,
 				this.PrepareParameters());
 
-			if (!string.IsNullOrWhiteSpace(data))
-			{
-				await this.ShowMessage(data, "Pure data");
-			}
+			await this.ShowMessage(data.Content ?? string.Empty, "Pure data");
 		}
 
 		private async Task GetTable()
@@ -221,6 +236,10 @@
 				{
 					this.Methods = new ObservableCollection<string>(methods);
 					this.SelectedMethod = this.Methods.First();
+				}
+				else
+				{
+					this.IsMethodEditable = true;
 				}
 			}, TaskScheduler.FromCurrentSynchronizationContext());
 		}

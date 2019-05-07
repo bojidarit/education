@@ -26,18 +26,18 @@
 			Uri uri = null;
 			if (Uri.TryCreate(path, UriKind.Absolute, out uri))
 			{
-				string data = await client.GetAsync(uri);
+				HttpData data = await client.GetAsync(uri);
 
-				if (!string.IsNullOrWhiteSpace(data))
+				if (!string.IsNullOrWhiteSpace(data.Content))
 				{
-					return JsonConvert.DeserializeObject<IEnumerable<string>>(data);
+					return JsonConvert.DeserializeObject<IEnumerable<string>>(data.Content);
 				}
 			}
 
 			return null;
 		}
 
-		public static async Task<string> GetRawDataAsync(this HttpApiClient client,
+		public static async Task<HttpData> GetRawDataAsync(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
 			Uri uri = MakeSpecialRequestUri(client, library, method, values);
@@ -48,15 +48,16 @@
 			string library, string method, object[] values)
 		{
 			JToken[] result = null;
-			string data = await client.GetRawDataAsync(library, method, values);
+			HttpData data = await client.GetRawDataAsync(library, method, values);
 
-			if (!string.IsNullOrWhiteSpace(data))
+			if (data.IsSuccessStatusCode && !string.IsNullOrWhiteSpace(data.Content) 
+				&& data.ContentType.MediaType.Contains("json"))
 			{
 				// Parse the JSON string
 				JObject jObject = null;
 				try
 				{
-					jObject = JObject.Parse(data);
+					jObject = JObject.Parse(data.Content);
 				}
 				catch (Exception ex)
 				{

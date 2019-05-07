@@ -19,7 +19,8 @@
 			<!--Method name-->
 			<TextBlock Text="Method" />
 			<ComboBox ItemsSource="{Binding Methods}"
-					  SelectedItem="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					  IsEditable="{Binding IsMethodEditable}"
+					  Text="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 					  Width="120"
 					  Margin="5,0" />
 

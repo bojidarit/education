@@ -46,23 +46,25 @@
 		public string GetRequestUriString(string apiPath) =>
 			Flurl.Url.Combine(_client.BaseAddress.ToString(), apiPath);
 
-		public async Task<string> GetAsync(Uri requestUri)
+		public async Task<HttpData> GetAsync(Uri requestUri)
 		{
-			string result = string.Empty;
+			HttpData result = null;
+			string data = string.Empty;
 			HttpResponseMessage response = null;
 
 			try
 			{
 				response = await _client.GetAsync(requestUri);
 
-				result = await response.Content.ReadAsStringAsync();
-
+				data = await response.Content.ReadAsStringAsync();
+				result = new HttpData(response, data);
+				
 				// throws an exception if the status code falls outside the range 200–299
 				response.EnsureSuccessStatusCode();
 			}
 			catch (Exception ex)
 			{
-				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), result));
+				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), $"Content: '{result?.Content}'"));
 			}
 
 			return result;
