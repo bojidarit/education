@@ -17,7 +17,7 @@
 		#region Fields
 
 		private Uri _baseUri = null;
-		private readonly string _testLibrary = "oblp_users";	//"Users";
+		private const string _testLibrary = "oblp_users";	//"Users";
 
 		#endregion //Fields
 
@@ -31,6 +31,8 @@
 
 			this.Params = new ObservableCollection<string>(new string[10]);
 
+			
+
 			int loadMethods = 0;
 			Int32.TryParse(ConfigurationManager.AppSettings.Get("LoadMethods"), out loadMethods);
 
@@ -40,7 +42,6 @@
 			}
 			else
 			{
-				//this.Methods = new ObservableCollection<string>();
 				this.IsMethodEditable = true;
 			}
 		}
@@ -126,6 +127,24 @@
 		}
 		public static readonly PropertyData ItemsProperty = RegisterProperty(nameof(Items), typeof(DataView), null);
 
+		#region Libraries
+
+		public ObservableCollection<string> Libraries
+		{
+			get { return GetValue<ObservableCollection<string>>(LibrariesProperty); }
+			set { SetValue(LibrariesProperty, value); }
+		}
+		public static readonly PropertyData LibrariesProperty = RegisterProperty("Libraries", typeof(ObservableCollection<string>), null);
+
+		public string SelectedLibrary
+		{
+			get { return GetValue<string>(SelectedLibraryProperty); }
+			set { SetValue(SelectedLibraryProperty, value); }
+		}
+		public static readonly PropertyData SelectedLibraryProperty = RegisterProperty("SelectedLibrary", typeof(string), _testLibrary);
+
+		#endregion //Libraries
+
 		#region Methods To Execute
 
 		public ObservableCollection<string> Methods
@@ -171,7 +190,8 @@
 
 		private bool OnExecuteCommandCanExecute()
 		{
-			return !this.IsBusy && !string.IsNullOrWhiteSpace(this.SelectedMethod);
+			return !this.IsBusy && !string.IsNullOrWhiteSpace(this.SelectedLibrary)
+				&& !string.IsNullOrWhiteSpace(this.SelectedMethod);
 		}
 
 		private async void OnExecuteCommandExecute()
@@ -197,7 +217,7 @@
 		private async Task GetString()
 		{
 			HttpData data = await this.HttpApiClient.GetRawDataAsync(
-				_testLibrary,
+				this.SelectedLibrary,
 				this.SelectedMethod,
 				this.PrepareParameters());
 
@@ -206,8 +226,10 @@
 
 		private async Task GetTable()
 		{
+			this.Items = null;
+
 			DataTable data = await this.HttpApiClient.GetDataTableAsync(
-				_testLibrary,
+				this.SelectedLibrary,
 				this.SelectedMethod,
 				this.PrepareParameters());
 

@@ -16,13 +16,21 @@
 					 IsReadOnly="True"
 					 Margin="5,0" />
 
+			<!--Libraries-->
+			<TextBlock Text="Library" />
+			<ComboBox ItemsSource="{Binding Libraries}"
+					  IsEditable="True"
+					  Text="{Binding SelectedLibrary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					  Width="120"
+					  Margin="5,0" />
+
 			<!--Method name-->
 			<TextBlock Text="Method" />
 			<ComboBox ItemsSource="{Binding Methods}"
 					  IsEditable="{Binding IsMethodEditable}"
 					  Text="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					  Width="120"
-					  Margin="5,0" />
+					  Width="150"
+					  Margin="5,0,35,0" />
 
 			<!--Parameters-->
 			<TextBlock Text="P1" />
