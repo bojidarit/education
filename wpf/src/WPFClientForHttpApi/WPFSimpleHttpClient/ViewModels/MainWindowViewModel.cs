@@ -17,7 +17,7 @@
 		#region Fields
 
 		private Uri _baseUri = null;
-		private const string _testLibrary = "oblp_users";	//"Users";
+		private const string _testLibrary = "oblp_users";   //"Users";
 
 		#endregion //Fields
 
@@ -31,7 +31,7 @@
 
 			this.Params = new ObservableCollection<string>(new string[10]);
 
-			
+
 
 			int loadMethods = 0;
 			Int32.TryParse(ConfigurationManager.AppSettings.Get("LoadMethods"), out loadMethods);
@@ -216,12 +216,14 @@
 
 		private async Task GetString()
 		{
+			string result = string.Empty;
+
 			HttpData data = await this.HttpApiClient.GetRawDataAsync(
 				this.SelectedLibrary,
 				this.SelectedMethod,
 				this.PrepareParameters());
 
-			await this.ShowMessage(data.Content ?? string.Empty, "Pure data");
+			var task = this.ShowDialogAsync(new PureDataViewModel(data));
 		}
 
 		private async Task GetTable()
