@@ -9,6 +9,8 @@
 
 	public static class Users
 	{
+		public static string LibraryName => "oblp_users";
+
 		private static IEnumerable<User> _users = new List<User>()
 		{
 			new User(1, "User 1", new DateTime(2010, 1, 1), 1.23M, true),

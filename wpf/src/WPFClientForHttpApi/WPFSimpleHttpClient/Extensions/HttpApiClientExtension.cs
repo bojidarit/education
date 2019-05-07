@@ -61,7 +61,8 @@
 				}
 				catch (Exception ex)
 				{
-					client.OnErrorOccured(new HttpErrorEventArgs(ex, string.Empty, "Invalid response format. JSON expected."));
+					client.OnErrorOccured(new HttpErrorEventArgs(
+						ex, data.RequestUri.ToString(), "Invalid response format. JSON expected."));
 				}
 
 				// Get "data" object as enumerable
@@ -71,7 +72,8 @@
 				}
 				catch (Exception ex)
 				{
-					client.OnErrorOccured(new HttpErrorEventArgs(ex, string.Empty, "Invalid 'data' object."));
+					client.OnErrorOccured(new HttpErrorEventArgs(
+						ex, data.RequestUri.ToString(), "Invalid 'data' object."));
 				}
 			}
 

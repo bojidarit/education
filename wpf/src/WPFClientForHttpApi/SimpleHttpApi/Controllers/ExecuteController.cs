@@ -44,8 +44,26 @@
 			Assembly currentAssembly = Assembly.GetExecutingAssembly();
 			try
 			{
-				Type type = currentAssembly.GetType($"SimpleHttpApi.DataLogic.{library}");
-				return Ok(type.GetStaticMethods());
+				var typesInDataLogic = currentAssembly.GetTypes()
+					.Where(t => t.IsClass && string.Compare(t.Namespace, "SimpleHttpApi.DataLogic", true) == 0);
+
+				Type type = null;
+				foreach (var item in typesInDataLogic)
+				{
+					if (item.MatchLibraryName(library))
+					{
+						type = item;
+						break;
+					}
+				}
+
+				if (type != null)
+				{
+					return Ok(type.GetStaticMethods().Where(m => !m.Contains("_")));
+				}
+
+				return BadRequest($"Library '{library}' not found.");
+
 			}
 			catch (Exception ex)
 			{
@@ -74,7 +92,7 @@
 			string method = targetArray[1];
 
 			// Check for the only library
-			if (string.Compare(library, dataLogicType.Name, true) != 0)
+			if (string.Compare(library, DataLogic.Users.LibraryName, true) != 0)
 			{
 				return BadRequest("Wrong library");
 			}
@@ -114,7 +132,7 @@
 					else
 					{
 						// PATCH: XML serialized cannot manage reference types inside of an object
-						if( result.GetType() == typeof(DataListModel<User>))
+						if (result.GetType() == typeof(DataListModel<User>))
 						{
 							return Ok((DataListModel<User>)result);
 						}
