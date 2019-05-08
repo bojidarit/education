@@ -31,6 +31,8 @@
 			this.Location = uriFromConfig;
 			SetBaseUri(uriFromConfig);
 
+			LoadLibraries();
+
 			this.Params = new ObservableCollection<string>(new string[10]);
 
 			int loadMethods = 0;
@@ -143,7 +145,15 @@
 			get { return GetValue<string>(SelectedLibraryProperty); }
 			set { SetValue(SelectedLibraryProperty, value); }
 		}
-		public static readonly PropertyData SelectedLibraryProperty = RegisterProperty("SelectedLibrary", typeof(string), _testLibrary);
+
+		public static readonly PropertyData SelectedLibraryProperty = 
+			RegisterProperty("SelectedLibrary", typeof(string), null, 
+				(sender, e) => ((MainWindowViewModel)sender).OnSelectedLibraryChanged());
+
+		private void OnSelectedLibraryChanged()
+		{
+			base.ViewModelCommandManager.InvalidateCommands(true);
+		}
 
 		#endregion //Libraries
 
@@ -161,7 +171,9 @@
 			get { return GetValue<string>(SelectedMethodProperty); }
 			set { SetValue(SelectedMethodProperty, value); }
 		}
-		public static readonly PropertyData SelectedMethodProperty = RegisterProperty(nameof(SelectedMethod), typeof(string), null, (sender, e) => ((MainWindowViewModel)sender).OnSelectedMethodChanged());
+		public static readonly PropertyData SelectedMethodProperty = 
+			RegisterProperty(nameof(SelectedMethod), typeof(string), null, 
+				(sender, e) => ((MainWindowViewModel)sender).OnSelectedMethodChanged());
 
 		private void OnSelectedMethodChanged()
 		{
@@ -198,7 +210,15 @@
 			get { return GetValue<string>(SelectedValueTypeProperty); }
 			set { SetValue(SelectedValueTypeProperty, value); }
 		}
-		public static readonly PropertyData SelectedValueTypeProperty = RegisterProperty("SelectedValueType", typeof(string), null);
+
+		public static readonly PropertyData SelectedValueTypeProperty = 
+			RegisterProperty("SelectedValueType", typeof(string), null, 
+				(sender, e) => ((MainWindowViewModel)sender).OnSelectedValueTypeChanged());
+
+		private void OnSelectedValueTypeChanged()
+		{
+			base.ViewModelCommandManager.InvalidateCommands(true);
+		}
 
 		#endregion //Value Types
 
@@ -241,43 +261,15 @@
 
 		private async void OnExecuteValueCommandExecute()
 		{
-			bool ok = true;
 			this.IsBusy = true;
-			string data = string.Empty;
 
-			if (this.SelectedValueType == typeof(decimal).Name || this.SelectedValueType == typeof(int).Name)
-			{
-				HttpData<NumberDto> dDto = await this.HttpApiClient.GetValueAsync<NumberDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
-				ok = dDto.IsSuccessStatusCode;
-				if (ok)
-				{
-					decimal number = dDto?.Content.Result ?? 0M;
-					data = (this.SelectedValueType == typeof(int).Name) ? number.ToString("F0") : number.ToString("F9");
-				}
-			}
-			else if (this.SelectedValueType == typeof(DateTime).Name)
-			{
-				HttpData<DateTimeDto> dtDto = await this.HttpApiClient.GetValueAsync<DateTimeDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
-				ok = dtDto.IsSuccessStatusCode;
-				if (ok)
-				{
-					data = dtDto?.Content?.ToString();
-				}
-			}
-			else
-			{
-				HttpData<StringDto> sDto = await this.HttpApiClient.GetValueAsync<StringDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
-				ok = sDto.IsSuccessStatusCode;
-				if (ok)
-				{
-					data = sDto?.Content?.ToString();
-				}
-			}
+			Tuple<bool, string> result = await SendHttpRequestForSingleValue();
+
 			this.IsBusy = false;
-
-			if (ok)
+			
+			if (result.Item1)
 			{
-				await this.ShowDialogAsync(new PureDataViewModel(data));
+				await this.ShowDialogAsync(new PureDataViewModel(result.Item2));
 			}
 		}
 
@@ -349,6 +341,9 @@
 			return result.ToArray();
 		}
 
+		/// <summary>
+		/// Value types - Loading static content
+		/// </summary>
 		private void LoadValueTypes()
 		{
 			this.ValueTypes = new ObservableCollection<string>() {
@@ -357,6 +352,101 @@
 				typeof(decimal).Name,
 				typeof(DateTime).Name
 			};
+		}
+
+		/// <summary>
+		/// Libraries - Loading static content
+		/// </summary>
+		private void LoadLibraries()
+		{
+			this.Libraries = new ObservableCollection<string>()
+			{
+				"oBLF_ABCENCE",
+				"oBLP_OTPCALC",
+				"oBLP_APPOINTMENT",
+				"oBLP_AUTOTEXT",
+				"oBLF_BACKUP",
+				"oBLF_BEDARF",
+				"oBLF_ZULAGEN",
+				"oBLF_CHIPSYS",
+				"oBLP_CONTROLSTAT",
+				"oBLF_DPLAN",
+				"oBLP_DPLANAUTO",
+				"oBLF_DPLANPROP",
+				"oBLF_BEREIT",
+				"oBLF_EDITHRS",
+				"oBLP_ENGINE",
+				"oBLF_EXPORT",
+				"oBLP_EXPPLANS",
+				"oBLP_FAVORITES",
+				"oBLP_FORMULAS",
+				"oBLP_INSTITUTE",
+				"oBLP_INTEGRATION",
+				"oBLP_LEGRUL",
+				"oBLP_LICENSE",
+				"oBLF_LISTEDIT",
+				"oBLP_LISTTYPES",
+				"oBLP_LOHNEW",
+				"oBLP_OPTHIST",
+				"oBLP_OPTIONS",
+				"oBLP_PARALLELSTAT",
+				"oBLF_PAUSEADD",
+				"oBLF_PERSONS",
+				"oBLP_PROCADD",
+				"oBLP_RECALCS",
+				"oBLP_DPREP",
+				"oBLF_DIENSTE",
+				"oBLP_MANDANTS",
+				"oBLP_STATISTICS",
+				"oBLF_STDCYCLE",
+				"oBLF_STNDOCS",
+				"oBLP_SYSSTATS",
+				"oBLF_UPLAN",
+				"oBLP_USERS",
+				"oBLP_VIEWS",
+				"oBLF_WORKMODEL"
+			};
+
+			this.SelectedLibrary = this.Libraries
+				.Where(l => string.Compare(_testLibrary, l, true) == 0)
+				.FirstOrDefault();
+		}
+
+		private async Task<Tuple<bool, string>> SendHttpRequestForSingleValue()
+		{
+			string data = string.Empty;
+			bool ok = true;
+
+			if (this.SelectedValueType == typeof(decimal).Name || this.SelectedValueType == typeof(int).Name)
+			{
+				HttpData<NumberDto> dDto = await this.HttpApiClient.GetValueAsync<NumberDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				ok = dDto.IsSuccessStatusCode;
+				if (ok)
+				{
+					decimal number = dDto?.Content.Result ?? 0M;
+					data = (this.SelectedValueType == typeof(int).Name) ? number.ToString("F0") : number.ToString("F9");
+				}
+			}
+			else if (this.SelectedValueType == typeof(DateTime).Name)
+			{
+				HttpData<DateTimeDto> dtDto = await this.HttpApiClient.GetValueAsync<DateTimeDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				ok = dtDto.IsSuccessStatusCode;
+				if (ok)
+				{
+					data = dtDto?.Content?.ToString();
+				}
+			}
+			else
+			{
+				HttpData<StringDto> sDto = await this.HttpApiClient.GetValueAsync<StringDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				ok = sDto.IsSuccessStatusCode;
+				if (ok)
+				{
+					data = sDto?.Content?.ToString();
+				}
+			}
+
+			return Tuple.Create(ok, data);
 		}
 
 		#endregion //Methods

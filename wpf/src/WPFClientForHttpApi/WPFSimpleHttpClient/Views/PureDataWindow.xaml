@@ -14,6 +14,7 @@
 	<DockPanel LastChildFill="True"
 			   Margin="5">
 
+		<!--Footer with buttons-->
 		<StackPanel DockPanel.Dock="Bottom"
 					Orientation="Horizontal"
 					Margin="0,10,0,5"
@@ -26,14 +27,17 @@
 			<Button Content="OK"
 					Command="{Binding OkCommand}"
 					Width="120"
-					Height="25"/>
+					Height="25" />
 		</StackPanel>
 
+		<!--Data box-->
 		<TextBox Text="{Binding Data}"
 				 TextWrapping="Wrap"
 				 AcceptsReturn="True"
 				 HorizontalAlignment="Stretch"
-				 VerticalAlignment="Stretch" />
+				 VerticalAlignment="Stretch"
+				 ScrollViewer.VerticalScrollBarVisibility="Auto"
+				 HorizontalScrollBarVisibility="Auto"/>
 	</DockPanel>
 
 </catel:DataWindow>
