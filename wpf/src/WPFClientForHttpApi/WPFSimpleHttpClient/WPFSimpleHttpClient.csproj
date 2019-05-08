@@ -82,6 +82,8 @@
     <Compile Include="Dtos\ISingleValueResult.cs" />
     <Compile Include="Dtos\NumberDto.cs" />
     <Compile Include="Dtos\StringDto.cs" />
+    <Compile Include="Models\EntityBase.cs" />
+    <Compile Include="Models\IdNameModel.cs" />
     <Compile Include="Views\PureDataWindow.xaml.cs">
       <DependentUpon>PureDataWindow.xaml</DependentUpon>
     </Compile>
@@ -139,7 +141,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Services\Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
