@@ -7,51 +7,57 @@
 	using System.Data;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using WPFSimpleHttpClient.Dtos;
 	using WPFSimpleHttpClient.HttpClientWrapper;
 
 	public static class HttpApiClientExtension
 	{
 		private static string _apiPath = "client/";
 
-		/// <summary>
-		/// Get all public methods of the library
-		/// </summary>
-		/// <param name="client">this</param>
-		/// <param name="library">Data logic class name (it is not fully classified)</param>
-		/// <returns></returns>
-		public static async Task<IEnumerable<string>> GetMethodsAsync(this HttpApiClient client, string library)
-		{
-			string path = Flurl.Url.Combine(client.GetRequestUriString(_apiPath), "methods", library);
-
-			Uri uri = null;
-			if (Uri.TryCreate(path, UriKind.Absolute, out uri))
-			{
-				HttpData data = await client.GetAsync(uri);
-
-				if (!string.IsNullOrWhiteSpace(data.Content))
-				{
-					return JsonConvert.DeserializeObject<IEnumerable<string>>(data.Content);
-				}
-			}
-
-			return null;
-		}
-
-		public static async Task<HttpData> GetRawDataAsync(this HttpApiClient client,
+		public static async Task<HttpData<string>> GetRawDataAsync(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
 			Uri uri = MakeSpecialRequestUri(client, library, method, values);
 			return await client.GetAsync(uri);
 		}
 
+		public static async Task<HttpData<T>> GetValueAsync<T>(this HttpApiClient client,
+			string library, string method, object[] values)
+			where T : ISingleValueResult
+		{
+			T result = default(T);
+			HttpData<string> data = await client.GetRawDataAsync(library, method, values);
+
+			if (CheckDataContent(data))
+			{
+				DataDto<T> dto = null;
+				try
+				{
+					dto = JsonConvert.DeserializeObject<DataDto<T>>(data.Content);
+				}
+				catch (Exception ex)
+				{
+					client.OnErrorOccured(new HttpErrorEventArgs(
+						ex, data.RequestUri.ToString(), "Invalid response format. JSON expected."));
+					data.SetSuccessFlag(false);
+				}
+
+				if (dto != null && dto.Data != null && dto.Data.Length > 0)
+				{
+					result = dto.Data[0];
+				}
+			}
+
+			return new HttpData<T>(data, result);
+		}
+
 		public static async Task<JToken[]> GetDataListAsync(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
 			JToken[] result = null;
-			HttpData data = await client.GetRawDataAsync(library, method, values);
+			HttpData<string> data = await client.GetRawDataAsync(library, method, values);
 
-			if (data.IsSuccessStatusCode && !string.IsNullOrWhiteSpace(data.Content) 
-				&& data.ContentType.MediaType.Contains("json"))
+			if (CheckDataContent(data))
 			{
 				// Parse the JSON string
 				JObject jObject = null;
@@ -96,6 +102,32 @@
 
 			return JCollectionToDataTable(data);
 		}
+
+		/// <summary>
+		/// Get all public methods of the library
+		/// </summary>
+		/// <param name="client">this</param>
+		/// <param name="library">Data logic class name (it is not fully classified)</param>
+		/// <returns></returns>
+		public static async Task<IEnumerable<string>> GetMethodsAsync(this HttpApiClient client, string library)
+		{
+			string path = Flurl.Url.Combine(client.GetRequestUriString(_apiPath), "methods", library);
+
+			Uri uri = null;
+			if (Uri.TryCreate(path, UriKind.Absolute, out uri))
+			{
+				HttpData<string> data = await client.GetAsync(uri);
+
+				if (!string.IsNullOrWhiteSpace(data.Content))
+				{
+					return JsonConvert.DeserializeObject<IEnumerable<string>>(data.Content);
+				}
+			}
+
+			return null;
+		}
+
+		#region Helpers
 
 		/// <summary>
 		/// Generates a pure JSON string from collection of JTokens and De-serialize it to a DataTable
@@ -179,5 +211,11 @@
 
 			return uri;
 		}
+
+		private static bool CheckDataContent(HttpData<string> data) =>
+			data.IsSuccessStatusCode && !string.IsNullOrWhiteSpace(data.Content)
+				&& data.ContentType.MediaType.Contains("json");
+
+		#endregion //Helpers
 	}
 }

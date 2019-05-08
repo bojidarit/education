@@ -9,53 +9,132 @@
 			   Margin="5">
 
 		<!--Header-->
-		<WrapPanel DockPanel.Dock="Top">
-			<!--Location-->
-			<TextBlock Text="Location" />
-			<TextBox Text="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-					 IsReadOnly="True"
-					 Margin="5,0" />
+		<GroupBox DockPanel.Dock="Top"
+				  Header="Parameters"
+				  Padding="3">
+			<WrapPanel>
+				<!--Location-->
+				<TextBlock Text="Location"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+						 IsReadOnly="True"
+						 Margin="5,0" />
 
-			<!--Libraries-->
-			<TextBlock Text="Library" />
-			<ComboBox ItemsSource="{Binding Libraries}"
-					  IsEditable="True"
-					  Text="{Binding SelectedLibrary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					  Width="120"
-					  Margin="5,0" />
+				<!--Libraries-->
+				<TextBlock Text="Library"
+						   VerticalAlignment="Center" />
+				<ComboBox ItemsSource="{Binding Libraries}"
+						  IsEditable="True"
+						  Text="{Binding SelectedLibrary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						  Width="120"
+						  Margin="5,0" />
 
-			<!--Method name-->
-			<TextBlock Text="Method" />
-			<ComboBox ItemsSource="{Binding Methods}"
-					  IsEditable="{Binding IsMethodEditable}"
-					  Text="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					  Width="150"
-					  Margin="5,0,35,0" />
+				<!--Method name-->
+				<TextBlock Text="Method"
+						   VerticalAlignment="Center" />
+				<ComboBox ItemsSource="{Binding Methods}"
+						  IsEditable="{Binding IsMethodEditable}"
+						  Text="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						  Width="150"
+						  Margin="5,0,35,0" />
 
-			<!--Parameters-->
-			<TextBlock Text="P1" />
-			<TextBox Text="{Binding Params[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					 Width="50"
-					 Margin="5,0" />
-			<TextBlock Text="P2" />
-			<TextBox Text="{Binding Params[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					 Width="50"
-					 Margin="5,0" />
-			<TextBlock Text="P3" />
-			<TextBox Text="{Binding Params[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					 Width="50"
-					 Margin="5,0" />
+				<!--Parameters-->
+				<TextBlock Text="P1"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
+				
+				<TextBlock Text="P2"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
 
-			<!--Expected Result type-->
-			<CheckBox IsChecked="{Binding IsPureString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					  Content="Get Pure String"
-					  Margin="5,0" />
+				<TextBlock Text="P3"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
 
-			<!--Execute-->
-			<Button Command="{Binding ExecuteCommand}"
-					Content="Execute"
-					Margin="5,0" />
-		</WrapPanel>
+				<TextBlock Text="P4"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[3], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
+
+				<TextBlock Text="P5"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[4], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
+
+				<TextBlock Text="P6"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[5], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
+
+				<TextBlock Text="P7"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[6], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
+
+				<TextBlock Text="P8"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[7], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
+
+				<TextBlock Text="P9"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[8], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
+
+				<TextBlock Text="P10"
+						   VerticalAlignment="Center" />
+				<TextBox Text="{Binding Params[9], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Width="50"
+						 Margin="5,0" />
+
+			</WrapPanel>
+		</GroupBox>
+
+		<!--Executors-->
+		<GroupBox DockPanel.Dock="Top"
+				  Header="Make HTTP Request"
+				  Margin="0,5"
+				  Padding="3">
+			<WrapPanel>
+				<TextBlock Text="Option 1"
+						   VerticalAlignment="Center" />
+
+				<!--Expected Result type-->
+				<CheckBox IsChecked="{Binding IsPureString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						  Content="Get Pure String"
+						  VerticalAlignment="Center"
+						  Margin="5,0" />
+
+				<Button Command="{Binding ExecuteCommand}"
+						Content="Execute"
+						Margin="5,0" />
+
+				<!--Execute Value-->
+				<TextBlock Text="Option 2 - Value Type"
+						   VerticalAlignment="Center"
+						   Margin="15,0,0,0" />
+				<ComboBox ItemsSource="{Binding ValueTypes}"
+						  SelectedItem="{Binding SelectedValueType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						  Width="100"
+						  Margin="5,0" />
+
+				<Button Command="{Binding ExecuteValueCommand}"
+						ToolTip="Execute single-value result method"
+						Content="Execute" />
+			</WrapPanel>
+		</GroupBox>
 
 		<!--Footer-->
 		<DockPanel DockPanel.Dock="Bottom"

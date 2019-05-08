@@ -11,27 +11,27 @@
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using System.Linq;
+	using WPFSimpleHttpClient.Dtos;
 
 	public class MainWindowViewModel : ViewModelBase
 	{
 		#region Fields
 
 		private Uri _baseUri = null;
-		private const string _testLibrary = "oblp_users";   //"Users";
+		private const string _testLibrary = "oblp_users";
 
 		#endregion //Fields
 
 		public MainWindowViewModel()
 		{
 			ExecuteCommand = new Command(OnExecuteCommandExecute, OnExecuteCommandCanExecute);
+			ExecuteValueCommand = new Command(OnExecuteValueCommandExecute, OnExecuteValueCommandCanExecute);
 
 			string uriFromConfig = ConfigurationManager.AppSettings.Get("BaseUri");
 			this.Location = uriFromConfig;
 			SetBaseUri(uriFromConfig);
 
 			this.Params = new ObservableCollection<string>(new string[10]);
-
-
 
 			int loadMethods = 0;
 			Int32.TryParse(ConfigurationManager.AppSettings.Get("LoadMethods"), out loadMethods);
@@ -44,6 +44,8 @@
 			{
 				this.IsMethodEditable = true;
 			}
+
+			LoadValueTypes();
 		}
 
 		#region Properties
@@ -182,6 +184,24 @@
 		}
 		public static readonly PropertyData IsPureStringProperty = RegisterProperty(nameof(IsPureString), typeof(bool), false);
 
+		#region Value Types
+
+		public ObservableCollection<string> ValueTypes
+		{
+			get { return GetValue<ObservableCollection<string>>(ValueTypesProperty); }
+			set { SetValue(ValueTypesProperty, value); }
+		}
+		public static readonly PropertyData ValueTypesProperty = RegisterProperty("ValueTypes", typeof(ObservableCollection<string>), null);
+
+		public string SelectedValueType
+		{
+			get { return GetValue<string>(SelectedValueTypeProperty); }
+			set { SetValue(SelectedValueTypeProperty, value); }
+		}
+		public static readonly PropertyData SelectedValueTypeProperty = RegisterProperty("SelectedValueType", typeof(string), null);
+
+		#endregion //Value Types
+
 		#endregion //Properties
 
 		#region Commands
@@ -210,6 +230,59 @@
 			this.IsBusy = false;
 		}
 
+		#region ExecuteValueCommand
+
+		public Command ExecuteValueCommand { get; private set; }
+
+		private bool OnExecuteValueCommandCanExecute()
+		{
+			return OnExecuteCommandCanExecute() && !string.IsNullOrWhiteSpace(this.SelectedValueType);
+		}
+
+		private async void OnExecuteValueCommandExecute()
+		{
+			bool ok = true;
+			this.IsBusy = true;
+			string data = string.Empty;
+
+			if (this.SelectedValueType == typeof(decimal).Name || this.SelectedValueType == typeof(int).Name)
+			{
+				HttpData<NumberDto> dDto = await this.HttpApiClient.GetValueAsync<NumberDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				ok = dDto.IsSuccessStatusCode;
+				if (ok)
+				{
+					decimal number = dDto?.Content.Result ?? 0M;
+					data = (this.SelectedValueType == typeof(int).Name) ? number.ToString("F0") : number.ToString("F9");
+				}
+			}
+			else if (this.SelectedValueType == typeof(DateTime).Name)
+			{
+				HttpData<DateTimeDto> dtDto = await this.HttpApiClient.GetValueAsync<DateTimeDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				ok = dtDto.IsSuccessStatusCode;
+				if (ok)
+				{
+					data = dtDto?.Content?.ToString();
+				}
+			}
+			else
+			{
+				HttpData<StringDto> sDto = await this.HttpApiClient.GetValueAsync<StringDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				ok = sDto.IsSuccessStatusCode;
+				if (ok)
+				{
+					data = sDto?.Content?.ToString();
+				}
+			}
+			this.IsBusy = false;
+
+			if (ok)
+			{
+				await this.ShowDialogAsync(new PureDataViewModel(data));
+			}
+		}
+
+		#endregion //ExecuteValueCommand
+
 		#endregion //Commands
 
 		#region Methods
@@ -218,7 +291,7 @@
 		{
 			string result = string.Empty;
 
-			HttpData data = await this.HttpApiClient.GetRawDataAsync(
+			HttpData<string> data = await this.HttpApiClient.GetRawDataAsync(
 				this.SelectedLibrary,
 				this.SelectedMethod,
 				this.PrepareParameters());
@@ -274,6 +347,16 @@
 				this.Params.Where(p => !string.IsNullOrWhiteSpace(p)));
 
 			return result.ToArray();
+		}
+
+		private void LoadValueTypes()
+		{
+			this.ValueTypes = new ObservableCollection<string>() {
+				typeof(string).Name,
+				typeof(int).Name,
+				typeof(decimal).Name,
+				typeof(DateTime).Name
+			};
 		}
 
 		#endregion //Methods

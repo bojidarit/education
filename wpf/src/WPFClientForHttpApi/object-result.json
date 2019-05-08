@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "IDUSER": 1,
+      "USERNAME": "geocon",
+      "PASSWORD": "**********",
+      "DESCRIPTION": "Systemverwalter",
+      "IDPROF": 2,
+      "PR_NAME": "admin",
+      "IDSTATION": 0,
+      "ISPOWER": 1,
+      "ISPASSPOL": 0,
+      "ISPASSEXP": 0,
+      "ISPASSCHN": 0,
+      "DATECHN": "2018-12-10T14:43",
+      "ISMAINEMAIL": 0,
+      "VALIDTO": null
+    }
+  ]
+}

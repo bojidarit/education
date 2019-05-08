@@ -77,6 +77,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Dtos\DataDto.cs" />
+    <Compile Include="Dtos\DateTimeDto.cs" />
+    <Compile Include="Dtos\ISingleValueResult.cs" />
+    <Compile Include="Dtos\NumberDto.cs" />
+    <Compile Include="Dtos\StringDto.cs" />
     <Compile Include="Views\PureDataWindow.xaml.cs">
       <DependentUpon>PureDataWindow.xaml</DependentUpon>
     </Compile>
@@ -123,7 +128,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Readme.txt" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

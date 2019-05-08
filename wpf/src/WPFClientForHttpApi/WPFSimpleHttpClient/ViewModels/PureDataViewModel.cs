@@ -7,15 +7,18 @@
 
 	public class PureDataViewModel : ViewModelBase
 	{
-		public PureDataViewModel(HttpData data)
+		public PureDataViewModel(string data)
 		{
-			OkCommand = new Command(OnOkCommandExecute);
-			CopyCommand = new Command(OnCopyCommandExecute);
+			Init();
+			this.Data = data;
+		}
 
-
-			if (!string.IsNullOrWhiteSpace(data.Content))
+		public PureDataViewModel(HttpData<string> httpData)
+		{
+			Init();
+			if (!string.IsNullOrWhiteSpace(httpData.Content))
 			{
-				this.Data = data.ContentType.MediaType.Contains("json") ? FormatJson(data.Content) : data.Content;
+				this.Data = httpData.ContentType.MediaType.Contains("json") ? FormatJson(httpData.Content) : httpData.Content;
 			}
 		}
 
@@ -64,6 +67,12 @@
 		{
 			dynamic parsedJson = JsonConvert.DeserializeObject(json);
 			return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+		}
+
+		private void Init()
+		{
+			OkCommand = new Command(OnOkCommandExecute);
+			CopyCommand = new Command(OnCopyCommandExecute);
 		}
 
 		#endregion //Methods
