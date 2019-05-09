@@ -32,14 +32,13 @@
 				List<User> result = new List<User>();
 				result.Add(user);
 
-				MethodBase method = MethodBase.GetCurrentMethod();
-				return new DataListModel<User>(method.DeclaringType.Name, method.Name, result);
+				return MakeDataArray<User>(MethodBase.GetCurrentMethod(), result);
 			}
 
 			return null;
 		}
 
-		public static DataResultModel<object> IsPowerUser(string parameter)
+		public static DataListModel<DataResultModel<object>> IsPowerUser(string parameter)
 		{
 			bool result = false;
 
@@ -52,7 +51,7 @@
 			return MakeDataResult<object>(MethodBase.GetCurrentMethod(), result);
 		}
 
-		public static DataResultModel<object> GetUserProperty(string parameter, string property)
+		public static DataListModel<DataResultModel<object>> GetUserProperty(string parameter, string property)
 		{
 			object result = null;
 
@@ -67,8 +66,15 @@
 
 		#region Helpers
 
-		public static DataResultModel<T> MakeDataResult<T>(MethodBase method, T result) =>
-			new DataResultModel<T>(method.DeclaringType.Name, method.Name, result);
+		public static DataListModel<DataResultModel<T>> MakeDataResult<T>(MethodBase method, T result)
+		{
+			List<DataResultModel<T>> output = new List<DataResultModel<T>>();
+			output.Add(new DataResultModel<T>(result));
+			return new DataListModel<DataResultModel<T>>(method.DeclaringType.Name, method.Name, output);
+		}
+
+		public static DataListModel<T> MakeDataArray<T>(MethodBase method, List<T> result) =>
+			new DataListModel<T>(method.DeclaringType.Name, method.Name, result);
 
 		private static User GetUserById(string parameter)
 		{

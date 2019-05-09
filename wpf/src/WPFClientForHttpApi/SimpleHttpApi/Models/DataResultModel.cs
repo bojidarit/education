@@ -1,13 +1,11 @@
 ﻿namespace SimpleHttpApi.Models
 {
-	using System.Reflection;
 	using System.Runtime.Serialization;
 
 	[DataContract(Name = "DataValue")]
-	public class DataResultModel<T> : BaseDataModel
+	public class DataResultModel<T>
 	{
-		public DataResultModel(string library, string method, T result)
-			: base(library, method)
+		public DataResultModel(T result)
 		{
 			this.Result = result;
 		}
