@@ -360,6 +360,7 @@
 				typeof(int).Name,
 				typeof(decimal).Name,
 				typeof(DateTime).Name,
+				typeof(object).Name,
 				typeof(IdNameModel).Name
 			};
 		}
@@ -452,6 +453,16 @@
 				ok = tDto.IsSuccessStatusCode;
 				if (tDto.CheckHttpData())
 				{
+					result = string.Join($" {Environment.NewLine}", tDto.Content.Select(m => m.ToString()));
+				}
+			}
+			else if (this.SelectedValueType == typeof(object).Name)
+			{
+				HttpData<object[]> tDto = await this.HttpApiClient.GetDataAsync<object>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				ok = tDto.IsSuccessStatusCode;
+				if (tDto.CheckHttpData())
+				{
+					// Data item type is Newtonsoft.Json.Linq.JObject
 					result = string.Join($" {Environment.NewLine}", tDto.Content.Select(m => m.ToString()));
 				}
 			}
