@@ -147,8 +147,8 @@
 			set { SetValue(SelectedLibraryProperty, value); }
 		}
 
-		public static readonly PropertyData SelectedLibraryProperty = 
-			RegisterProperty("SelectedLibrary", typeof(string), null, 
+		public static readonly PropertyData SelectedLibraryProperty =
+			RegisterProperty("SelectedLibrary", typeof(string), null,
 				(sender, e) => ((MainWindowViewModel)sender).OnSelectedLibraryChanged());
 
 		private void OnSelectedLibraryChanged()
@@ -172,8 +172,8 @@
 			get { return GetValue<string>(SelectedMethodProperty); }
 			set { SetValue(SelectedMethodProperty, value); }
 		}
-		public static readonly PropertyData SelectedMethodProperty = 
-			RegisterProperty(nameof(SelectedMethod), typeof(string), null, 
+		public static readonly PropertyData SelectedMethodProperty =
+			RegisterProperty(nameof(SelectedMethod), typeof(string), null,
 				(sender, e) => ((MainWindowViewModel)sender).OnSelectedMethodChanged());
 
 		private void OnSelectedMethodChanged()
@@ -212,8 +212,8 @@
 			set { SetValue(SelectedValueTypeProperty, value); }
 		}
 
-		public static readonly PropertyData SelectedValueTypeProperty = 
-			RegisterProperty("SelectedValueType", typeof(string), null, 
+		public static readonly PropertyData SelectedValueTypeProperty =
+			RegisterProperty("SelectedValueType", typeof(string), null,
 				(sender, e) => ((MainWindowViewModel)sender).OnSelectedValueTypeChanged());
 
 		private void OnSelectedValueTypeChanged()
@@ -274,7 +274,7 @@
 			Tuple<bool, string> result = await SendHttpRequestForSingleValue();
 
 			this.IsBusy = false;
-			
+
 			if (result.Item1)
 			{
 				await this.ShowDialogAsync(new PureDataViewModel(result.Item2));
@@ -422,39 +422,39 @@
 
 		private async Task<Tuple<bool, string>> SendHttpRequestForSingleValue()
 		{
-			string data = string.Empty;
+			string result = string.Empty;
 			bool ok = true;
 
 			if (this.SelectedValueType == typeof(decimal).Name || this.SelectedValueType == typeof(int).Name)
 			{
-				HttpData<NumberDto> dDto = await this.HttpApiClient.GetValueAsync<NumberDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				HttpData<NumberDto[]> dDto = await this.HttpApiClient.GetDataAsync<NumberDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
 				ok = dDto.IsSuccessStatusCode;
-				if (ok)
+				if (dDto.CheckHttpData())
 				{
-					decimal number = dDto?.Content.Result ?? 0M;
-					data = (this.SelectedValueType == typeof(int).Name) ? number.ToString("F0") : number.ToString("F9");
+					decimal number = dDto.Content[0].Result;
+					result = (this.SelectedValueType == typeof(int).Name) ? number.ToString("F0") : number.ToString("F9");
 				}
 			}
 			else if (this.SelectedValueType == typeof(DateTime).Name)
 			{
-				HttpData<DateTimeDto> dtDto = await this.HttpApiClient.GetValueAsync<DateTimeDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				HttpData<DateTimeDto[]> dtDto = await this.HttpApiClient.GetDataAsync<DateTimeDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
 				ok = dtDto.IsSuccessStatusCode;
-				if (ok)
+				if (dtDto.CheckHttpData())
 				{
-					data = dtDto?.Content?.ToString();
+					result = dtDto.Content[0].ToString();
 				}
 			}
 			else
 			{
-				HttpData<StringDto> sDto = await this.HttpApiClient.GetValueAsync<StringDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				HttpData<StringDto[]> sDto = await this.HttpApiClient.GetDataAsync<StringDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
 				ok = sDto.IsSuccessStatusCode;
-				if (ok)
+				if (sDto.CheckHttpData())
 				{
-					data = sDto?.Content?.ToString();
+					result = sDto.Content[0].ToString();
 				}
 			}
 
-			return Tuple.Create(ok, data);
+			return Tuple.Create(ok, result);
 		}
 
 		#endregion //Methods

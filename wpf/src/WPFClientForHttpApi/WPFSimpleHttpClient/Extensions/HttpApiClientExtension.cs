@@ -21,11 +21,10 @@
 			return await client.GetAsync(uri);
 		}
 
-		public static async Task<HttpData<T>> GetValueAsync<T>(this HttpApiClient client,
+		public static async Task<HttpData<T[]>> GetDataAsync<T>(this HttpApiClient client,
 			string library, string method, object[] values)
-			where T : ISingleValueResult
 		{
-			T result = default(T);
+			T[] result = null;
 			HttpData<string> data = await client.GetRawDataAsync(library, method, values);
 
 			if (CheckDataContent(data))
@@ -42,13 +41,13 @@
 					data.SetSuccessFlag(false);
 				}
 
-				if (dto != null && dto.Data != null && dto.Data.Length > 0)
+				if (dto != null && dto.Data != null)
 				{
-					result = dto.Data[0];
+					result = dto.Data;
 				}
 			}
 
-			return new HttpData<T>(data, result);
+			return new HttpData<T[]>(data, result);
 		}
 
 		public static async Task<JToken[]> GetDataListAsync(this HttpApiClient client,
@@ -126,6 +125,10 @@
 
 			return null;
 		}
+
+		public static bool CheckHttpData<T>(this HttpData<T[]> data) =>
+			(data != null) && (data.IsSuccessStatusCode)
+				&& (data.Content != null) && (data.Content.Length > 0);
 
 		#region Helpers
 
