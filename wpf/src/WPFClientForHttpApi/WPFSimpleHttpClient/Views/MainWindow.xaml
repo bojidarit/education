@@ -139,7 +139,10 @@
 		<!--Footer-->
 		<DockPanel DockPanel.Dock="Bottom"
 				   LastChildFill="True">
-			<TextBox Text="{Binding Message}" />
+			<TextBlock Text="Last Request Uri"
+					   Margin="0,0,5,0" />
+			<TextBox Text="{Binding Message}"
+					 IsReadOnly="True"/>
 		</DockPanel>
 
 		<DataGrid Grid.Row="1"

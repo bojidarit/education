@@ -82,6 +82,7 @@
     <Compile Include="Dtos\ISingleValueResult.cs" />
     <Compile Include="Dtos\NumberDto.cs" />
     <Compile Include="Dtos\StringDto.cs" />
+    <Compile Include="HttpClientWrapper\ExecutionInfoEventArgs.cs" />
     <Compile Include="Models\EntityBase.cs" />
     <Compile Include="Models\IdNameModel.cs" />
     <Compile Include="Views\PureDataWindow.xaml.cs">

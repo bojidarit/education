@@ -103,7 +103,8 @@
 					else
 					{
 						_httpApiClient = new HttpApiClient(_baseUri,
-							(sender, e) => this.ShowError(e.HierarchyExceptionMessages, e.ExceptionType).GetAwaiter().GetResult());
+							(sender, e) => this.ShowError(e.HierarchyExceptionMessages, e.ExceptionType).GetAwaiter().GetResult(),
+							(sender, e) => this.Message = e.RequestUri.ToString());
 					}
 				}
 
@@ -221,6 +222,13 @@
 		}
 
 		#endregion //Value Types
+
+		public string Message
+		{
+			get { return GetValue<string>(MessageProperty); }
+			set { SetValue(MessageProperty, value); }
+		}
+		public static readonly PropertyData MessageProperty = RegisterProperty("Message", typeof(string), null);
 
 		#endregion //Properties
 

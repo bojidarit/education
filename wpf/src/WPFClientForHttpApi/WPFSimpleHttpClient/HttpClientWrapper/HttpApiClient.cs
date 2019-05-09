@@ -11,12 +11,20 @@
 	public class HttpApiClient : IDisposable
 	{
 		public delegate void CustomErrorEventHandler(object sender, HttpErrorEventArgs e);
+		public delegate void ExecutionInfoEventHandler(object sender, ExecutionInfoEventArgs e);
+		
 		public CustomErrorEventHandler ErrorEventHandler;
+		public ExecutionInfoEventHandler ExecutionInfoHandler;
+
 		private static HttpClient _client = new HttpClient();
 
-		public HttpApiClient(Uri baseAddress, CustomErrorEventHandler eventHandler)
+		public HttpApiClient(Uri baseAddress, CustomErrorEventHandler errorEventHandler, ExecutionInfoEventHandler executionEventHandler = null)
 		{
-			ErrorEventHandler += eventHandler;
+			ErrorEventHandler += errorEventHandler;
+			if(executionEventHandler != null)
+			{
+				ExecutionInfoHandler += executionEventHandler;
+			}
 
 			try
 			{
@@ -43,6 +51,9 @@
 		public virtual void OnErrorOccured(HttpErrorEventArgs eventArgs) =>
 			ErrorEventHandler?.Invoke(this, eventArgs);
 
+		public virtual void OnRequestExecute(ExecutionInfoEventArgs eventArgs) =>
+			ExecutionInfoHandler?.Invoke(this, eventArgs);
+
 		public string GetRequestUriString(string apiPath) =>
 			Flurl.Url.Combine(_client.BaseAddress.ToString(), apiPath);
 
@@ -54,6 +65,7 @@
 
 			try
 			{
+				OnRequestExecute(new ExecutionInfoEventArgs(requestUri));
 				response = await _client.GetAsync(requestUri);
 
 				data = await response.Content.ReadAsStringAsync();
