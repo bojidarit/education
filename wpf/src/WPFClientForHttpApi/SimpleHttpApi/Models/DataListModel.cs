@@ -4,20 +4,13 @@
 	using System.Runtime.Serialization;
 
 	[DataContract(Name = "DataList")]
-	public class DataListModel<T>
+	public class DataListModel<T> : BaseDataModel
 	{
 		public DataListModel(string library, string method, IEnumerable<T> list)
+			: base(library, method)
 		{
 			this.Data = list;
-			this.Library = library;
-			this.Method = method;
 		}
-
-		[DataMember]
-		public string Library { get; private set; }
-
-		[DataMember]
-		public string Method { get; private set; }
 
 		[DataMember]
 		public IEnumerable<T> Data { get; private set; }

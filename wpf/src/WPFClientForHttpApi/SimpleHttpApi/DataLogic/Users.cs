@@ -39,7 +39,7 @@
 			return null;
 		}
 
-		public static bool IsPowerUser(string parameter)
+		public static DataResultModel<object> IsPowerUser(string parameter)
 		{
 			bool result = false;
 
@@ -49,10 +49,10 @@
 				result = user.IsPower;
 			}
 
-			return result;
+			return MakeDataResult<object>(MethodBase.GetCurrentMethod(), result);
 		}
 
-		public static object GetUserProperty(string parameter, string property)
+		public static DataResultModel<object> GetUserProperty(string parameter, string property)
 		{
 			object result = null;
 
@@ -62,8 +62,13 @@
 				result = user.GetPropertyValue(property);
 			}
 
-			return result;
+			return MakeDataResult(MethodBase.GetCurrentMethod(), result);
 		}
+
+		#region Helpers
+
+		public static DataResultModel<T> MakeDataResult<T>(MethodBase method, T result) =>
+			new DataResultModel<T>(method.DeclaringType.Name, method.Name, result);
 
 		private static User GetUserById(string parameter)
 		{
@@ -82,5 +87,7 @@
 
 			return result;
 		}
+
+		#endregion //Helpers
 	}
 }

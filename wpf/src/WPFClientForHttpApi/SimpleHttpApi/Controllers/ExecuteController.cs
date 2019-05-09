@@ -136,7 +136,7 @@
 						{
 							return Ok((DataListModel<User>)result);
 						}
-						return Ok(result);
+						return Ok((DataResultModel<object>)result);
 					}
 				}
 				catch (Exception ex)
