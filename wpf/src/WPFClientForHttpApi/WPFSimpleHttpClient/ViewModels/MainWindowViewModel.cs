@@ -12,6 +12,7 @@
 	using System.Threading.Tasks;
 	using System.Linq;
 	using WPFSimpleHttpClient.Dtos;
+	using WPFSimpleHttpClient.Models;
 
 	public class MainWindowViewModel : ViewModelBase
 	{
@@ -358,7 +359,8 @@
 				typeof(string).Name,
 				typeof(int).Name,
 				typeof(decimal).Name,
-				typeof(DateTime).Name
+				typeof(DateTime).Name,
+				typeof(IdNameModel).Name
 			};
 		}
 
@@ -442,6 +444,15 @@
 				if (dtDto.CheckHttpData())
 				{
 					result = dtDto.Content[0].ToString();
+				}
+			}
+			else if (this.SelectedValueType == typeof(IdNameModel).Name)
+			{
+				HttpData<IdNameModel[]> tDto = await this.HttpApiClient.GetDataAsync<IdNameModel>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
+				ok = tDto.IsSuccessStatusCode;
+				if (tDto.CheckHttpData())
+				{
+					result = string.Join($" {Environment.NewLine}", tDto.Content.Select(m => m.ToString()));
 				}
 			}
 			else
