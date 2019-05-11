@@ -13,6 +13,8 @@
 	using System.Linq;
 	using WPFSimpleHttpClient.Dtos;
 	using WPFSimpleHttpClient.Models;
+	using System.Dynamic;
+	using Newtonsoft.Json;
 
 	public class MainWindowViewModel : ViewModelBase
 	{
@@ -235,6 +237,8 @@
 
 		#region Commands
 
+		#region ExecuteCommand
+
 		public Command ExecuteCommand { get; private set; }
 
 		private bool OnExecuteCommandCanExecute()
@@ -258,6 +262,8 @@
 
 			this.IsBusy = false;
 		}
+
+		#endregion //ExecuteCommand
 
 		#region ExecuteValueCommand
 
@@ -361,7 +367,8 @@
 				typeof(decimal).Name,
 				typeof(DateTime).Name,
 				typeof(object).Name,
-				typeof(IdNameModel).Name
+				typeof(IdNameModel).Name,
+				"test-anonymous"
 			};
 		}
 
@@ -466,6 +473,16 @@
 					result = string.Join($" {Environment.NewLine}", tDto.Content.Select(m => m.ToString()));
 				}
 			}
+			else if (this.SelectedValueType == "test-anonymous")
+			{
+				var man = new { Id = 0, Name = "", DateOfJoining = DateTime.MinValue, Rank = 0M, IsPower = false };
+				var oDto = await this.HttpApiClient.GetAnonymousDataAsync(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters(), man);
+				ok = oDto.IsSuccessStatusCode;
+				if (oDto.CheckHttpData())
+				{
+					result = string.Join($" {Environment.NewLine}", oDto.Content.Select(m => m.ToString()));
+				}
+			}
 			else
 			{
 				HttpData<StringDto[]> sDto = await this.HttpApiClient.GetDataAsync<StringDto>(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters());
@@ -477,6 +494,29 @@
 			}
 
 			return Tuple.Create(ok, result);
+		}
+
+		private async Task TestExpandoObjectSerialization()
+		{
+			dynamic obj = new ExpandoObject();
+			obj.Id = 123;
+			obj.Name = "User_123";
+			obj.DateOfJoining = DateTime.Today;
+			obj.Rank = 123.456789M;
+			obj.IsPower = true;
+
+			var json = JsonConvert.SerializeObject(obj, Formatting.None);
+			string data = json.ToString();
+
+			await this.ShowDialogAsync(new PureDataViewModel(data));
+
+			obj.Id = -123;
+			obj.Name = "User -123";
+			obj.DateOfJoining = DateTime.MinValue;
+			obj.Rank = -123.456789M;
+			obj.IsPower = false;
+
+			dynamic output = JsonConvert.DeserializeAnonymousType(data, obj);
 		}
 
 		#endregion //Methods

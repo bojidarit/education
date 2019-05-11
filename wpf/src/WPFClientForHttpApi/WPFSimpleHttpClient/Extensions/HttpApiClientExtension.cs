@@ -21,6 +21,10 @@
 			return await client.GetAsync(uri);
 		}
 
+		public static async Task<HttpData<T[]>> GetAnonymousDataAsync<T>(this HttpApiClient client,
+			string library, string method, object[] values, T anonymousTypeObject) =>
+			await client.GetDataAsync<T>(library, method, values);
+
 		public static async Task<HttpData<T[]>> GetDataAsync<T>(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
