@@ -79,10 +79,14 @@
     </ApplicationDefinition>
     <Compile Include="Dtos\DataDto.cs" />
     <Compile Include="Dtos\DateTimeDto.cs" />
+    <Compile Include="Dtos\Helpers.cs" />
     <Compile Include="Dtos\ISingleValueResult.cs" />
     <Compile Include="Dtos\NumberDto.cs" />
+    <Compile Include="Dtos\PropMold.cs" />
     <Compile Include="Dtos\StringDto.cs" />
     <Compile Include="HttpClientWrapper\ExecutionInfoEventArgs.cs" />
+    <Compile Include="HttpClientWrapper\HttpBaseData.cs" />
+    <Compile Include="HttpClientWrapper\HttpDataExpando.cs" />
     <Compile Include="Models\EntityBase.cs" />
     <Compile Include="Models\IdNameModel.cs" />
     <Compile Include="Views\PureDataWindow.xaml.cs">

@@ -368,7 +368,8 @@
 				typeof(DateTime).Name,
 				typeof(object).Name,
 				typeof(IdNameModel).Name,
-				"test-anonymous"
+				"test-anonymous",
+				"test-dynamic"
 			};
 		}
 
@@ -475,12 +476,32 @@
 			}
 			else if (this.SelectedValueType == "test-anonymous")
 			{
-				var man = new { Id = 0, Name = "", DateOfJoining = DateTime.MinValue, Rank = 0M, IsPower = false };
-				var oDto = await this.HttpApiClient.GetAnonymousDataAsync(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters(), man);
+				var man = new { Id = 0, Name = string.Empty, DateOfJoining = DateTime.MinValue, Rank = 0M, IsPower = false };
+				var oDto = await this.HttpApiClient.GetDataAsync(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters(), man);
 				ok = oDto.IsSuccessStatusCode;
 				if (oDto.CheckHttpData())
 				{
 					result = string.Join($" {Environment.NewLine}", oDto.Content.Select(m => m.ToString()));
+				}
+			}
+			else if (this.SelectedValueType == "test-dynamic")
+			{
+				PropMold[] props = new PropMold[] 
+				{
+					PropMold.Make<int>("Id"),
+					PropMold.Make<string>("Name"),
+					PropMold.Make<DateTime>("DateOfJoining"),
+					PropMold.Make<decimal>("Rank"),
+					PropMold.Make<bool>("IsPower"),
+				};
+				
+				var expandoData = await this.HttpApiClient.GetDynamicDataAsync(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters(), props);
+				ok = expandoData.IsSuccessStatusCode;
+				if (expandoData.CheckHttpExpando())
+				{
+
+					var dynamicList = expandoData.Content.Select(i => new { Id = i.id, Name = i.name, DateOfJoining = ((DateTime)i.dateOfJoining).ToString("dd.MM.yyyy"), Rank = i.rank, IsPower = i.isPower });
+					result = string.Join($" {Environment.NewLine}", dynamicList);
 				}
 			}
 			else
@@ -494,29 +515,6 @@
 			}
 
 			return Tuple.Create(ok, result);
-		}
-
-		private async Task TestExpandoObjectSerialization()
-		{
-			dynamic obj = new ExpandoObject();
-			obj.Id = 123;
-			obj.Name = "User_123";
-			obj.DateOfJoining = DateTime.Today;
-			obj.Rank = 123.456789M;
-			obj.IsPower = true;
-
-			var json = JsonConvert.SerializeObject(obj, Formatting.None);
-			string data = json.ToString();
-
-			await this.ShowDialogAsync(new PureDataViewModel(data));
-
-			obj.Id = -123;
-			obj.Name = "User -123";
-			obj.DateOfJoining = DateTime.MinValue;
-			obj.Rank = -123.456789M;
-			obj.IsPower = false;
-
-			dynamic output = JsonConvert.DeserializeAnonymousType(data, obj);
 		}
 
 		#endregion //Methods

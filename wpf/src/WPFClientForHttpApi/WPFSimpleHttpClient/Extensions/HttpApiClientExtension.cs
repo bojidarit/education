@@ -21,8 +21,46 @@
 			return await client.GetAsync(uri);
 		}
 
-		public static async Task<HttpData<T[]>> GetAnonymousDataAsync<T>(this HttpApiClient client,
-			string library, string method, object[] values, T anonymousTypeObject) =>
+		public static async Task<HttpDataExpando> GetDynamicDataAsync(this HttpApiClient client,
+			string library, string method, object[] values, PropMold[] props)
+		{
+			List<dynamic> result = new List<dynamic>();
+
+			HttpData<object[]> data = await client.GetDataAsync<object>(library, method, values);
+
+			dynamic expandoObject = Helpers.MakeExpandoWithDefaults(props);
+			bool successFlag = true;
+			foreach (JObject item in data.Content)
+			{
+				// Data item type is Newtonsoft.Json.Linq.JObject
+				string json = item.ToString();
+				dynamic output = null;
+				try
+				{
+					output = JsonConvert.DeserializeAnonymousType(json, expandoObject);
+				}
+				catch (Exception ex)
+				{
+					client.OnErrorOccured(new HttpErrorEventArgs(
+						ex, data.RequestUri.ToString(), "Invalid response format. JSON expected."));
+					successFlag = false;
+				}
+
+				if (successFlag)
+				{
+					result.Add(output);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			return new HttpDataExpando(data, result.ToArray());
+		}
+
+		public static async Task<HttpData<T[]>> GetDataAsync<T>(this HttpApiClient client,
+			string library, string method, object[] values, T typeHelperObject) =>
 			await client.GetDataAsync<T>(library, method, values);
 
 		public static async Task<HttpData<T[]>> GetDataAsync<T>(this HttpApiClient client,
@@ -131,6 +169,10 @@
 		}
 
 		public static bool CheckHttpData<T>(this HttpData<T[]> data) =>
+			(data != null) && (data.IsSuccessStatusCode)
+				&& (data.Content != null) && (data.Content.Length > 0);
+
+		public static bool CheckHttpExpando(this HttpDataExpando data) =>
 			(data != null) && (data.IsSuccessStatusCode)
 				&& (data.Content != null) && (data.Content.Length > 0);
 
