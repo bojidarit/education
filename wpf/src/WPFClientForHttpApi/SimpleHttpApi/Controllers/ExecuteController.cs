@@ -74,15 +74,19 @@
 		// GET: client/{target}
 		// Example: http://localhost:50118/client/oblp_users.getuser?apikey=00000&p1=1
 		[Route("client/{target}")]
+		[HttpGet]
 		public IHttpActionResult GetResult(string target)
 		{
 			Dictionary<string, string> parameters = null;
-			var targetArray = target.Split('.');
+			string[] targetArray = null;
 
-			if (targetArray.Length < 2)
+			try
 			{
-				return BadRequest("Wrong target. Must contains two items separated with dot symbol. " +
-					$"The current one is '{target}'");
+				targetArray = GetMethodAndLibrary(target);
+			}
+			catch (ArgumentException ex)
+			{
+				return BadRequest(ex.Message);
 			}
 
 			// There is only one library for now
@@ -148,6 +152,26 @@
 			return BadRequest("No parameters");
 		}
 
+		// POST: client/{target}
+		[Route("client/{target}")]
+		[HttpPost]
+		public IHttpActionResult PostResult(string target, ParametersModel parameters)
+		{
+			string[] targetArray = null;
+
+			try
+			{
+				targetArray = GetMethodAndLibrary(target);
+			}
+			catch (ArgumentException ex)
+			{
+				return BadRequest(ex.Message);
+			}
+
+			// TODO: ... for now just return target library and method, plus all parameters supplied ...
+			return Ok(DataLogic.Users.MakeDataResult(targetArray[0], targetArray[1], parameters));
+		}
+
 		#region Helpers
 
 		private T CastToType<T>(object data) =>
@@ -186,6 +210,19 @@
 
 		private string FormatException(Exception exception) =>
 			$"{exception.GetType().Name}: '{exception.Message}'";
+
+		private string[] GetMethodAndLibrary(string target)
+		{
+			var targetArray = target.Split('.');
+
+			if (targetArray.Length < 2)
+			{
+				throw new ArgumentException("Wrong target. Must contains two items separated with dot symbol. " +
+					$"The current one is '{target}'");
+			}
+
+			return targetArray;
+		}
 
 		#endregion //Helpers
 	}

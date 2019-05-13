@@ -82,6 +82,31 @@
 			return result;
 		}
 
+		public async Task<HttpData<string>> PostAsync<T>(Uri requestUri, T value)
+		{
+			HttpData<string> result = null;
+			string data = string.Empty;
+			HttpResponseMessage response = null;
+
+			try
+			{
+				OnRequestExecute(new ExecutionInfoEventArgs(requestUri));
+				response = await _client.PostAsJsonAsync(requestUri, value);
+
+				data = await response.Content.ReadAsStringAsync();
+				result = new HttpData<string>(response, data);
+
+				// throws an exception if the status code falls outside the range 200–299
+				response.EnsureSuccessStatusCode();
+			}
+			catch (Exception ex)
+			{
+				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), $"Content: '{result?.Content}'"));
+			}
+
+			return result;
+		}
+
 		#endregion //Public interface
 
 		#endregion //Methods

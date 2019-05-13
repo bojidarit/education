@@ -66,15 +66,21 @@
 
 		#region Helpers
 
-		public static DataListModel<DataResultModel<T>> MakeDataResult<T>(MethodBase method, T result)
+		public static DataListModel<DataResultModel<T>> MakeDataResult<T>(string library, string method, T result)
 		{
 			List<DataResultModel<T>> output = new List<DataResultModel<T>>();
 			output.Add(new DataResultModel<T>(result));
-			return new DataListModel<DataResultModel<T>>(method.DeclaringType.Name, method.Name, output);
+			return new DataListModel<DataResultModel<T>>(library, method, output);
 		}
 
-		public static DataListModel<T> MakeDataArray<T>(MethodBase method, List<T> result) =>
-			new DataListModel<T>(method.DeclaringType.Name, method.Name, result);
+		public static DataListModel<T> MakeDataArray<T>(string library, string method, List<T> result) =>
+			new DataListModel<T>(library, method, result);
+
+		private static DataListModel<DataResultModel<T>> MakeDataResult<T>(MethodBase method, T result) =>
+			MakeDataResult<T>(method.DeclaringType.Name, method.Name, result);
+
+		private static DataListModel<T> MakeDataArray<T>(MethodBase method, List<T> result) =>
+			MakeDataArray<T>(method.DeclaringType.Name, method.Name, result);
 
 		private static User GetUserById(string parameter)
 		{

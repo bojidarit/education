@@ -13,8 +13,6 @@
 	using System.Linq;
 	using WPFSimpleHttpClient.Dtos;
 	using WPFSimpleHttpClient.Models;
-	using System.Dynamic;
-	using Newtonsoft.Json;
 
 	public class MainWindowViewModel : ViewModelBase
 	{
@@ -29,6 +27,7 @@
 		{
 			ExecuteCommand = new Command(OnExecuteCommandExecute, OnExecuteCommandCanExecute);
 			ExecuteValueCommand = new Command(OnExecuteValueCommandExecute, OnExecuteValueCommandCanExecute);
+			PostCommand = new Command(OnPostCommandExecute, OnPostCommandCanExecute);
 
 			string uriFromConfig = ConfigurationManager.AppSettings.Get("BaseUri");
 			this.Location = uriFromConfig;
@@ -290,6 +289,33 @@
 
 		#endregion //ExecuteValueCommand
 
+		#region PostCommand
+
+		public Command PostCommand { get; private set; }
+
+		private bool OnPostCommandCanExecute()
+		{
+			return OnExecuteCommandCanExecute();
+		}
+
+		private async void OnPostCommandExecute()
+		{
+			this.IsBusy = true;
+
+			if (this.IsPureString)
+			{
+				await PostString();
+			}
+			else
+			{
+				await PostTable();
+			}
+
+			this.IsBusy = false;
+		}
+
+		#endregion //PostCommand
+
 		#endregion //Commands
 
 		#region Methods
@@ -319,6 +345,23 @@
 			{
 				this.Items = data.DefaultView;
 			}
+		}
+
+		private async Task PostString()
+		{
+			string result = string.Empty;
+
+			HttpData<string> data = await this.HttpApiClient.PostRawDataAsync(
+				this.SelectedLibrary,
+				this.SelectedMethod,
+				this.PrepareParameters());
+
+			var task = this.ShowDialogAsync(new PureDataViewModel(data));
+		}
+
+		private Task PostTable()
+		{
+			throw new NotImplementedException();
 		}
 
 		private void SetBaseUri(string uri)
@@ -476,8 +519,10 @@
 			}
 			else if (this.SelectedValueType == "test-anonymous")
 			{
-				var man = new { Id = 0, Name = string.Empty, DateOfJoining = DateTime.MinValue, Rank = 0M, IsPower = false };
-				var oDto = await this.HttpApiClient.GetDataAsync(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters(), man);
+				//var user = new { Id = 0, Name = string.Empty, DateOfJoining = DateTime.MinValue, Rank = 0M, IsPower = false };
+				var user = new { IdUser = -1, UserName = "", IdProf = -1, Pr_Name = "", IdStation = -1, IsPower = -1,
+					IsPassPol = -1, IsPassExp = -1, IsPassChn = - 1, Email = "", DateChn = DateTime.MinValue, IsMainEmail = -1, ValidTo = default(DateTime?)};
+				var oDto = await this.HttpApiClient.GetDataAsync(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters(), user);
 				ok = oDto.IsSuccessStatusCode;
 				if (oDto.CheckHttpData())
 				{

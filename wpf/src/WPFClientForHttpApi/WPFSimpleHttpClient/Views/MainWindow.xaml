@@ -111,17 +111,17 @@
 				<TextBlock Text="Option 1"
 						   VerticalAlignment="Center" />
 
-				<!--Expected Result type-->
+				<!--GET Result type-->
 				<CheckBox IsChecked="{Binding IsPureString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						  Content="Get Pure String"
 						  VerticalAlignment="Center"
 						  Margin="5,0" />
 
 				<Button Command="{Binding ExecuteCommand}"
-						Content="Execute"
+						Content="Get"
 						Margin="5,0" />
 
-				<!--Execute Value-->
+				<!--GET Value-->
 				<TextBlock Text="Option 2 - Value Type"
 						   VerticalAlignment="Center"
 						   Margin="15,0,0,0" />
@@ -132,7 +132,16 @@
 
 				<Button Command="{Binding ExecuteValueCommand}"
 						ToolTip="Execute single-value result method"
-						Content="Execute" />
+						Content="Get" />
+
+				<!--POST Result-->
+				<TextBlock Text="Option 3 - Result"
+						   VerticalAlignment="Center"
+						   Margin="15,0,5,0" />
+
+				<Button Command="{Binding PostCommand}"
+						ToolTip="Execute single-value result method"
+						Content="Post" />
 			</WrapPanel>
 		</GroupBox>
 

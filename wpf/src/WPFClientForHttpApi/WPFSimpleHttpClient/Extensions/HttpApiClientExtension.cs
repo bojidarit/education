@@ -12,13 +12,27 @@
 
 	public static class HttpApiClientExtension
 	{
+		#region Fields
+
+		private static string _apiKeyParamName = "apikey";
+		private static string _apiKeyParamValue = "00000";
 		private static string _apiPath = "client/";
+
+		#endregion //Fields
 
 		public static async Task<HttpData<string>> GetRawDataAsync(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
 			Uri uri = MakeSpecialRequestUri(client, library, method, values);
 			return await client.GetAsync(uri);
+		}
+
+		public static async Task<HttpData<string>> PostRawDataAsync(this HttpApiClient client,
+			string library, string method, object[] values)
+		{
+			Uri uri = MakeSimpleRequestUri(client, library, method);
+			var parameters = new { ApiKey = _apiKeyParamValue, Params = values };
+			return await client.PostAsync(uri, parameters);
 		}
 
 		public static async Task<HttpDataExpando> GetDynamicDataAsync(this HttpApiClient client,
@@ -244,9 +258,17 @@
 			return result;
 		}
 
+		private static Uri MakeSimpleRequestUri(HttpApiClient client, string library, string method)
+		{
+			string path = $"{client.GetRequestUriString(_apiPath)}{library.ToLower()}.{method.ToLower()}";
+			Uri uri = null;
+			Uri.TryCreate(path, UriKind.Absolute, out uri);
+			return uri;
+		}
+
 		private static Uri MakeSpecialRequestUri(HttpApiClient client, string library, string method, params object[] values)
 		{
-			string path = $"{client.GetRequestUriString(_apiPath)}{library.ToLower()}.{method.ToLower()}?apikey=00000";
+			string path = $"{client.GetRequestUriString(_apiPath)}{library.ToLower()}.{method.ToLower()}?{_apiKeyParamName}={_apiKeyParamValue}";
 
 			if (values != null && values.Any())
 			{
