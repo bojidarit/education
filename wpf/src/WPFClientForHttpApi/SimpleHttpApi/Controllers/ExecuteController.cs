@@ -78,37 +78,74 @@
 			}
 		}
 
-		// POST: client/{target}
-		[Route("client/{target}")]
+		// POST: client
+		[Route("client")]
 		[HttpPost]
-		public IHttpActionResult PostResult(string target, ParametersModel parameters)
+		public IHttpActionResult PostResult(ParametersModel parameters)
 		{
 			TargetModel targetData = null;
 
 			try
 			{
-				targetData = GetMethodAndLibrary(target);
+				targetData = GetMethodAndLibrary(parameters.Method);
 				Type dataLogicType = GetLibraryPath(targetData.Library);
 				CheckApiKey(parameters.ApiKey);
 
 				// Get result
 				object result = null;
-				result = dataLogicType.ExecuteStaticMethod(targetData.Method, parameters.Params);
+				result	= dataLogicType.ExecuteStaticMethod(targetData.Method, parameters.Params ?? new string[0]);
 
 				if (result != null)
 				{
 					return Ok(result);
+					//return MakeOkResponse(result);
 				}
 
 				return NotFound();
+				//return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
 			}
 			catch (Exception ex)
 			{
 				return BadRequest(SmartFormatException(ex));
+				//return MakeBadRequestResponse(SmartFormatException(ex));
 			}
 		}
 
 		#region Helpers
+
+		private HttpResponseMessage MakeBadRequestResponse(string message)
+		{
+			HttpResponseMessage result = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+
+			result.Content = new StringContent(message, System.Text.Encoding.UTF8, "text/plain");
+
+			return result;
+		}
+
+		private HttpResponseMessage MakeOkResponse<T>(T data)
+		{
+			HttpResponseMessage result = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+
+			string json = Newtonsoft.Json.JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.None);
+			result.Content = new StringContent(json, System.Text.Encoding.UTF8, "text/html");
+			//string xml = SerializeObject(data);
+			//result.Content = new StringContent(xml, System.Text.Encoding.UTF8, "text/html");
+
+			return result;
+		}
+
+		private string SerializeObject<T>(T data)
+		{
+			string xml = string.Empty;
+			System.Xml.Serialization.XmlSerializer xmlSerializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
+			using (System.IO.StringWriter textWriter = new System.IO.StringWriter())
+			{
+				xmlSerializer.Serialize(textWriter, data);
+				xml = textWriter.ToString();
+			}
+
+			return xml;
+		}
 
 		private T CastToType<T>(object data) =>
 			(T)Convert.ChangeType(data, typeof(T));
