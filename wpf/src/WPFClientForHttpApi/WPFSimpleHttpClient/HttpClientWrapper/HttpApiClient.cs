@@ -10,6 +10,8 @@
 	/// </summary>
 	public class HttpApiClient : IDisposable
 	{
+		public static string jsonEncoding = "application/json";
+
 		public delegate void CustomErrorEventHandler(object sender, HttpErrorEventArgs e);
 		public delegate void ExecutionInfoEventHandler(object sender, ExecutionInfoEventArgs e);
 		
@@ -31,7 +33,7 @@
 				_client.BaseAddress = baseAddress;
 				_client.DefaultRequestHeaders.Accept.Clear();
 				_client.DefaultRequestHeaders.Accept.Add(
-					new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+					new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(jsonEncoding));
 			}
 			catch (Exception ex)
 			{
@@ -90,8 +92,12 @@
 
 			try
 			{
+				// Prepare JSON content
+				string json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+				var content = new StringContent(json, System.Text.Encoding.UTF8, jsonEncoding);
+
 				OnRequestExecute(new ExecutionInfoEventArgs(requestUri));
-				response = await _client.PostAsJsonAsync(requestUri, value);
+				response = await _client.PostAsync(requestUri, content);
 
 				data = await response.Content.ReadAsStringAsync();
 				result = new HttpData<string>(response, data);
