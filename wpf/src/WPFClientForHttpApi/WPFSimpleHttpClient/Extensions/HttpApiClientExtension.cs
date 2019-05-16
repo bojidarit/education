@@ -17,6 +17,7 @@
 		private static string _apiKeyParamName = "apikey";
 		private static string _apiKeyParamValue = "00000";
 		private static string _apiPath = "client/";
+		public static string jsonFormatParamValue = "json";
 
 		#endregion //Fields
 
@@ -274,7 +275,7 @@
 			{
 				int id = 1;
 				var parameters = values.Select(i => $"p{id++}={i.ToString()}");
-				path += $"&{string.Join("&", parameters)}";
+				path += $"&{string.Join("&", parameters)}&format={jsonFormatParamValue}";
 			}
 
 			Uri uri = null;

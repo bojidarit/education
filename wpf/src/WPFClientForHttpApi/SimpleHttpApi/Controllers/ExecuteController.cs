@@ -13,6 +13,7 @@
 	{
 		private static string _apiKeyParamName = "apikey";
 		private static string _apiKeyParamValue = "00000";
+		private static string _formatParamName = "format";
 
 		// GET: client/methods/{library}
 		[Route("client/methods/{library}")]
@@ -50,7 +51,7 @@
 				CheckApiKey(parameters);
 
 				// Filter ApiKey parameter
-				var paramValues = parameters.Where(p => p.Key != _apiKeyParamName)
+				var paramValues = parameters.Where(p => p.Key != _apiKeyParamName && p.Key != _formatParamName)
 					.Select(p => p.Value).ToArray();
 
 				// Get result
