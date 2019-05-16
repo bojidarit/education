@@ -60,20 +60,24 @@
 			{
 				result = user.GetPropertyValue(property);
 			}
+			else
+			{
+				throw new ArgumentException($"User not found. Parameter = '{parameter}'");
+			}
 
 			return MakeDataResult(MethodBase.GetCurrentMethod(), result);
 		}
 
 		#region Helpers
 
-		public static DataListModel<DataResultModel<T>> MakeDataResult<T>(string library, string method, T result)
+		private static DataListModel<DataResultModel<T>> MakeDataResult<T>(string library, string method, T result)
 		{
 			List<DataResultModel<T>> output = new List<DataResultModel<T>>();
 			output.Add(new DataResultModel<T>(result));
 			return new DataListModel<DataResultModel<T>>(library, method, output);
 		}
 
-		public static DataListModel<T> MakeDataArray<T>(string library, string method, List<T> result) =>
+		private static DataListModel<T> MakeDataArray<T>(string library, string method, List<T> result) =>
 			new DataListModel<T>(library, method, result);
 
 		private static DataListModel<DataResultModel<T>> MakeDataResult<T>(MethodBase method, T result) =>

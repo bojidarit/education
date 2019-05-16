@@ -14,60 +14,18 @@
 		private static string _apiKeyParamName = "apikey";
 		private static string _apiKeyParamValue = "00000";
 
-		// GET: api/execute/{library}/{method}
-		// Example: http://localhost:50118/api/execute/oblp_users/getuser?apikey=00000&p1=1
-		[Route("api/execute/{library}/{method}")]
-		public IHttpActionResult GetResult(string library, string method)
-		{
-			Dictionary<string, string> parameters = null;
-
-			try
-			{
-				parameters = QueryStringToDictionaty(this.ActionContext.Request.GetQueryNameValuePairs(), true);
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(FormatException(ex));
-			}
-
-			// TODO: Execute method with parameters that came from the query string ... 
-			parameters.Add("library", library);
-			parameters.Add("method", method);
-
-			return Ok(parameters);
-		}
-
 		// GET: client/methods/{library}
 		[Route("client/methods/{library}")]
 		public IHttpActionResult GetMethods(string library)
 		{
-			Assembly currentAssembly = Assembly.GetExecutingAssembly();
 			try
 			{
-				var typesInDataLogic = currentAssembly.GetTypes()
-					.Where(t => t.IsClass && string.Compare(t.Namespace, "SimpleHttpApi.DataLogic", true) == 0);
-
-				Type type = null;
-				foreach (var item in typesInDataLogic)
-				{
-					if (item.MatchLibraryName(library))
-					{
-						type = item;
-						break;
-					}
-				}
-
-				if (type != null)
-				{
-					return Ok(type.GetStaticMethods().Where(m => !m.Contains("_")));
-				}
-
-				return BadRequest($"Library '{library}' not found.");
-
+				Type type = GetLibraryPath(library);
+				return Ok(type.GetStaticMethods().Where(m => !m.Contains("_")));
 			}
 			catch (Exception ex)
 			{
-				return BadRequest(FormatException(ex));
+				return BadRequest(SmartFormatException(ex));
 			}
 		}
 
@@ -78,78 +36,45 @@
 		public IHttpActionResult GetResult(string target)
 		{
 			Dictionary<string, string> parameters = null;
-			string[] targetArray = null;
+			TargetModel targetData = null;
+			Type dataLogicType = null;
 
 			try
 			{
-				targetArray = GetMethodAndLibrary(target);
-			}
-			catch (ArgumentException ex)
-			{
-				return BadRequest(ex.Message);
-			}
+				targetData = GetMethodAndLibrary(target);
+				dataLogicType = GetLibraryPath(targetData.Library);
 
-			// There is only one library for now
-			Type dataLogicType = typeof(DataLogic.Users);
-
-			string library = targetArray[0];
-			string method = targetArray[1];
-
-			// Check for the only library
-			if (string.Compare(library, DataLogic.Users.LibraryName, true) != 0)
-			{
-				return BadRequest("Wrong library");
-			}
-
-			// Get parameters from query string
-			try
-			{
+				// Get parameters from query string
 				parameters = QueryStringToDictionaty(this.ActionContext.Request.GetQueryNameValuePairs(), true);
+
+				CheckApiKey(parameters);
+
+				// Filter ApiKey parameter
+				var paramValues = parameters.Where(p => p.Key != _apiKeyParamName)
+					.Select(p => p.Value).ToArray();
+
+				// Get result
+				object result = null;
+				result = dataLogicType.ExecuteStaticMethod(targetData.Method, paramValues);
+
+				if (result == null)
+				{
+					return NotFound();
+				}
+				else
+				{
+					// PATCH: XML serialized cannot manage reference types inside of an object
+					if (result.GetType() == typeof(DataListModel<User>))
+					{
+						return Ok((DataListModel<User>)result);
+					}
+					return Ok((DataListModel<DataResultModel<object>>)result);
+				}
 			}
 			catch (Exception ex)
 			{
-				return BadRequest(ex.Message);
+				return BadRequest(SmartFormatException(ex));
 			}
-
-			// Check parameters
-			if (parameters != null)
-			{
-				if (!CheckApiKey(parameters))
-				{
-					return BadRequest("Wrong or missing API Key");
-				}
-
-				object result = null;
-
-				try
-				{
-					// Filter ApiKey parameter
-					var paramValues = parameters.Where(p => p.Key != _apiKeyParamName)
-						.Select(p => p.Value).ToArray();
-
-					result = dataLogicType.ExecuteStaticMethod(method, paramValues);
-
-					if (result == null)
-					{
-						return NotFound();
-					}
-					else
-					{
-						// PATCH: XML serialized cannot manage reference types inside of an object
-						if (result.GetType() == typeof(DataListModel<User>))
-						{
-							return Ok((DataListModel<User>)result);
-						}
-						return Ok((DataListModel<DataResultModel<object>>)result);
-					}
-				}
-				catch (Exception ex)
-				{
-					return BadRequest(ex.Message);
-				}
-			}
-
-			return BadRequest("No parameters");
 		}
 
 		// POST: client/{target}
@@ -157,19 +82,29 @@
 		[HttpPost]
 		public IHttpActionResult PostResult(string target, ParametersModel parameters)
 		{
-			string[] targetArray = null;
+			TargetModel targetData = null;
 
 			try
 			{
-				targetArray = GetMethodAndLibrary(target);
-			}
-			catch (ArgumentException ex)
-			{
-				return BadRequest(ex.Message);
-			}
+				targetData = GetMethodAndLibrary(target);
+				Type dataLogicType = GetLibraryPath(targetData.Library);
+				CheckApiKey(parameters.ApiKey);
 
-			// TODO: ... for now just return target library and method, plus all parameters supplied ...
-			return Ok(DataLogic.Users.MakeDataResult(targetArray[0], targetArray[1], parameters));
+				// Get result
+				object result = null;
+				result = dataLogicType.ExecuteStaticMethod(targetData.Method, parameters.Params);
+
+				if (result != null)
+				{
+					return Ok(result);
+				}
+
+				return NotFound();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(SmartFormatException(ex));
+			}
 		}
 
 		#region Helpers
@@ -199,19 +134,42 @@
 
 		private bool CheckApiKey(Dictionary<string, string> parameters)
 		{
-			bool result = parameters.ContainsKey(_apiKeyParamName);
-
+			if (!parameters.ContainsKey(_apiKeyParamName))
 			{
-				result = string.Compare(parameters[_apiKeyParamName], _apiKeyParamValue) == 0;
+				throw new ArgumentException("Wrong or missing API Key");
 			}
 
-			return result;
+			return CheckApiKey(parameters[_apiKeyParamName]);
+		}
+
+		private bool CheckApiKey(string value)
+		{
+			if (string.Compare(value, _apiKeyParamValue) != 0)
+			{
+				throw new ArgumentException("Wrong API Key");
+			}
+
+			return true;
 		}
 
 		private string FormatException(Exception exception) =>
 			$"{exception.GetType().Name}: '{exception.Message}'";
 
-		private string[] GetMethodAndLibrary(string target)
+		private string SmartFormatException(Exception exception)
+		{
+			if (exception is TargetInvocationException)
+			{
+				TargetInvocationException reflectionException = exception as TargetInvocationException;
+				if (reflectionException.InnerException != null)
+				{
+					exception = reflectionException.InnerException;
+				}
+			}
+
+			return FormatException(exception);
+		}
+
+		private TargetModel GetMethodAndLibrary(string target)
 		{
 			var targetArray = target.Split('.');
 
@@ -221,7 +179,37 @@
 					$"The current one is '{target}'");
 			}
 
-			return targetArray;
+			return new TargetModel(targetArray[0], targetArray[1]);
+		}
+
+		/// <summary>
+		/// Gets the C# type of the library using reflection
+		/// </summary>
+		/// <param name="library">Library's internal name</param>
+		/// <returns>Class type. Throws exception if not found</returns>
+		private Type GetLibraryPath(string library)
+		{
+			Assembly currentAssembly = Assembly.GetExecutingAssembly();
+
+			var typesInDataLogic = currentAssembly.GetTypes()
+				.Where(t => t.IsClass && string.Compare(t.Namespace, "SimpleHttpApi.DataLogic", true) == 0);
+
+			Type type = null;
+			foreach (var item in typesInDataLogic)
+			{
+				if (item.MatchLibraryName(library))
+				{
+					type = item;
+					break;
+				}
+			}
+
+			if (type == null)
+			{
+				throw new ArgumentException($"Library '{library}' not found.");
+			}
+
+			return type;
 		}
 
 		#endregion //Helpers
