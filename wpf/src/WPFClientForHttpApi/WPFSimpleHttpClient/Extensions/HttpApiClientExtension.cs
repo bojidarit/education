@@ -56,7 +56,7 @@
 				catch (Exception ex)
 				{
 					client.OnErrorOccured(new HttpErrorEventArgs(
-						ex, data.RequestUri.ToString(), "Invalid response format. JSON expected."));
+						ex, data.RequestUri.ToString(), HttpVerb.Get, "Invalid response format. JSON expected."));
 					successFlag = false;
 				}
 
@@ -93,7 +93,7 @@
 				catch (Exception ex)
 				{
 					client.OnErrorOccured(new HttpErrorEventArgs(
-						ex, data.RequestUri.ToString(), "Invalid response format. JSON expected."));
+						ex, data.RequestUri.ToString(), HttpVerb.Get, "Invalid response format. JSON expected."));
 					data.SetSuccessFlag(false);
 				}
 
@@ -123,7 +123,7 @@
 				catch (Exception ex)
 				{
 					client.OnErrorOccured(new HttpErrorEventArgs(
-						ex, data.RequestUri.ToString(), "Invalid response format. JSON expected."));
+						ex, data.RequestUri.ToString(), HttpVerb.Get, "Invalid response format. JSON expected."));
 				}
 
 				// Get "data" object as enumerable
@@ -134,7 +134,7 @@
 				catch (Exception ex)
 				{
 					client.OnErrorOccured(new HttpErrorEventArgs(
-						ex, data.RequestUri.ToString(), "Invalid 'data' object."));
+						ex, data.RequestUri.ToString(), HttpVerb.Get, "Invalid 'data' object."));
 				}
 			}
 
@@ -152,7 +152,7 @@
 			}
 			catch (Exception ex)
 			{
-				client.OnErrorOccured(new HttpErrorEventArgs(ex, string.Empty, "Invalid 'data' object."));
+				client.OnErrorOccured(new HttpErrorEventArgs(ex, string.Empty, HttpVerb.Get, "Invalid 'data' object."));
 			}
 
 			return JCollectionToDataTable(data);

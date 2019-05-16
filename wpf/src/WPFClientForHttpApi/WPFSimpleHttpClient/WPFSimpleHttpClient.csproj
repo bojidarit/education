@@ -83,6 +83,7 @@
     <Compile Include="HttpClientWrapper\ExecutionInfoEventArgs.cs" />
     <Compile Include="HttpClientWrapper\HttpBaseData.cs" />
     <Compile Include="HttpClientWrapper\HttpDataExpando.cs" />
+    <Compile Include="HttpClientWrapper\HttpVerb.cs" />
     <Compile Include="Models\EntityBase.cs" />
     <Compile Include="Models\IdNameModel.cs" />
     <Compile Include="Views\PureDataWindow.xaml.cs">

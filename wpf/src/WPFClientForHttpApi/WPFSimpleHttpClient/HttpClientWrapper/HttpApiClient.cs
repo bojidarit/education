@@ -78,7 +78,7 @@
 			}
 			catch (Exception ex)
 			{
-				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), $"Content: '{result?.Content}'"));
+				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), HttpVerb.Get, $"Content: '{result?.Content}'"));
 			}
 
 			return result;
@@ -107,7 +107,7 @@
 			}
 			catch (Exception ex)
 			{
-				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), $"Content: '{result?.Content}'"));
+				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), HttpVerb.Post, $"Content: '{result?.Content}'"));
 			}
 
 			return result;

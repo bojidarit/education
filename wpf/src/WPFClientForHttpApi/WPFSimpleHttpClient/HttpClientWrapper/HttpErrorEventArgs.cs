@@ -5,16 +5,19 @@
 
 	public class HttpErrorEventArgs : EventArgs
 	{
-		public HttpErrorEventArgs(Exception exception, string requestUri, string additionalInfo = null)
+		public HttpErrorEventArgs(Exception exception, string requestUri, HttpVerb verb = HttpVerb.None, string additionalInfo = null)
 		{
 			this.Exception = exception;
 			this.RequestUri = requestUri;
+			this.RequestVerb = verb;
 			this.AdditionalInfo = additionalInfo ?? string.Empty;
 		}
 
 		#region Properties
 
 		public string RequestUri { get; private set; }
+
+		public HttpVerb RequestVerb { get; private set; }
 
 		public Exception Exception { get; private set; }
 
@@ -47,7 +50,8 @@
 
 		private string GetFullHttpException()
 		{
-			StringBuilder stringBuilder = new StringBuilder($"Request Uri: {this.RequestUri} {Environment.NewLine}");
+			StringBuilder stringBuilder = new StringBuilder($"Request Uri: {this.RequestUri} {Environment.NewLine}" +
+				$"Request Type: {this.RequestVerb.ToString().ToUpper()} {Environment.NewLine}");
 			GetInnerExceptions(this.Exception, stringBuilder);
 			return stringBuilder.ToString();
 		}
