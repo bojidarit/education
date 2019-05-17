@@ -78,10 +78,10 @@
 			}
 		}
 
-		// POST: client
+		// POST: client-dynamic
 		[Route("client")]
 		[HttpPost]
-		public IHttpActionResult PostResult(dynamic dynamic)
+		public IHttpActionResult PostResult(dynamic dynamic)    // Parameter is of type Newtonsoft.Json.Linq.JObject
 		{
 			TargetModel targetData = null;
 
@@ -91,9 +91,16 @@
 				Type dataLogicType = GetLibraryPath(targetData.Library);
 				CheckApiKey(dynamic.apiKey.ToString());
 
+				dynamic mold = dataLogicType.MakeExpandoFromMethod(targetData.Method);
+				string jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(dynamic);
+				dynamic props = Newtonsoft.Json.JsonConvert.DeserializeAnonymousType(jsonData, mold);
+
+				IDictionary<string, Object> keyValuePairs = props as IDictionary<string, Object>;
+				IEnumerable<object> propValues = keyValuePairs.Where(p => p.Key.Substring(0, 1).ToLower() == "p").Select(p => p.Value);
+
 				// Get result
 				object result = null;
-				result = dataLogicType.ExecuteStaticMethod(targetData.Method, new string[0]);	// TODO: Manage parameters
+				result = dataLogicType.ExecuteStaticMethod(targetData.Method, propValues.ToArray());
 
 				if (result != null)
 				{
@@ -108,8 +115,8 @@
 			}
 		}
 
-		// POST: client/straight
-		[Route("client/straight")]
+		// POST: client
+		[Route("client-static")]
 		[HttpPost]
 		public IHttpActionResult PostResult(ParametersModel parameters)
 		{

@@ -7,14 +7,18 @@
 
 	public static class TypeExtensions
 	{
-		public static object ExecuteStaticMethod(this Type type, string methodName, string[] parameters, bool ignoreCase = true)
+		/// <summary>
+		/// Finds the static method (no matter the case)
+		/// </summary>
+		private static MethodInfo GetStaticMethod(this Type type, string methodName, bool ignoreCase = true) =>
+			type.GetMethods().Where(m => m.IsStatic)
+				.FirstOrDefault(m => string.Compare(m.Name, methodName, ignoreCase) == 0);
+
+		public static object ExecuteStaticMethod(this Type type, string methodName, object[] parameters, bool ignoreCase = true)
 		{
 			object result = null;
 
-			// Find the static method no matter the case
-			MethodInfo method = type.GetMethods()
-				.Where(m => m.IsStatic)
-				.FirstOrDefault(m => string.Compare(m.Name, methodName, ignoreCase) == 0);
+			MethodInfo method = type.GetStaticMethod(methodName, ignoreCase);
 
 			// Execute method and get result
 			result = method?.Invoke(null, parameters.ToArray());
@@ -38,6 +42,41 @@
 			}
 
 			return string.Compare(value, libraryName, ignoreCase) == 0;
+		}
+
+		public static dynamic MakeExpandoFromMethod(this Type type, string methodName, bool ignoreCase = true)
+		{
+			IDictionary<string, Object> obj =
+				new System.Dynamic.ExpandoObject() as IDictionary<string, Object>;
+
+			MethodInfo method = type.GetStaticMethod(methodName, ignoreCase);
+			IEnumerable<ParameterInfo> props = method.GetParameters().OrderBy(p => p.Position);
+
+			foreach (var prop in props)
+			{
+				obj.Add(prop.Name, prop.HasDefaultValue ? prop.DefaultValue : prop.ParameterType.GetDefaultValue());
+			}
+
+			return obj;
+		}
+
+		private static object GetDefaultValue(this Type type)
+		{
+			object result = null;
+
+			if (type.IsValueType)
+			{
+				result = Activator.CreateInstance(type);
+			}
+			else
+			{
+				if (type == typeof(string))
+				{
+					result = string.Empty;
+				}
+			}
+
+			return result;
 		}
 	}
 }
