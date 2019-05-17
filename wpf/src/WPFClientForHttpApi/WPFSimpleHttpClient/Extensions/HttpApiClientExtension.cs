@@ -32,13 +32,23 @@
 			string library, string method, object[] values)
 		{
 			Uri uri = MakeSimpleRequestUri(client);
-			var parameters = new
+
+			List<PropMold> props = new List<PropMold>
+				{
+					PropMold.Make("ApiKey", _apiKeyParamValue),
+					PropMold.Make("Format", jsonFormatParamValue),
+					PropMold.Make("Method", $"{library.ToLower()}.{method.ToLower()}"),
+				};
+
+			// Add method parameters
+			if (values != null && values.Length > 0)
 			{
-				Method = $"{library.ToLower()}.{method.ToLower()}",
-				ApiKey = _apiKeyParamValue,
-				Params = values,
-				Format = jsonFormatParamValue
-			};
+				int id = 1;
+				props.AddRange(values.Select(p => PropMold.Make($"p{id++}", p)));
+			}
+
+			dynamic parameters = Helpers.MakeExpandoWithDefaults(props);
+
 			return await client.PostAsync(uri, parameters);
 		}
 

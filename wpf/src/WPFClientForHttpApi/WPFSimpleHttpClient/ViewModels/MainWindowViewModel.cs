@@ -106,7 +106,7 @@
 					{
 						_httpApiClient = new HttpApiClient(_baseUri,
 							(sender, e) => this.ShowError(e.HierarchyExceptionMessages, e.ExceptionType).GetAwaiter().GetResult(),
-							(sender, e) => this.Message = e.RequestUri.ToString());
+							(sender, e) => { this.Message = e.RequestUri.ToString(); this.MessageBody = e.Body?.ToString(); });
 					}
 				}
 
@@ -231,6 +231,13 @@
 			set { SetValue(MessageProperty, value); }
 		}
 		public static readonly PropertyData MessageProperty = RegisterProperty("Message", typeof(string), null);
+
+		public string MessageBody
+		{
+			get { return GetValue<string>(MessageBodyProperty); }
+			set { SetValue(MessageBodyProperty, value); }
+		}
+		public static readonly PropertyData MessageBodyProperty = RegisterProperty("MessageBody", typeof(string), null);
 
 		#endregion //Properties
 
@@ -520,8 +527,22 @@
 			else if (this.SelectedValueType == "test-anonymous")
 			{
 				//var user = new { Id = 0, Name = string.Empty, DateOfJoining = DateTime.MinValue, Rank = 0M, IsPower = false };
-				var user = new { IdUser = -1, UserName = "", IdProf = -1, Pr_Name = "", IdStation = -1, IsPower = -1,
-					IsPassPol = -1, IsPassExp = -1, IsPassChn = - 1, Email = "", DateChn = DateTime.MinValue, IsMainEmail = -1, ValidTo = default(DateTime?)};
+				var user = new
+				{
+					IdUser = -1,
+					UserName = "",
+					IdProf = -1,
+					Pr_Name = "",
+					IdStation = -1,
+					IsPower = -1,
+					IsPassPol = -1,
+					IsPassExp = -1,
+					IsPassChn = -1,
+					Email = "",
+					DateChn = DateTime.MinValue,
+					IsMainEmail = -1,
+					ValidTo = default(DateTime?)
+				};
 				var oDto = await this.HttpApiClient.GetDataAsync(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters(), user);
 				ok = oDto.IsSuccessStatusCode;
 				if (oDto.CheckHttpData())
@@ -531,7 +552,7 @@
 			}
 			else if (this.SelectedValueType == "test-dynamic")
 			{
-				PropMold[] props = new PropMold[] 
+				PropMold[] props = new PropMold[]
 				{
 					PropMold.Make<int>("Id"),
 					PropMold.Make<string>("Name"),
@@ -539,7 +560,7 @@
 					PropMold.Make<decimal>("Rank"),
 					PropMold.Make<bool>("IsPower"),
 				};
-				
+
 				var expandoData = await this.HttpApiClient.GetDynamicDataAsync(this.SelectedLibrary, this.SelectedMethod, this.PrepareParameters(), props);
 				ok = expandoData.IsSuccessStatusCode;
 				if (expandoData.CheckHttpExpando())

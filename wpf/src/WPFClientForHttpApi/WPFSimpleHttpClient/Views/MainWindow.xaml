@@ -44,7 +44,7 @@
 				<TextBox Text="{Binding Params[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						 Width="50"
 						 Margin="5,0" />
-				
+
 				<TextBlock Text="P2"
 						   VerticalAlignment="Center" />
 				<TextBox Text="{Binding Params[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -146,13 +146,18 @@
 		</GroupBox>
 
 		<!--Footer-->
-		<DockPanel DockPanel.Dock="Bottom"
-				   LastChildFill="True">
-			<TextBlock Text="Last Request Uri"
-					   Margin="0,0,5,0" />
-			<TextBox Text="{Binding Message}"
-					 IsReadOnly="True"/>
-		</DockPanel>
+		<StackPanel DockPanel.Dock="Bottom"
+					Orientation="Vertical">
+			<DockPanel LastChildFill="True">
+				<TextBlock Text="Last Request Uri"
+						   Margin="0,0,5,0" />
+				<TextBox Text="{Binding Message}"
+						 IsReadOnly="True"
+						 Margin="0,0,0,5" />
+			</DockPanel>
+			<TextBox Text="{Binding MessageBody}"
+					 IsReadOnly="True" />
+		</StackPanel>
 
 		<DataGrid Grid.Row="1"
 				  Margin="0,5"

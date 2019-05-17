@@ -1,0 +1,6 @@
+{
+	"apikey": "000000000",
+	"format": "json",
+	"method": "oBLP_USERS.getUser",
+	"p1": 1
+}

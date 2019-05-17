@@ -16,7 +16,7 @@
 		public PureDataViewModel(HttpData<string> httpData)
 		{
 			Init();
-			if (!string.IsNullOrWhiteSpace(httpData.Content))
+			if (!string.IsNullOrWhiteSpace(httpData?.Content))
 			{
 				this.Data = httpData.ContentType.MediaType.Contains("json") ? FormatJson(httpData.Content) : httpData.Content;
 			}

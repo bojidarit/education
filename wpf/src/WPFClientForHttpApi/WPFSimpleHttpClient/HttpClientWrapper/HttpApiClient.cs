@@ -14,7 +14,7 @@
 
 		public delegate void CustomErrorEventHandler(object sender, HttpErrorEventArgs e);
 		public delegate void ExecutionInfoEventHandler(object sender, ExecutionInfoEventArgs e);
-		
+
 		public CustomErrorEventHandler ErrorEventHandler;
 		public ExecutionInfoEventHandler ExecutionInfoHandler;
 
@@ -23,7 +23,7 @@
 		public HttpApiClient(Uri baseAddress, CustomErrorEventHandler errorEventHandler, ExecutionInfoEventHandler executionEventHandler = null)
 		{
 			ErrorEventHandler += errorEventHandler;
-			if(executionEventHandler != null)
+			if (executionEventHandler != null)
 			{
 				ExecutionInfoHandler += executionEventHandler;
 			}
@@ -67,12 +67,12 @@
 
 			try
 			{
-				OnRequestExecute(new ExecutionInfoEventArgs(requestUri));
+				OnRequestExecute(new ExecutionInfoEventArgs(requestUri, HttpVerb.Get));
 				response = await _client.GetAsync(requestUri);
 
 				data = await response.Content.ReadAsStringAsync();
 				result = new HttpData<string>(response, data);
-				
+
 				// throws an exception if the status code falls outside the range 200–299
 				response.EnsureSuccessStatusCode();
 			}
@@ -92,11 +92,11 @@
 
 			try
 			{
-				// Prepare JSON content
-				string json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
-				var content = new StringContent(json, System.Text.Encoding.UTF8, jsonEncoding);
+				/// Prepare JSON content
+				string body = PrepareJsonBody(value);
+				StringContent content = new StringContent(body, System.Text.Encoding.UTF8, jsonEncoding);
 
-				OnRequestExecute(new ExecutionInfoEventArgs(requestUri));
+				OnRequestExecute(new ExecutionInfoEventArgs(requestUri, HttpVerb.Post, body));
 				response = await _client.PostAsync(requestUri, content);
 
 				data = await response.Content.ReadAsStringAsync();
@@ -114,6 +114,20 @@
 		}
 
 		#endregion //Public interface
+
+		#region Helpers
+
+		private string PrepareJsonBody<T>(T data)
+		{
+			string body = Newtonsoft.Json.JsonConvert.SerializeObject(
+				data,
+				Newtonsoft.Json.Formatting.None,
+				new Newtonsoft.Json.JsonSerializerSettings { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+
+			return body;
+		}
+
+		#endregion //Helpers
 
 		#endregion //Methods
 	}
