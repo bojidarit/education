@@ -17,6 +17,7 @@
 		private static string _apiKeyParamName = "apikey";
 		private static string _apiKeyParamValue = "00000";
 		private static string _apiPath = "client/";
+		public static string jsonFormatParamValue = "json";
 
 		#endregion //Fields
 
@@ -30,8 +31,14 @@
 		public static async Task<HttpData<string>> PostRawDataAsync(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
-			Uri uri = MakeSimpleRequestUri(client, library, method);
-			var parameters = new { ApiKey = _apiKeyParamValue, Params = values };
+			Uri uri = MakeSimpleRequestUri(client);
+			var parameters = new
+			{
+				Method = $"{library.ToLower()}.{method.ToLower()}",
+				ApiKey = _apiKeyParamValue,
+				Params = values,
+				Format = jsonFormatParamValue
+			};
 			return await client.PostAsync(uri, parameters);
 		}
 
@@ -258,9 +265,9 @@
 			return result;
 		}
 
-		private static Uri MakeSimpleRequestUri(HttpApiClient client, string library, string method)
+		private static Uri MakeSimpleRequestUri(HttpApiClient client)
 		{
-			string path = $"{client.GetRequestUriString(_apiPath)}{library.ToLower()}.{method.ToLower()}";
+			string path = client.GetRequestUriString(_apiPath);
 			Uri uri = null;
 			Uri.TryCreate(path, UriKind.Absolute, out uri);
 			return uri;
@@ -274,7 +281,7 @@
 			{
 				int id = 1;
 				var parameters = values.Select(i => $"p{id++}={i.ToString()}");
-				path += $"&{string.Join("&", parameters)}";
+				path += $"&{string.Join("&", parameters)}&format={jsonFormatParamValue}";
 			}
 
 			Uri uri = null;

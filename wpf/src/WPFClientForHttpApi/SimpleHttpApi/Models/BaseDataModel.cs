@@ -5,6 +5,8 @@
 	[DataContract]
 	public class BaseDataModel
 	{
+		public BaseDataModel() { }
+
 		public BaseDataModel(string library, string method)
 		{
 			this.Library = library;
