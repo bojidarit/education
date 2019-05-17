@@ -309,14 +309,7 @@
 		{
 			this.IsBusy = true;
 
-			if (this.IsPureString)
-			{
-				await PostString();
-			}
-			else
-			{
-				await PostTable();
-			}
+			await PostString();
 
 			this.IsBusy = false;
 		}

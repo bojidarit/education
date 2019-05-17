@@ -81,6 +81,36 @@
 		// POST: client
 		[Route("client")]
 		[HttpPost]
+		public IHttpActionResult PostResult(dynamic dynamic)
+		{
+			TargetModel targetData = null;
+
+			try
+			{
+				targetData = GetMethodAndLibrary(dynamic.method.ToString());
+				Type dataLogicType = GetLibraryPath(targetData.Library);
+				CheckApiKey(dynamic.apiKey.ToString());
+
+				// Get result
+				object result = null;
+				result = dataLogicType.ExecuteStaticMethod(targetData.Method, new string[0]);	// TODO: Manage parameters
+
+				if (result != null)
+				{
+					return Ok(result);
+				}
+
+				return NotFound();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(SmartFormatException(ex));
+			}
+		}
+
+		// POST: client/straight
+		[Route("client/straight")]
+		[HttpPost]
 		public IHttpActionResult PostResult(ParametersModel parameters)
 		{
 			TargetModel targetData = null;
