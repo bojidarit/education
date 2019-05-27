@@ -1,0 +1,38 @@
+XML serialized cannot manage reference types inside of an object
+
+Message = "The type SimpleHttpApi.Models.DataListModel`1[[SimpleHttpApi.Models.User, SimpleHttpApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] was not expected. Use the XmlInclude or SoapInclude attribute to specify types that are not known statically."
+
+Host: localhost:59141
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Connection: keep-alive
+Cookie: __RequestVerificationToken=YjDmTsGZkRLRJEXCRF3-kxxocrdxg2bFlN-Ii3IUkS7q3M7-s2espeySpT_Pgpd2QOigZirpkVQ4iP4AoXni8-6BoPfQ4bIFBKpHf5d49001
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+
+<Error>
+  <Message>An error has occurred.</Message>
+  <ExceptionMessage>The 'ObjectContent`1' type failed to serialize the response body for content type 'application/xml; charset=utf-8'.</ExceptionMessage>
+  <ExceptionType>System.InvalidOperationException</ExceptionType>
+  <StackTrace />
+  <InnerException>
+    <Message>An error has occurred.</Message>
+    <ExceptionMessage>Type 'SimpleHttpApi.Models.DataListModel`1[[SimpleHttpApi.Models.DataResultModel`1[[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], SimpleHttpApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]' with data contract name 'DataList:http://schemas.datacontract.org/2004/07/SimpleHttpApi.Models' is not expected. Consider using a DataContractResolver if you are using DataContractSerializer or add any types not known statically to the list of known types - for example, by using the KnownTypeAttribute attribute or by adding them to the list of known types passed to the serializer.</ExceptionMessage>
+    <ExceptionType>System.Runtime.Serialization.SerializationException</ExceptionType>
+    <StackTrace>   at System.Runtime.Serialization.XmlObjectSerializerWriteContext.SerializeAndVerifyType(DataContract dataContract, XmlWriterDelegator xmlWriter, Object obj, Boolean verifyKnownType, RuntimeTypeHandle declaredTypeHandle, Type declaredType)
+   at System.Runtime.Serialization.XmlObjectSerializerWriteContext.SerializeWithXsiTypeAtTopLevel(DataContract dataContract, XmlWriterDelegator xmlWriter, Object obj, RuntimeTypeHandle originalDeclaredTypeHandle, Type graphType)
+   at System.Runtime.Serialization.DataContractSerializer.InternalWriteObjectContent(XmlWriterDelegator writer, Object graph, DataContractResolver dataContractResolver)
+   at System.Runtime.Serialization.DataContractSerializer.InternalWriteObject(XmlWriterDelegator writer, Object graph, DataContractResolver dataContractResolver)
+   at System.Runtime.Serialization.XmlObjectSerializer.WriteObjectHandleExceptions(XmlWriterDelegator writer, Object graph, DataContractResolver dataContractResolver)
+   at System.Runtime.Serialization.DataContractSerializer.WriteObject(XmlWriter writer, Object graph)
+   at System.Net.Http.Formatting.XmlMediaTypeFormatter.WriteToStream(Type type, Object value, Stream writeStream, HttpContent content)
+   at System.Net.Http.Formatting.XmlMediaTypeFormatter.WriteToStreamAsync(Type type, Object value, Stream writeStream, HttpContent content, TransportContext transportContext, CancellationToken cancellationToken)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Web.Http.WebHost.HttpControllerHandler.&lt;WriteBufferedResponseContentAsync&gt;d__22.MoveNext()</StackTrace>
+  </InnerException>
+</Error>
