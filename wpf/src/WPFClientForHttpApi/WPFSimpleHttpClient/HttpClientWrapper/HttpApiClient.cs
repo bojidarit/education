@@ -1,6 +1,7 @@
 ﻿namespace WPFSimpleHttpClient.HttpClientWrapper
 {
 	using System;
+	using System.Net;
 	using System.Net.Http;
 	using System.Threading.Tasks;
 
@@ -94,10 +95,21 @@
 			{
 				/// Prepare JSON content
 				string body = PrepareJsonBody(value);
-				StringContent content = new StringContent(body, System.Text.Encoding.UTF8, jsonEncoding);
+				HttpContent content = new StringContent(body, System.Text.Encoding.UTF8, jsonEncoding);
 
-				OnRequestExecute(new ExecutionInfoEventArgs(requestUri, HttpVerb.Post, body));
+				OnRequestExecute(new ExecutionInfoEventArgs(requestUri, HttpVerb.Post, body, _client.DefaultRequestHeaders, content.Headers));
+
+				// Option 1 - Make simple request
 				response = await _client.PostAsync(requestUri, content);
+
+				// Option 2 - Make request with custom headers
+				//var request = new HttpRequestMessage
+				//{
+				//	RequestUri = requestUri,
+				//	Method = HttpMethod.Post,
+				//	Content = content
+				//};
+				//response = await _client.SendAsync(request);
 
 				data = await response.Content.ReadAsStringAsync();
 				result = new HttpData<string>(response, data);

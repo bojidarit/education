@@ -106,7 +106,14 @@
 					{
 						_httpApiClient = new HttpApiClient(_baseUri,
 							(sender, e) => this.ShowError(e.HierarchyExceptionMessages, e.ExceptionType).GetAwaiter().GetResult(),
-							(sender, e) => { this.Message = e.RequestUri.ToString(); this.MessageBody = e.Body?.ToString(); });
+							(sender, e) =>
+							{
+								this.Message = e.RequestUri.ToString();
+								this.MessageBody = $"Request Accept = {e.RequestHeaders.Accept.ToString()}; " +
+									$"Content-Type = {e.ContentHeaders.ContentType.MediaType}; " +
+									$"Char-set = {e.ContentHeaders.ContentType.CharSet}; " +
+									$"Body = {e.Body?.ToString()}";
+							});
 					}
 				}
 
