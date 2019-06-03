@@ -13,6 +13,7 @@
 	using System.Linq;
 	using WPFSimpleHttpClient.Dtos;
 	using WPFSimpleHttpClient.Models;
+	using System.Text;
 
 	public class MainWindowViewModel : ViewModelBase
 	{
@@ -108,11 +109,27 @@
 							(sender, e) => this.ShowError(e.HierarchyExceptionMessages, e.ExceptionType).GetAwaiter().GetResult(),
 							(sender, e) =>
 							{
+								StringBuilder message = new StringBuilder();
+
 								this.Message = e.RequestUri.ToString();
-								this.MessageBody = $"Request Accept = {e.RequestHeaders.Accept.ToString()}; " +
-									$"Content-Type = {e.ContentHeaders.ContentType.MediaType}; " +
-									$"Char-set = {e.ContentHeaders.ContentType.CharSet}; " +
-									$"Body = {e.Body?.ToString()}";
+
+								if(e.RequestHeaders != null)
+								{
+									message.Append($"Request Accept = {e.RequestHeaders.Accept.ToString()}; ");
+								}
+
+								if (e.ContentHeaders != null)
+								{
+									message.Append($"Content-Type = {e.ContentHeaders.ContentType.MediaType}; ");
+									message.Append($"Char-set = {e.ContentHeaders.ContentType.CharSet}; ");
+								}
+
+								if(e.Body != null)
+								{
+									message.Append($"Body = {e.Body.ToString()}");
+								}
+
+								this.MessageBody = message.ToString();
 							});
 					}
 				}
@@ -336,7 +353,11 @@
 				this.SelectedMethod,
 				this.PrepareParameters());
 
-			var task = this.ShowDialogAsync(new PureDataViewModel(data));
+			if (data != null &&
+				(data.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(data.Content)))
+			{
+				var task = this.ShowDialogAsync(new PureDataViewModel(data));
+			}
 		}
 
 		private async Task GetTable()
@@ -363,7 +384,11 @@
 				this.SelectedMethod,
 				this.PrepareParameters());
 
-			var task = this.ShowDialogAsync(new PureDataViewModel(data));
+			if (data != null && 
+				(data.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(data.Content)))
+			{
+				var task = this.ShowDialogAsync(new PureDataViewModel(data));
+			}
 		}
 
 		private Task PostTable()

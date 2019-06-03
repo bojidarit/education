@@ -79,7 +79,7 @@
 			}
 			catch (Exception ex)
 			{
-				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), HttpVerb.Get, $"Content: '{result?.Content}'"));
+				ManageException(ex, requestUri, result, HttpVerb.Get);
 			}
 
 			return result;
@@ -119,7 +119,7 @@
 			}
 			catch (Exception ex)
 			{
-				OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), HttpVerb.Post, $"Content: '{result?.Content}'"));
+				ManageException(ex, requestUri, result, HttpVerb.Post);
 			}
 
 			return result;
@@ -128,6 +128,12 @@
 		#endregion //Public interface
 
 		#region Helpers
+		private void ManageException(Exception ex, Uri requestUri, HttpData<string> result, HttpVerb httpVerb)
+
+		{
+			string content = (result != null) ? $"Content: '{result?.Content}'" : string.Empty;
+			OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), httpVerb, content));
+		}
 
 		private string PrepareJsonBody<T>(T data)
 		{
