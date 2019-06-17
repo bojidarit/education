@@ -1,0 +1,5 @@
+1) Shows Assembly Image Runtime Version
+2) Shows Environment Version
+3) Identifies the version of the .NET Framework that a particular assembly was compiled against
+
+Usage: AppRuntimeVer.exe <path_to_the_assembly>
