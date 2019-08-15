@@ -26,15 +26,21 @@
 		public async Task<string> PostAsync<T>(string requestAddress, T value)
 		{
 			string result = null;
+			string body = string.Empty;
 
 			try
 			{
-				string body = Common.PrepareJsonBody(value);
+				body = Common.PrepareJsonBody(value);
 				result = await _webClient.UploadStringTaskAsync(requestAddress, body);
 			}
 			catch (Exception ex)
 			{
-				// TODO: ...
+				string line = new string('-', 80);
+
+				System.Diagnostics.Debug.WriteLine($"{line}{Environment.NewLine}WebApiClient.PostAsync<T>(string requestAddress, T value)" +
+					$"{Environment.NewLine}Request Address: {requestAddress}" +
+					$"{Environment.NewLine}JSON Body: {body}" +
+					$"{Environment.NewLine}{ex.GetType().Name}: {ex.Message}{Environment.NewLine}{line}");
 			}
 
 			return result;
