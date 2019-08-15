@@ -11,8 +11,6 @@
 	/// </summary>
 	public class HttpApiClient : IDisposable
 	{
-		public static string jsonEncoding = "application/json";
-
 		public delegate void CustomErrorEventHandler(object sender, HttpErrorEventArgs e);
 		public delegate void ExecutionInfoEventHandler(object sender, ExecutionInfoEventArgs e);
 
@@ -34,7 +32,7 @@
 				_client.BaseAddress = baseAddress;
 				_client.DefaultRequestHeaders.Accept.Clear();
 				_client.DefaultRequestHeaders.Accept.Add(
-					new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(jsonEncoding));
+					new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(Common.JsonContentType));
 			}
 			catch (Exception ex)
 			{
@@ -94,8 +92,8 @@
 			try
 			{
 				/// Prepare JSON content
-				string body = PrepareJsonBody(value);
-				HttpContent content = new StringContent(body, System.Text.Encoding.UTF8, jsonEncoding);
+				string body = Common.PrepareJsonBody(value);
+				HttpContent content = new StringContent(body, System.Text.Encoding.UTF8, Common.JsonContentType);
 
 				OnRequestExecute(new ExecutionInfoEventArgs(requestUri, HttpVerb.Post, body, _client.DefaultRequestHeaders, content.Headers));
 
@@ -133,16 +131,6 @@
 		{
 			string content = (result != null) ? $"Content: '{result?.Content}'" : string.Empty;
 			OnErrorOccured(new HttpErrorEventArgs(ex, requestUri.ToString(), httpVerb, content));
-		}
-
-		private string PrepareJsonBody<T>(T data)
-		{
-			string body = Newtonsoft.Json.JsonConvert.SerializeObject(
-				data,
-				Newtonsoft.Json.Formatting.None,
-				new Newtonsoft.Json.JsonSerializerSettings { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
-
-			return body;
 		}
 
 		#endregion //Helpers

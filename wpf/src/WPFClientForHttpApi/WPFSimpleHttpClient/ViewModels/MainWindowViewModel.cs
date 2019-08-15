@@ -14,6 +14,7 @@
 	using WPFSimpleHttpClient.Dtos;
 	using WPFSimpleHttpClient.Models;
 	using System.Text;
+	using WPFSimpleHttpClient.WebClientWrapper;
 
 	public class MainWindowViewModel : ViewModelBase
 	{
@@ -29,6 +30,7 @@
 			ExecuteCommand = new Command(OnExecuteCommandExecute, OnExecuteCommandCanExecute);
 			ExecuteValueCommand = new Command(OnExecuteValueCommandExecute, OnExecuteValueCommandCanExecute);
 			PostCommand = new Command(OnPostCommandExecute, OnPostCommandCanExecute);
+			PostWebClientCommand = new Command(OnPostWebClientCommandExecute, OnPostWebClientCommandCanExecute);
 
 			string uriFromConfig = ConfigurationManager.AppSettings.Get("BaseUri");
 			this.Location = uriFromConfig;
@@ -340,6 +342,26 @@
 
 		#endregion //PostCommand
 
+		#region PostWebClientCommand
+
+		#region PostWebClientCommand
+
+		public Command PostWebClientCommand { get; private set; }
+
+		private bool OnPostWebClientCommandCanExecute()
+		{
+			return OnExecuteCommandCanExecute();
+		}
+
+		private async void OnPostWebClientCommandExecute()
+		{
+			await PostWebClientString();
+		}
+
+		#endregion //PostWebClientCommand
+
+		#endregion //PostWebClientCommand
+
 		#endregion //Commands
 
 		#region Methods
@@ -388,6 +410,33 @@
 				(data.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(data.Content)))
 			{
 				var task = this.ShowDialogAsync(new PureDataViewModel(data));
+			}
+		}
+
+		private async Task PostWebClientString()
+		{
+			if (_baseUri == null)
+			{
+				await this.ShowError("The base URI is null!", "Invalid argument");
+				return;
+			}
+
+			// Easy to use and disposable client for HTTP API
+			using (WebApiClient webApiClient = new WebApiClient(_baseUri))
+			{
+				this.IsBusy = true;
+
+				string data = await webApiClient.PostRawDataAsync(
+					this.SelectedLibrary,
+					this.SelectedMethod,
+					this.PrepareParameters());
+
+				this.IsBusy = false;
+
+				if (data != null)
+				{
+					await this.ShowDialogAsync(new PureDataViewModel(data));
+				}
 			}
 		}
 

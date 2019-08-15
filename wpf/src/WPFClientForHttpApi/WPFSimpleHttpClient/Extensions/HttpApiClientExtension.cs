@@ -12,15 +12,6 @@
 
 	public static class HttpApiClientExtension
 	{
-		#region Fields
-
-		private static string _apiKeyParamName = "apikey";
-		private static string _apiKeyParamValue = "00000";
-		private static string _apiPath = "client/";
-		public static string jsonFormatParamValue = "json";
-
-		#endregion //Fields
-
 		public static async Task<HttpData<string>> GetRawDataAsync(this HttpApiClient client,
 			string library, string method, object[] values)
 		{
@@ -33,21 +24,7 @@
 		{
 			Uri uri = MakeSimpleRequestUri(client);
 
-			List<PropMold> props = new List<PropMold>
-				{
-					PropMold.Make("ApiKey", _apiKeyParamValue),
-					PropMold.Make("Format", jsonFormatParamValue),
-					PropMold.Make("Method", $"{library.ToLower()}.{method.ToLower()}"),
-				};
-
-			// Add method parameters
-			if (values != null && values.Length > 0)
-			{
-				int id = 1;
-				props.AddRange(values.Select(p => PropMold.Make($"p{id++}", p)));
-			}
-
-			dynamic parameters = Helpers.MakeExpandoWithDefaults(props);
+			dynamic parameters = Common.MakeExpandoBody(library, method, values);
 
 			return await client.PostAsync(uri, parameters);
 		}
@@ -183,7 +160,7 @@
 		/// <returns></returns>
 		public static async Task<IEnumerable<string>> GetMethodsAsync(this HttpApiClient client, string library)
 		{
-			string path = Flurl.Url.Combine(client.GetRequestUriString(_apiPath), "methods", library);
+			string path = Flurl.Url.Combine(client.GetRequestUriString(Common.ApiPath), "methods", library);
 
 			Uri uri = null;
 			if (Uri.TryCreate(path, UriKind.Absolute, out uri))
@@ -277,7 +254,7 @@
 
 		private static Uri MakeSimpleRequestUri(HttpApiClient client)
 		{
-			string path = client.GetRequestUriString(_apiPath);
+			string path = client.GetRequestUriString(Common.ApiPath);
 			Uri uri = null;
 			Uri.TryCreate(path, UriKind.Absolute, out uri);
 			return uri;
@@ -285,13 +262,13 @@
 
 		private static Uri MakeSpecialRequestUri(HttpApiClient client, string library, string method, params object[] values)
 		{
-			string path = $"{client.GetRequestUriString(_apiPath)}{library.ToLower()}.{method.ToLower()}?{_apiKeyParamName}={_apiKeyParamValue}";
+			string path = $"{client.GetRequestUriString(Common.ApiPath)}{library.ToLower()}.{method.ToLower()}?{Common.ApiKeyParamName}={Common.ApiKeyParamValue}";
 
 			if (values != null && values.Any())
 			{
 				int id = 1;
 				var parameters = values.Select(i => $"p{id++}={i.ToString()}");
-				path += $"&{string.Join("&", parameters)}&format={jsonFormatParamValue}";
+				path += $"&{string.Join("&", parameters)}&format={Common.JsonFormatParamValue}";
 			}
 
 			Uri uri = null;

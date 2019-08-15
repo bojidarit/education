@@ -140,7 +140,16 @@
 						   Margin="15,0,5,0" />
 
 				<Button Command="{Binding PostCommand}"
-						ToolTip="Execute single-value result method"
+						ToolTip="Make a POST request using HttpClient"
+						Content="Post" />
+
+				<!--POST with WebClient-->
+				<TextBlock Text="Option 4 - Result (WebClient)"
+						   VerticalAlignment="Center"
+						   Margin="15,0,5,0" />
+
+				<Button Command="{Binding PostWebClientCommand}"
+						ToolTip="Make a POST request using WebClient"
 						Content="Post" />
 			</WrapPanel>
 		</GroupBox>

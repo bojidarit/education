@@ -73,6 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common.cs" />
     <Compile Include="Dtos\DataDto.cs" />
     <Compile Include="Dtos\DateTimeDto.cs" />
     <Compile Include="Dtos\Helpers.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Dtos\NumberDto.cs" />
     <Compile Include="Dtos\PropMold.cs" />
     <Compile Include="Dtos\StringDto.cs" />
+    <Compile Include="Extensions\WebApiClientExtension.cs" />
     <Compile Include="HttpClientWrapper\ExecutionInfoEventArgs.cs" />
     <Compile Include="HttpClientWrapper\HttpBaseData.cs" />
     <Compile Include="HttpClientWrapper\HttpDataExpando.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Views\PureDataWindow.xaml.cs">
       <DependentUpon>PureDataWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WebClientWrapper\WebApiClient.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
