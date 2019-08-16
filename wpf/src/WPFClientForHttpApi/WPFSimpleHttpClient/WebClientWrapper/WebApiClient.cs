@@ -18,7 +18,7 @@
 			this.Encoding = encoding ?? Encoding.UTF8;
 		}
 
-		#region Properties
+		#region Properties, 
 
 		public string LastRequestAddress { get; private set; }
 
