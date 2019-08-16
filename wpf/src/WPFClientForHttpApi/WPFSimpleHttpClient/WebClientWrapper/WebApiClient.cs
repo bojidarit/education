@@ -7,13 +7,13 @@
 
 	public class WebApiClient : WebClient
 	{
-		private int _timeoutSeconds = 100;	// Default for this class
+		private int _timeoutSeconds = 100;  // Default for this class
 
 		public WebApiClient(string baseAddress = null, string contentType = Common.JsonContentType, Encoding encoding = null, int timeoutSeconds = 100) : base()
 		{
 			this.BaseAddress = baseAddress;
 			_timeoutSeconds = timeoutSeconds;
-			this.Headers[HttpRequestHeader.ContentType] = 
+			this.Headers[HttpRequestHeader.ContentType] =
 				string.IsNullOrWhiteSpace(contentType) ? Common.JsonContentType : contentType;
 			this.Encoding = encoding ?? Encoding.UTF8;
 		}
@@ -25,6 +25,8 @@
 		public string LastRequestBody { get; private set; }
 
 		public Exception LastException { get; private set; }
+
+		public WebExceptionStatus? LastExceptionStatus { get; private set; }
 
 		#endregion //Properties
 
@@ -52,19 +54,30 @@
 				this.LastRequestBody = body;
 				result = await UploadStringTaskAsync(requestAddress, Common.HttpVerbPost, body);
 			}
+			catch (WebException webException)
+			{
+				this.LastExceptionStatus = webException.Status;
+				HandleException(webException, body);
+			}
 			catch (Exception ex)
 			{
-				this.LastException = ex;
-
-				string line = new string('-', 80);
-
-				System.Diagnostics.Debug.WriteLine($"{line}{Environment.NewLine}WebApiClient.PostAsync<T>(string requestAddress, T value)" +
-					$"{Environment.NewLine}Request Address: {requestAddress}" +
-					$"{Environment.NewLine}Body: {body}" +
-					$"{Environment.NewLine}{ex.GetType().Name}: {ex.Message}{Environment.NewLine}{line}");
+				HandleException(ex, body);
 			}
 
 			return result;
+		}
+
+		private void HandleException(Exception ex, string body)
+		{
+			this.LastException = ex;
+
+			string line = new string('-', 80);
+
+			System.Diagnostics.Debug.WriteLine($"{line}{Environment.NewLine}WebApiClient.PostAsync<T>(string requestAddress, T value)" +
+				$"{Environment.NewLine}Request Address: {this.LastRequestAddress}" +
+				$"{Environment.NewLine}Body: {body}" +
+				$"{Environment.NewLine}Exception Status: {this.LastExceptionStatus?.ToString()}" +
+				$"{Environment.NewLine}{ex.GetType().Name}: {ex.Message}{Environment.NewLine}{line}");
 		}
 
 		#endregion //Methods
