@@ -2,25 +2,42 @@
 {
 	using System;
 	using System.Net;
+	using System.Text;
 	using System.Threading.Tasks;
 
-	public class WebApiClient : IDisposable
+	public class WebApiClient : WebClient
 	{
-		public Uri BaseUri { get; private set; } = null;
+		private int _timeoutSeconds = 100;	// Default for this class
 
-		private string _contentType = Common.JsonContentType;
-		private WebClient _webClient = null;
-
-		public WebApiClient(Uri baseUri)
+		public WebApiClient(string baseAddress = null, string contentType = Common.JsonContentType, Encoding encoding = null, int timeoutSeconds = 100) : base()
 		{
-			this.BaseUri = baseUri;
-			_webClient = new WebClient();
-			_webClient.Headers[HttpRequestHeader.ContentType] = _contentType;
+			this.BaseAddress = baseAddress;
+			_timeoutSeconds = timeoutSeconds;
+			this.Headers[HttpRequestHeader.ContentType] = 
+				string.IsNullOrWhiteSpace(contentType) ? Common.JsonContentType : contentType;
+			this.Encoding = encoding ?? Encoding.UTF8;
 		}
 
-		public void Dispose()
+		#region Properties
+
+		public string LastRequestAddress { get; private set; }
+
+		public string LastRequestBody { get; private set; }
+
+		public Exception LastException { get; private set; }
+
+		#endregion //Properties
+
+		#region Methods
+
+		protected override WebRequest GetWebRequest(Uri uri)
 		{
-			_webClient?.Dispose();
+			WebRequest webRequest = base.GetWebRequest(uri);
+
+			// Time, in milliseconds, before the request times out.
+			webRequest.Timeout = _timeoutSeconds * 1000;
+
+			return webRequest;
 		}
 
 		public async Task<string> PostAsync<T>(string requestAddress, T value)
@@ -31,19 +48,25 @@
 			try
 			{
 				body = Common.PrepareJsonBody(value);
-				result = await _webClient.UploadStringTaskAsync(requestAddress, body);
+				this.LastRequestAddress = string.IsNullOrEmpty(this.BaseAddress) ? requestAddress : Common.MakeRequestAddress(this.BaseAddress, requestAddress);
+				this.LastRequestBody = body;
+				result = await UploadStringTaskAsync(requestAddress, body);
 			}
 			catch (Exception ex)
 			{
+				this.LastException = ex;
+
 				string line = new string('-', 80);
 
 				System.Diagnostics.Debug.WriteLine($"{line}{Environment.NewLine}WebApiClient.PostAsync<T>(string requestAddress, T value)" +
 					$"{Environment.NewLine}Request Address: {requestAddress}" +
-					$"{Environment.NewLine}JSON Body: {body}" +
+					$"{Environment.NewLine}Body: {body}" +
 					$"{Environment.NewLine}{ex.GetType().Name}: {ex.Message}{Environment.NewLine}{line}");
 			}
 
 			return result;
 		}
+
+		#endregion //Methods
 	}
 }

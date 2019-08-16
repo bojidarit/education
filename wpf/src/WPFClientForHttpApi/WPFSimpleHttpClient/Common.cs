@@ -7,7 +7,7 @@
 
 	public static class Common
 	{
-		public static readonly string JsonContentType = "application/json";
+		public const string JsonContentType = "application/json";
 
 		#region HTTP API Server specific
 
@@ -30,6 +30,9 @@
 
 		public static string MakeRequestAddress(Uri baseAddress, string apiPath) =>
 			Flurl.Url.Combine(baseAddress.ToString(), apiPath);
+
+		public static string MakeRequestAddress(string baseAddress, string apiPath) =>
+			Flurl.Url.Combine(baseAddress, apiPath);
 
 		public static string PrepareJsonBody<T>(T data)
 		{

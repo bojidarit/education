@@ -115,7 +115,7 @@
 
 								this.Message = e.RequestUri.ToString();
 
-								if(e.RequestHeaders != null)
+								if (e.RequestHeaders != null)
 								{
 									message.Append($"Request Accept = {e.RequestHeaders.Accept.ToString()}; ");
 								}
@@ -126,7 +126,7 @@
 									message.Append($"Char-set = {e.ContentHeaders.ContentType.CharSet}; ");
 								}
 
-								if(e.Body != null)
+								if (e.Body != null)
 								{
 									message.Append($"Body = {e.Body.ToString()}");
 								}
@@ -406,7 +406,7 @@
 				this.SelectedMethod,
 				this.PrepareParameters());
 
-			if (data != null && 
+			if (data != null &&
 				(data.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(data.Content)))
 			{
 				var task = this.ShowDialogAsync(new PureDataViewModel(data));
@@ -422,7 +422,7 @@
 			}
 
 			// Easy to use and disposable client for HTTP API
-			using (WebApiClient webApiClient = new WebApiClient(_baseUri))
+			using (WebApiClient webApiClient = new WebApiClient(_baseUri.ToString()))
 			{
 				this.IsBusy = true;
 
@@ -431,7 +431,15 @@
 					this.SelectedMethod,
 					this.PrepareParameters());
 
+				this.Message = webApiClient.LastRequestAddress;
+				this.MessageBody = webApiClient.LastRequestBody;
+
 				this.IsBusy = false;
+
+				if (webApiClient.LastException != null)
+				{
+					await this.ShowError(webApiClient.LastException.Message, webApiClient.LastException.GetType().Name);
+				}
 
 				if (data != null)
 				{
