@@ -8,6 +8,7 @@
 	public static class Common
 	{
 		public const string JsonContentType = "application/json";
+		public const string HttpVerbPost = "POST";
 
 		#region HTTP API Server specific
 

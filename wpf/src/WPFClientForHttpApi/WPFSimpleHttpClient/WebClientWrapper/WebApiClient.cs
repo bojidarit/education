@@ -50,7 +50,7 @@
 				body = Common.PrepareJsonBody(value);
 				this.LastRequestAddress = string.IsNullOrEmpty(this.BaseAddress) ? requestAddress : Common.MakeRequestAddress(this.BaseAddress, requestAddress);
 				this.LastRequestBody = body;
-				result = await UploadStringTaskAsync(requestAddress, body);
+				result = await UploadStringTaskAsync(requestAddress, Common.HttpVerbPost, body);
 			}
 			catch (Exception ex)
 			{
