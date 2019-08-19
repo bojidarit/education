@@ -438,7 +438,10 @@
 
 				if (webApiClient.LastException != null)
 				{
-					await this.ShowError(webApiClient.LastException.Message, webApiClient.LastException.GetType().Name);
+					await this.ShowError($"{webApiClient.LastException.Message}{Environment.NewLine}" +
+						$"{Environment.NewLine}{webApiClient.LastExceptionDetails}" +
+						$"{Environment.NewLine}Body: {webApiClient.LastRequestBody}",
+						webApiClient.LastException.GetType().Name);
 				}
 
 				if (data != null)

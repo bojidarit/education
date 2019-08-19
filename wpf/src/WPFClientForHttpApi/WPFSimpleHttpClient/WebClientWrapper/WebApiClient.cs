@@ -26,7 +26,7 @@
 
 		public Exception LastException { get; private set; }
 
-		public WebExceptionStatus? LastExceptionStatus { get; private set; }
+		public string LastExceptionDetails { get; private set; }
 
 		#endregion //Properties
 
@@ -56,7 +56,10 @@
 			}
 			catch (WebException webException)
 			{
-				this.LastExceptionStatus = webException.Status;
+				HttpWebResponse httpWebResponse = webException.Response as HttpWebResponse;
+				this.LastExceptionDetails = (httpWebResponse == null) ? webException.Status.ToString() :
+					$"{webException.Status.ToString()}: ({(int)httpWebResponse.StatusCode}) '{httpWebResponse.StatusDescription}' " +
+					$"from ({httpWebResponse.Method}) {httpWebResponse.ResponseUri}";
 				HandleException(webException, body);
 			}
 			catch (Exception ex)
@@ -76,7 +79,7 @@
 			System.Diagnostics.Debug.WriteLine($"{line}{Environment.NewLine}WebApiClient.PostAsync<T>(string requestAddress, T value)" +
 				$"{Environment.NewLine}Request Address: {this.LastRequestAddress}" +
 				$"{Environment.NewLine}Body: {body}" +
-				$"{Environment.NewLine}Exception Status: {this.LastExceptionStatus?.ToString()}" +
+				$"{Environment.NewLine}Exception Details: {this.LastExceptionDetails}" +
 				$"{Environment.NewLine}{ex.GetType().Name}: {ex.Message}{Environment.NewLine}{line}");
 		}
 
