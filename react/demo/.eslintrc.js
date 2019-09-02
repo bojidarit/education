@@ -19,6 +19,14 @@ module.exports = {
         "react"
     ],
     "rules": {
-        "no-extra-semi": "warn"
+        "no-extra-semi": "warn",
+        "no-const-assign": "warn",
+        "no-unreachable": "warn",
+        "no-unused-vars": "warn",
+        "no-undef": "warn",
+        "no-const-assign": "warn",
+        "no-this-before-super": "warn",
+        "constructor-super": "warn",
+        "valid-typeof": "warn"
     }
 };
