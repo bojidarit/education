@@ -1,0 +1,8 @@
+Ctrl+Shift+X (Extensions)
+simple react snippets
+prettier
+
+File -> Preferences -> Settings -> JSON
+"editor.formatOnSave": true,
+
+https://babeljs.io/rep
