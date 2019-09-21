@@ -3,7 +3,7 @@
 // const element = <h1>Hello World...</h1>;
 // ReactDOM.render(element, document.getElementById("root"));
 
-// JavaScript for React Developers | Mosh
+// JavaScript for React Developers from Mosh
 // https://youtu.be/NCwa_xi0Uuc
 
 //-----------------------------------------------------------------------------
@@ -35,9 +35,9 @@ const pi = () => PI;
 console.log(`PI func returns ${pi()}`);
 
 {
-  const sqareFunc = number => number * number;
+  const squareFunc = number => number * number;
   let number = 5;
-  console.log(`Sqare of ${number} equals ${sqareFunc(number)}`);
+  console.log(`Square of ${number} equals ${squareFunc(number)}`);
 
   const persons = [
     { id: 1, name: "first", isActive: true },
