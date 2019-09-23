@@ -1,7 +1,5 @@
-// import React from "react";
-// import ReactDOM from "react-dom";
-// const element = <h1>Hello World...</h1>;
-// ReactDOM.render(element, document.getElementById("root"));
+import Person from "./person";
+import Teacher, { demoFunction } from "./teacher";
 
 // JavaScript for React Developers from Mosh
 // https://youtu.be/NCwa_xi0Uuc
@@ -138,27 +136,25 @@ const spreadObj = { ...obj1, sex: "male", ...obj2 };
 console.log(spreadObj);
 
 //-----------------------------------------------------------------------------
-// Classes
-//-----------------------------------------------------------------------------{
-class Person {
-  constructor(name) {
-    this.name = name;
-  }
-
-  walk() {
-    console.log(`${this.name} is walking...`);
-  }
-}
+// Classes & Inheritance
+//-----------------------------------------------------------------------------
 
 const personIvan = new Person("Ivan");
 
-console.log("Person Class: ");
+console.log("Class 'Person': ");
 console.log(personIvan);
 personIvan.walk();
 
+const teacher = new Teacher("Mosh", "MSc");
+console.log("Class 'Teacher' that extends 'Person'");
+console.log(teacher);
+teacher.walk();
+teacher.teach();
+
 //-----------------------------------------------------------------------------
-//
+// Named and default exports
 //-----------------------------------------------------------------------------
+demoFunction();
 
 //-----------------------------------------------------------------------------
 //
