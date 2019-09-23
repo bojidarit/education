@@ -1,0 +1,7 @@
+Home Toshiba Laptop
+
+node --version
+v11.10.0
+
+npm --version
+6.7.0
