@@ -1,10 +1,8 @@
 -------------------------------------------------------------------------------
--- Insltall node.js
+-- Install node.js
 -------------------------------------------------------------------------------
 
 npm install -g create-react-app
-npm install -g react
-npm install -g react-scripts
 [npm install -g eslint]
 
 -------------------------------------------------------------------------------
@@ -14,10 +12,25 @@ npm install -g react-scripts
 Ctrl+Shift+X (Extensions)
 
 [eslint]
-simple react snippets
-prettier
+simple react snippets (from Burke Holland)
+prettier (from Esben Petersen)
 
 File -> Preferences -> Settings -> JSON
 "editor.formatOnSave": true,
 
-https://babeljs.io/rep
+-- Shortcuts
+Ctrl+D:         Add selection to next Find match (Multi-cursor editing)
+Ctrl+P:         Quick Open, Go to File..
+Ctrl+Shift+R:   Code refactoring
+
+-------------------------------------------------------------------------------
+-- For existing react app with no node_modules installed
+-- Before run "nmp start"
+-------------------------------------------------------------------------------
+nmp install
+
+-------------------------------------------------------------------------------
+-- Babel to plain JavaScript code
+-------------------------------------------------------------------------------
+
+https://babeljs.io/repl
