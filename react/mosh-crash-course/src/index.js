@@ -13,10 +13,13 @@
 // var -> function scope
 // let -> block scope
 function loopDemo() {
+  let result = "";
   // for (var i = 0; i < 5; i++) {
   for (let i = 0; i < 5; i++) {
-    console.log(`From loop -> ${i}`);
+    result += `${i} `;
   }
+
+  console.log(result);
 
   //console.log(`Outside loop -> ${i}`);
 }
@@ -45,7 +48,15 @@ console.log(`PI func returns ${pi()}`);
     { id: 3, name: "third", isActive: true }
   ];
 
+  console.log("All Jobs:");
   console.log(persons);
+  console.log("Active Jobs:");
+  // The old way
+  console.log(
+    persons.filter(function(item) {
+      return item.isActive;
+    })
+  );
   console.log(persons.filter(item => item.isActive));
 }
 
@@ -55,27 +66,108 @@ console.log(`PI func returns ${pi()}`);
 
 const person = {
   talk() {
-    console.log("talk this", this);
+    console.log("Person talk this", this);
   },
   walk() {
     var self = this;
     setTimeout(function() {
-      console.log("walk self", self);
-    }, 100);
+      console.log("Person walk self", self);
+    }, 1);
   },
   bless() {
-    setTimeout(() => console.log("bless arrow this", this), 1000);
+    setTimeout(() => console.log("Person bless arrow this", this), 1);
   }
 };
 
 person.talk();
-person.walk();
-person.bless();
+// person.walk();
+// person.bless();
 
 //-----------------------------------------------------------------------------
-// array.map()
+// array.map() using arrow function and template literal
 //-----------------------------------------------------------------------------
 
 const colors = ["red", "green", "blue"];
 const colorItems = colors.map(color => `<li>${color}</li>`);
+console.log("Colors mapped to list item tags:");
 console.log(colorItems);
+
+//-----------------------------------------------------------------------------
+// Object destructuring
+//-----------------------------------------------------------------------------
+
+const address = {
+  street: "Main",
+  city: "Sofia",
+  country: "Bulgaria"
+};
+
+console.log("Address object: ");
+console.log(address);
+
+const { street: st, city: ct } = address;
+console.log(`Address deconstructed : ${ct}, ${st} Str.`);
+
+//-----------------------------------------------------------------------------
+// Spread operator
+//-----------------------------------------------------------------------------
+const arr1 = [1, 2, 3];
+const arr2 = [3, 4, 5];
+
+//const clone = [...arr1];
+
+const comboClassicWay = arr1.concat(arr2);
+const comboSpreadWay = [...arr1, "a", ...arr2, "b"];
+
+console.log(comboClassicWay);
+console.log("Spread arrays: ");
+console.log(comboSpreadWay);
+
+const obj1 = { name: "Ivan" };
+const obj2 = { job: "Coder" };
+
+const obj1Clone = { ...obj1 };
+obj1Clone.lastName = "van Dam";
+
+console.log("Clone objects: ");
+console.log(obj1);
+console.log(obj1Clone);
+
+console.log("Spread objects: ");
+const spreadObj = { ...obj1, sex: "male", ...obj2 };
+console.log(spreadObj);
+
+//-----------------------------------------------------------------------------
+// Classes
+//-----------------------------------------------------------------------------{
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+
+  walk() {
+    console.log(`${this.name} is walking...`);
+  }
+}
+
+const personIvan = new Person("Ivan");
+
+console.log("Person Class: ");
+console.log(personIvan);
+personIvan.walk();
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
