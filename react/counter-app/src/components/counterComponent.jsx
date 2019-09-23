@@ -5,11 +5,6 @@ class Counter extends Component {
     count: 0
   };
 
-  styles = {
-    fontSize: 20,
-    fontWeight: "bold"
-  };
-
   render() {
     return (
       <React.Fragment>
@@ -20,13 +15,11 @@ class Counter extends Component {
   }
 
   getBargeClasses() {
-    return (
-      "badge m-2 badge-" + (this.state.count === 0 ? "warning" : "primary")
-    );
+    return `badge m-2 badge-${this.state.count === 0 ? "warning" : "primary"}`;
   }
 
   formatCount() {
-    const { count } = this.state;
+    const { count } = this.state; // object destructuring
     return count === 0 ? "Zero" : count;
   }
 }
