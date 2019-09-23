@@ -1,4 +1,19 @@
+-------------------------------------------------------------------------------
+-- Insltall node.js
+-------------------------------------------------------------------------------
+
+npm install -g create-react-app
+npm install -g react
+npm install -g react-scripts
+npm install -g eslint
+
+-------------------------------------------------------------------------------
+-- Install VS Code
+-------------------------------------------------------------------------------
+
 Ctrl+Shift+X (Extensions)
+
+eslint
 simple react snippets
 prettier
 
