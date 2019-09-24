@@ -3,9 +3,13 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
-import Counter from "./components/counterComponent";
+import Counters from "./components/counters";
+// import TitledCounters from "./components/titledCounters";
+// import List from "./components/listComponent";
 
-ReactDOM.render(<Counter />, document.getElementById("root"));
+ReactDOM.render(<Counters />, document.getElementById("root"));
+// ReactDOM.render(<TitledCounters />, document.getElementById("root"));
+// ReactDOM.render(<List />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

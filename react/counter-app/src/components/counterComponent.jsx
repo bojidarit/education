@@ -2,24 +2,42 @@ import React, { Component } from "react";
 
 class Counter extends Component {
   state = {
-    count: 0
+    value: this.props.value
+  };
+
+  // Bind Event-Handler
+  // constructor() {
+  //   super();
+  //   this.handleIncrement = this.handleIncrement.bind(this);
+  // }
+
+  // Experimental binding with arrow function
+  handleIncrement = product => {
+    //console.log("Increment Clicked", this);
+    this.setState({ value: this.state.value + 1 });
   };
 
   render() {
     return (
       <React.Fragment>
+        {this.props.children}
         <span className={this.getBargeClasses()}>{this.formatCount()}</span>
-        <button className="btn btn-secondary btn-sm">Increment</button>
+        <button
+          onClick={() => this.handleIncrement({ id: 777 })}
+          className="btn btn-secondary btn-sm"
+        >
+          Increment
+        </button>
       </React.Fragment>
     );
   }
 
   getBargeClasses() {
-    return `badge m-2 badge-${this.state.count === 0 ? "warning" : "primary"}`;
+    return `badge m-2 badge-${this.state.value === 0 ? "warning" : "primary"}`;
   }
 
   formatCount() {
-    const { count } = this.state; // object destructuring
+    const { value: count } = this.state; // object destructuring
     return count === 0 ? "Zero" : count;
   }
 }
