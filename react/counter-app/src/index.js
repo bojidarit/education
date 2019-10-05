@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
-import Counters from "./components/counters";
+import App from "./App";
 // import TitledCounters from "./components/titledCounters";
 // import List from "./components/listComponent";
 
-ReactDOM.render(<Counters />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));
 // ReactDOM.render(<TitledCounters />, document.getElementById("root"));
 // ReactDOM.render(<List />, document.getElementById("root"));
 
