@@ -3,14 +3,40 @@ import NavBar from "./components/navbar";
 import Counters from "./components/counters";
 
 class App extends Component {
-  state = {
-    counters: [
+  state = { counters: [{ id: -1, value: -1 }] };
+
+  logMethodCall(methodName) {
+    console.log(`${this.constructor.name} -> ${methodName}`, this.props);
+  }
+
+  getDummyState() {
+    return [
       { id: 1, value: 3 },
       { id: 2, value: 0 },
       { id: 3, value: 0 },
       { id: 4, value: 0 }
-    ]
-  };
+    ];
+  }
+
+  // Hook - The constructor is called once in the app life cycle
+  // It is the perfect place to initialize the component state
+  // 'props' must be passed as constructor parameter in case one wants to use it here
+  constructor(props) {
+    super(props);
+    this.logMethodCall("constructor");
+    // The component state can be set here
+    const counters = this.getDummyState();
+    this.state = { counters };
+  }
+
+  // Hook - Called after the component is rendered into the DOM
+  // Perfect place to make AJAX calls to get data from the server
+  componentDidMount() {
+    this.logMethodCall(this.componentDidMount.name);
+
+    // const counters = this.getDummyState();
+    // this.setState({ counters });
+  }
 
   // Delete event handler
   handleDelete = counterId => {
@@ -51,6 +77,8 @@ class App extends Component {
   };
 
   render() {
+    this.logMethodCall(this.render.name);
+
     return (
       <React.Fragment>
         <NavBar

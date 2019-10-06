@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import Counter from "./counterComponent";
+import Counter from "./counter";
 
 class Counters extends Component {
   render() {
+    console.log(`${this.constructor.name} -> ${this.render.name}`, this.props);
+
     const {
       counters,
       onReset,

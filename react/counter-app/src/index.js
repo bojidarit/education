@@ -7,7 +7,10 @@ import App from "./App";
 // import TitledCounters from "./components/titledCounters";
 // import List from "./components/listComponent";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <App name="Demo Application" />,
+  document.getElementById("root")
+);
 // ReactDOM.render(<TitledCounters />, document.getElementById("root"));
 // ReactDOM.render(<List />, document.getElementById("root"));
 
