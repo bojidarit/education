@@ -16,6 +16,7 @@
 		private static string _formatParamName = "format";
 
 		// GET: client/methods/{library}
+		// Example: http://localhost:59141/client/methods/users?apikey=12345
 		[Route("client/methods/{library}")]
 		public IHttpActionResult GetMethods(string library)
 		{
@@ -31,7 +32,7 @@
 		}
 
 		// GET: client/{target}
-		// Example: http://localhost:50118/client/users.getuser?apikey=00000&p1=1
+		// Example: http://localhost:59141/client/users.getuser?apikey=12345&p1=1
 		[Route("client/{target}")]
 		[HttpGet]
 		public IHttpActionResult GetResult(string target)

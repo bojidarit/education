@@ -13,7 +13,7 @@
 		#region HTTP API Server specific
 
 		public static readonly string ApiKeyParamName = "apikey";
-		public static readonly string ApiKeyParamValue = "00000";
+		public static readonly string ApiKeyParamValue = "12345";
 		public static readonly string ApiPath = "client/";
 		public static readonly string JsonFormatParamValue = "json";
 
