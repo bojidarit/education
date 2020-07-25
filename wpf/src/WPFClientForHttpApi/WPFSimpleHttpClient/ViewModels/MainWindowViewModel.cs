@@ -21,7 +21,7 @@
 		#region Fields
 
 		private Uri _baseUri = null;
-		private const string _testLibrary = "oblp_users";
+		private const string _testLibrary = "users";
 
 		#endregion //Fields
 
@@ -515,50 +515,9 @@
 		{
 			this.Libraries = new ObservableCollection<string>()
 			{
-				"oBLF_ABCENCE",
-				"oBLP_OTPCALC",
-				"oBLP_APPOINTMENT",
-				"oBLP_AUTOTEXT",
-				"oBLF_BACKUP",
-				"oBLF_BEDARF",
-				"oBLF_ZULAGEN",
-				"oBLF_CHIPSYS",
-				"oBLP_CONTROLSTAT",
-				"oBLF_DPLAN",
-				"oBLP_DPLANAUTO",
-				"oBLF_DPLANPROP",
-				"oBLF_BEREIT",
-				"oBLF_EDITHRS",
-				"oBLP_ENGINE",
-				"oBLF_EXPORT",
-				"oBLP_EXPPLANS",
-				"oBLP_FAVORITES",
-				"oBLP_FORMULAS",
-				"oBLP_INSTITUTE",
-				"oBLP_INTEGRATION",
-				"oBLP_LEGRUL",
-				"oBLP_LICENSE",
-				"oBLF_LISTEDIT",
-				"oBLP_LISTTYPES",
-				"oBLP_LOHNEW",
-				"oBLP_OPTHIST",
-				"oBLP_OPTIONS",
-				"oBLP_PARALLELSTAT",
-				"oBLF_PAUSEADD",
-				"oBLF_PERSONS",
-				"oBLP_PROCADD",
-				"oBLP_RECALCS",
-				"oBLP_DPREP",
-				"oBLF_DIENSTE",
-				"oBLP_MANDANTS",
-				"oBLP_STATISTICS",
-				"oBLF_STDCYCLE",
-				"oBLF_STNDOCS",
-				"oBLP_SYSSTATS",
-				"oBLF_UPLAN",
-				"oBLP_USERS",
-				"oBLP_VIEWS",
-				"oBLF_WORKMODEL"
+				"USERS",
+				"PROFILES",
+				"MODELS"
 			};
 
 			this.SelectedLibrary = this.Libraries

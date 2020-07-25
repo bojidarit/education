@@ -9,7 +9,7 @@
 
 	public static class Users
 	{
-		public static string LibraryName => "oblp_users";
+		public static string LibraryName => "users";
 
 		private static IEnumerable<User> _users = new List<User>()
 		{

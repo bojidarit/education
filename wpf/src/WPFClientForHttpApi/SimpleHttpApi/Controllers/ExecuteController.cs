@@ -12,7 +12,7 @@
 	public class ExecuteController : ApiController
 	{
 		private static string _apiKeyParamName = "apikey";
-		private static string _apiKeyParamValue = "00000";
+		private static string _apiKeyParamValue = "12345";
 		private static string _formatParamName = "format";
 
 		// GET: client/methods/{library}
@@ -31,7 +31,7 @@
 		}
 
 		// GET: client/{target}
-		// Example: http://localhost:50118/client/oblp_users.getuser?apikey=00000&p1=1
+		// Example: http://localhost:50118/client/users.getuser?apikey=00000&p1=1
 		[Route("client/{target}")]
 		[HttpGet]
 		public IHttpActionResult GetResult(string target)
