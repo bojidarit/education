@@ -1,0 +1,10 @@
+WPF Application With CATEL MVVM and Localization Demo
+
+--------------------------------------------------------------------------------
+-- WPFLocalizationExtension
+--------------------------------------------------------------------------------
+
+LocalizationExtension is a really easy way to localize any type of DependencyProperties or native Properties on DependencyObjects
+
+https://github.com/XAMLMarkupExtensions/WPFLocalizationExtension
+https://www.nuget.org/packages/WpfLocalizeExtension
