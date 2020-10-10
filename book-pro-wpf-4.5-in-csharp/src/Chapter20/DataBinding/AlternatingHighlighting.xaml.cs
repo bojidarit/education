@@ -1,17 +1,15 @@
-using StoreDatabase;
+﻿using StoreDatabase;
 using System.Collections.Generic;
 using System.Windows;
 
 namespace DataBinding
 {
 	/// <summary>
-	/// Interaction logic for ListStyles.xaml
+	/// Interaction logic for AlternatingHighlighting.xaml
 	/// </summary>
-
-	public partial class ListStyles : System.Windows.Window
+	public partial class AlternatingHighlighting : Window
 	{
-
-		public ListStyles()
+		public AlternatingHighlighting()
 		{
 			InitializeComponent();
 		}
@@ -23,6 +21,5 @@ namespace DataBinding
 			products = App.StoreDb.GetProducts();
 			lstProducts.ItemsSource = products;
 		}
-
 	}
 }

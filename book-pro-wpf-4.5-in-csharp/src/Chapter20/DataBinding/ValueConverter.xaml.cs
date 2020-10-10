@@ -1,23 +1,17 @@
+using StoreDatabase;
+using StoreDatabase.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using StoreDatabase;
 
 namespace DataBinding
 {
-    /// <summary>
-    /// Interaction logic for EditProductObject.xaml
-    /// </summary>
+	/// <summary>
+	/// Interaction logic for EditProductObject.xaml
+	/// </summary>
 
-    public partial class ValueConverter : System.Windows.Window
+	public partial class ValueConverter : System.Windows.Window
     {
         private Product product;
 
@@ -38,7 +32,7 @@ namespace DataBinding
                 }
                 catch (Exception err)
                 {
-                    MessageBox.Show("Error contacting database.");
+                    MessageBox.Show(err.Format(), "Error contacting database.");
                 }                
             }
             else
@@ -54,8 +48,5 @@ namespace DataBinding
 
             MessageBox.Show(product.UnitCost.ToString());
         }
-
-
-     
     }
 }

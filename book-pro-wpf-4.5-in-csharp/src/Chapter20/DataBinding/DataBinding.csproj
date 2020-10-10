@@ -77,6 +77,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AlternatingHighlighting.xaml.cs">
+      <DependentUpon>AlternatingHighlighting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -107,10 +110,10 @@
     <Compile Include="ExpandingDataTemplate.xaml.cs">
       <DependentUpon>ExpandingDataTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PriceConverter.cs" />
-    <Compile Include="PriceToBackgroundConverter.cs" />
+    <Compile Include="Converters\PriceConverter.cs" />
+    <Compile Include="Converters\PriceToBackgroundConverter.cs" />
     <Compile Include="StyleSelector.cs" />
-    <Compile Include="ValueInStockConverter.cs" />
+    <Compile Include="Converters\ValueInStockConverter.cs" />
     <Compile Include="VariedTemplates.xaml.cs">
       <DependentUpon>VariedTemplates.xaml</DependentUpon>
     </Compile>
@@ -128,7 +131,7 @@
       <SubType>Code</SubType>
       <DependentUpon>DataTemplateList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImagePathConverter.cs" />
+    <Compile Include="Converters\ImagePathConverter.cs" />
     <Compile Include="Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
@@ -161,6 +164,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AlternatingHighlighting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CheckBoxList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
