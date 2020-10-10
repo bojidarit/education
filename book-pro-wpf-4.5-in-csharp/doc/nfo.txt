@@ -1,0 +1,10 @@
+GitHub - Apress-pro-wpf-4.5-in-csharp- Source code for 'Pro WPF 4.5 in C#' by Matthew MacDonald
+https://github.com/Apress/pro-wpf-4.5-in-csharp
+https://www.apress.com/gp/book/9781430243656
+
+This repository accompanies Pro WPF 4.5 in C# by Matthew MacDonald (Apress, 2012).
+
+Download the files as a zip using the green button, or clone the repository to your machine using Git.
+
+Releases
+Release v1.0 corresponds to the code in the published book, without corrections or updates.

@@ -1,0 +1,8 @@
+Pro WPF 4.5 in C# (2012)
+Windows Presentation Foundation in .NET 4.5
+Authors: MacDonald, Matthew
+https://www.apress.com/gp/book/9781430243656
+
+Microsoft's Windows Presentation Foundation (WPF) provides you with a development framework for building high-quality user experiences for the Windows operating system. It blends together rich content from a wide range of sources and allows you unparalleled access to the processing power of your Windows computer.
+
+Pro WPF 4.5 in C# provides a thorough, authoritative guide to how WPF really works. Packed with no-nonsense examples and practical advice you'll learn everything you need to know in order to use WPF in a professional setting. The book begins by building a firm foundation of elementary concepts, using your existing C# skills as a frame of reference, before moving on to discuss advanced concepts and demonstrate them in a hands-on way that emphasizes the time and effort savings that can be gained.
