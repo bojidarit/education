@@ -6,6 +6,9 @@
 	using System.Collections.Generic;
 	using System.Linq;
 
+	// Inspired from Dino Esposito's [Cutting Edge] REST and Web API in ASP.NET Core
+	// MSDN Magazine from March 2018 (Volume 33 Number 3)
+	// Source: https://docs.microsoft.com/en-us/archive/msdn-magazine/2018/march/cutting-edge-rest-and-web-api-in-asp-net-core
 	[Route("api/[controller]")]
 	[ApiController]
 	public class DemoController : ControllerBase
@@ -14,12 +17,14 @@
 			.Select(i => IdNameDto.Create(i, $"Name {i}"))
 			.ToList();
 
+		// Get: api/demo
 		[HttpGet]
 		public ActionResult<IdNameDto> GetAll()
 		{
 			return Ok(dummyList);
 		}
 
+		// Get: api/demo/{id}
 		[HttpGet("{id}")]
 		public ActionResult<IdNameDto> GetById(int id)
 		{
@@ -32,6 +37,7 @@
 			return Ok(dto);
 		}
 
+		// Post: api/demo
 		[HttpPost]
 		public IActionResult Create(IdNameDto dto)
 		{
@@ -51,6 +57,7 @@
 			return Created(uri, dto);
 		}
 
+		// Delete: api/demo/{id}
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
@@ -65,6 +72,7 @@
 			return NoContent();
 		}
 
+		// Put: api/demo
 		[HttpPut]
 		public IActionResult Update(IdNameDto dto)
 		{
@@ -76,7 +84,7 @@
 			var found = dummyList.Where(i => i.Id == dto.Id).FirstOrDefault();
 			if (found == null)
 			{
-				return BadRequest(ErrorDto.Create($"Item with id = {dto.Id} do not exists."));
+				return NotFound(ErrorDto.Create($"Item with id = {dto.Id} do not exists."));
 			}
 
 			dummyList.Remove(found);
