@@ -1,0 +1,79 @@
+Inspired from Dino Esposito's [Cutting Edge] REST and Web API in ASP.NET Core
+MSDN Magazine from March 2018 (Volume 33 Number 3)
+Source:  https://docs.microsoft.com/en-us/archive/msdn-magazine/2018/march/cutting-edge-rest-and-web-api-in-asp-net-core
+
+REST-Oriented Action Result Types
+
+Whether a Web API is better off with a REST design is a highly debatable point. In general, it’s safe enough to say that the REST approach is based on a known set of rules and, in this regard, it is more standard. For this reason, it’s generally recommended for a public API that’s part of the enterprise business. If the API exists only to serve a limited number of clients—mostly under the same control of the API creators—then no real business difference exists between using REST design route or a looser remote-procedure call (RPC) approach.
+
+In ASP.NET Core, there’s nothing like a distinct and dedicated Web API framework. There are just controllers with their set of action results and helper methods. If you want to build a Web API whatsoever, you just return JSON, XML or whatever else. If you want to build a RESTful API, you just get familiar with another set of action results and helper methods. Figure 2 presents the new action result types that ASP.NET Core controllers can return. In ASP.NET Core, an action result type is a type that implements the IActionResult interface. 
+
+-------------------------------------------------------------------------------
+-- Figure 2 Web API-Related Action Result Types
+-------------------------------------------------------------------------------
+Type 	Description
+
+AcceptedResult 	Returns a 202 status code. In addition, it returns the URI to check on the ongoing status of the request. The URI is stored in the Location header.
+BadRequestResult 	Returns a 400 status code.
+CreatedResult 	Returns a 201 status code. In addition, it returns the URI of the resource created, stored in the Location header.
+NoContentResult 	Returns a 204 status code and null content.
+OkResult 	Returns a 200 status code.
+UnsupportedMediaTypeResult 	Returns a 415 status code.
+-------------------------------------------------------------------------------
+
+Note that some of the types in Figure 2 come with buddy types that provide the same core function but with some slight differences. For example, in addition to AcceptedResult and CreatedResult, you find xxxAtActionResult and xxxAtRouteResult types. The difference is in how the types express the URI to monitor the status of the accepted operation and the location of the resource just created. The xxxAtActionResult type expresses the URI as a pair of controller and action strings whereas the xxxAtRouteResult type uses a route name.
+
+OkObjectResult and BadRequestObjectResult, instead, have an xxxObjectResult variation. The difference is that object result types also let you append an object to the response. So OkResult just sets a 200 status code, but OkObjectResult sets a 200 status code and appends an object of your choice. A common way to use this feature is to return a ModelState dictionary updated with the detected error when a bad request is handled.
+
+Another interesting distinction is between NoContentResult and EmptyResult. Both return an empty response, but NoContentResult sets a status code of 204, whereas EmptyResult sets a 200 status code. All this said, building a RESTful API is a matter of defining the resource being acted on and arranging a set of calls using the HTTP verb to perform common manipulation operations. You use GET to read, PUT to update, POST to create a new resource and DELETE to remove an existing one. Figure 3 shows the skeleton of a RESTful interface around a sample resource type as it results from ASP.NET Core classes.
+
+-------------------------------------------------------------------------------
+-- Figure 3 Common RESTful Skeleton of Code
+-------------------------------------------------------------------------------
+
+[HttpGet]
+public ObjectResult Get(Guid id)
+{
+  // Do something here to retrieve the resource
+  var res = FindResourceInSomeWay(id);
+  return Ok(res);
+}
+[HttpPut]
+public AcceptedResult UpdateResource(Guid id, string content)
+{
+  // Do something here to update the resource
+  var res = UpdateResourceInSomeWay(id, content);
+  var path = String.Format("/api/resource/{0}", res.Id);
+  return Accepted(new Uri(path));  
+}
+[HttpPost]
+public CreatedResult AddNews(MyResource res)
+{
+  // Do something here to create the resource
+  var resId = CreateResourceInSomeWay(res);
+  // Returns HTTP 201 and sets the URI to the Location header
+  var path = String.Format("/api/resource/{0}", resId);
+  return Created(path, res);
+}
+[HttpDelete]
+public NoContentResult DeleteResource(Guid id)
+{
+  // Do something here to delete the resource
+  // ...
+  return NoContent();
+}
+-------------------------------------------------------------------------------
+
+Wrapping Up
+
+A Web API is a common element in most applications today. 
+It’s used to provide data to an Angular or MVC front end, as well as to provide services to mobile 
+or desktop applications. In the context of ASP.NET Core, the term “Web API” finally achieves 
+its real meaning without ambiguity or need to further explain its contours. 
+A Web API is a programmatic interface comprising a number of publicly exposed HTTP endpoints 
+that typically (but not necessarily) return JSON or XML data to callers. 
+The controller infrastructure in ASP.NET Core fully supports this vision with a revamped implementation 
+and new action result types. 
+
+Building a RESTful API in ASP.NET has never been easier!
+
