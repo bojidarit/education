@@ -2,9 +2,11 @@
 {
 	using Microsoft.AspNetCore.Mvc;
 	using NetCoreApi.Dtos;
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
+	[Route("api/[controller]")]
 	[ApiController]
 	public class DemoController : ControllerBase
 	{
@@ -12,13 +14,13 @@
 			.Select(i => IdNameDto.Create(i, $"Name {i}"))
 			.ToList();
 
-		[HttpGet("api/[controller]")]
+		[HttpGet]
 		public ActionResult<IdNameDto> GetAll()
 		{
 			return Ok(dummyList);
 		}
 
-		[HttpGet("api/[controller]/{id}")]
+		[HttpGet("{id}")]
 		public ActionResult<IdNameDto> GetById(int id)
 		{
 			var dto = dummyList.Where(i => i.Id == id).FirstOrDefault();
@@ -30,7 +32,7 @@
 			return Ok(dto);
 		}
 
-		[HttpPost("api/[controller]")]
+		[HttpPost]
 		public IActionResult Create(IdNameDto dto)
 		{
 			if (dto == null)
@@ -45,10 +47,11 @@
 
 			dummyList.Add(dto);
 
-			return Created($"api/[controller]/{dto.Id}", dto);
+			Uri uri = Helper.CombineRequestPath(this.Request, dto.Id.ToString());
+			return Created(uri, dto);
 		}
 
-		[HttpDelete("api/[controller]/{id}")]
+		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
 			var dto = dummyList.Where(i => i.Id == id).FirstOrDefault();
@@ -62,7 +65,7 @@
 			return NoContent();
 		}
 
-		[HttpPut("api/[controller]")]
+		[HttpPut]
 		public IActionResult Update(IdNameDto dto)
 		{
 			if (dto == null)
@@ -80,7 +83,8 @@
 
 			dummyList.Add(dto);
 
-			return Accepted($"api/[controller]/{dto.Id}", dto);
+			Uri uri = Helper.CombineRequestPath(this.Request, dto.Id.ToString());
+			return Created(uri, dto);
 		}
 	}
 }
