@@ -1,24 +1,16 @@
+using StoreDatabase;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.ComponentModel;
-using StoreDatabase;
 
 namespace DataBinding
 {
-    /// <summary>
-    /// Interaction logic for NavigateCollection.xaml
-    /// </summary>
+	/// <summary>
+	/// Interaction logic for NavigateCollection.xaml
+	/// </summary>
 
-    public partial class NavigateCollection : System.Windows.Window
+	public partial class NavigateCollection : System.Windows.Window
     {
         private ICollection<Product> products;
         private ListCollectionView view;
@@ -57,5 +49,10 @@ namespace DataBinding
             cmdPrev.IsEnabled = view.CurrentPosition > 0;
             cmdNext.IsEnabled = view.CurrentPosition < view.Count - 1; 
         }
-    }
+
+		private void ButtonClose_Click(object sender, RoutedEventArgs e)
+		{
+            Close();
+		}
+	}
 }

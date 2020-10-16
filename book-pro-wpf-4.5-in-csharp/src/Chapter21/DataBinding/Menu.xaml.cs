@@ -1,42 +1,47 @@
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Reflection;
-
-
 namespace DataBinding
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
+	using System;
+	using System.Reflection;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Input;
 
-    public partial class Menu : Window
-    {
+	/// <summary>
+	/// Interaction logic for Window1.xaml
+	/// </summary>
 
-        public Menu()
-        {
-            InitializeComponent();
-        }
+	public partial class Menu : Window
+	{
 
-        private void ButtonClick(object sender, RoutedEventArgs e)
-        {            
-            // Get the current button.
-            Button cmd = (Button)e.OriginalSource;
-                
-            // Create an instance of the window named
-            // by the current button.
-            Type type = this.GetType();
-            Assembly assembly = type.Assembly;                       
-            Window win = (Window)assembly.CreateInstance(
-                type.Namespace + "." + cmd.Content);
+		public Menu()
+		{
+			InitializeComponent();
 
-            // Show the window.
-            win.ShowDialog();
-        }
-    }
+			KeyUp += Window_KeyUp;
+		}
+
+		private void ButtonClick(object sender, RoutedEventArgs e)
+		{
+			// Get the current button.
+			Button cmd = (Button)e.OriginalSource;
+
+			// Create an instance of the window named
+			// by the current button.
+			Type type = this.GetType();
+			Assembly assembly = type.Assembly;
+			Window win = (Window)assembly.CreateInstance(
+				type.Namespace + "." + cmd.Content);
+
+			// Show the window.
+			win.ShowDialog();
+		}
+
+		private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+		{
+			if (e.Key == Key.Escape)
+			{
+				Application.Current.Shutdown();
+			}
+		}
+	}
 }
