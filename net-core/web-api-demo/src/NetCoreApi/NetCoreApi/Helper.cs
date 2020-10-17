@@ -3,6 +3,9 @@
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Http.Extensions;
 	using System;
+	using System.Reflection;
+	using System.Runtime.InteropServices;
+	using System.Runtime.Versioning;
 
 	public static class Helper
 	{
@@ -29,6 +32,16 @@
 			Uri uri = CombineUri(requestPath, relativePath);
 
 			return uri;
+		}
+
+		public static string GetRuntimeInformation()
+		{
+			var framework = Assembly.GetEntryAssembly()?
+				.GetCustomAttribute<TargetFrameworkAttribute>()?
+				.FrameworkName;
+
+			return $"{framework} ({RuntimeInformation.FrameworkDescription}) @ OS {RuntimeInformation.OSArchitecture} " +
+				$"[{RuntimeInformation.OSDescription.Trim()}] Process {RuntimeInformation.ProcessArchitecture}";
 		}
 	}
 }
