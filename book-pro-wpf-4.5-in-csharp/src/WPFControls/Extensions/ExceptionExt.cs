@@ -1,4 +1,4 @@
-﻿namespace StoreDatabase.Extensions
+﻿namespace WPFControls.Extensions
 {
 	using System;
 
