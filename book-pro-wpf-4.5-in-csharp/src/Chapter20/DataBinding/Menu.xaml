@@ -9,6 +9,8 @@
 		<Style TargetType="{x:Type Button}">
 			<Setter Property="Margin"
 					Value="3,3,3,0" />
+			<Setter Property="FontSize"
+					Value="14" />
 		</Style>
 	</Window.Resources>
 	<Grid>
@@ -19,12 +21,14 @@
 			<Button>ListStyles</Button>
 
 			<Button>RadioButtonList</Button>
-			<Button>CheckBoxList</Button>
-			<Button>AlternatingHighlighting</Button>
-			<Button>VariedStyles</Button>
+			<Button FontWeight="Bold">CheckBoxList</Button>
+			<Button FontWeight="Bold">AlternatingHighlighting</Button>
+			<Button FontWeight="Bold">VariedStyles</Button>
 
-			<Button>DataTemplateList</Button>
-			<Button>DataTemplateByType</Button>
+			<Button FontWeight="Bold"
+					FontStyle="Italic">DataTemplateList</Button>
+			<Button FontWeight="Bold"
+					FontStyle="Italic">DataTemplateByType</Button>
 			<Button>DataTemplateImages</Button>
 			<Button>DataTemplateControls</Button>
 			<Button>VariedTemplates</Button>

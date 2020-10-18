@@ -1,38 +1,39 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using StoreDatabase;
-
 namespace DataBinding
 {
+    using StoreDatabase;
+    using System.Collections.Generic;
+	using System.Linq;
+	using WPFControls;
+
     /// <summary>
     /// Interaction logic for DataTemplateList.xaml
     /// </summary>
-
-    public partial class DataTemplateByType : System.Windows.Window
+    public partial class DataTemplateByType : Dialog
     {
 
         public DataTemplateByType()
         {
             InitializeComponent();
-        }
 
-        private ICollection<Product> products;
+			LoadProducts();
+			KeyUp += DataTemplateList_KeyUp;
+		}
 
-        private void cmdGetProducts_Click(object sender, RoutedEventArgs e)
-        {
-            products = App.StoreDb.GetProducts();
-            lstProducts.ItemsSource = products;
-         
-        }
+		private void DataTemplateList_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+		{
+			if (e.Key == System.Windows.Input.Key.F5)
+			{
+				LoadProducts();
+			}
+		}
 
-    }
+		private ICollection<Product> products;
+
+		private void LoadProducts()
+		{
+			products = App.StoreDb.GetProducts();
+			lstProducts.ItemsSource = products;
+			lstProducts.SelectedItem = products.FirstOrDefault();
+		}
+	}
 }

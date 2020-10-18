@@ -1,78 +1,73 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Controls;
-using System.Windows;
-using StoreDatabase;
-using System.Reflection;
-
 namespace DataBinding
 {
-    public class ProductByCategoryStyleSelector : StyleSelector
-    {
-        public override Style SelectStyle(object item, DependencyObject container)
-        {
-            Product product = (Product)item;
-            Window window = Application.Current.MainWindow;
+	using System;
+	using System.Windows.Controls;
+	using System.Windows;
+	using StoreDatabase;
+	using System.Reflection;
 
-            if (product.CategoryName == "Travel")
-            {
-                return (Style)window.FindResource("TravelProductStyle");
-            }
-            else
-            {
-                return (Style)window.FindResource("DefaultProductStyle");
-            }
-        }
-    }
+	public class ProductByCategoryStyleSelector : StyleSelector
+	{
+		public override Style SelectStyle(object item, DependencyObject container)
+		{
+			Product product = (Product)item;
+			Window window = Application.Current.MainWindow;
 
-    public class SingleCriteriaHighlightStyleSelector : StyleSelector
-    {
-        public Style DefaultStyle
-        {
-            get;
-            set;
-        }
+			if (product.CategoryName == "Travel")
+			{
+				return (Style)window.FindResource("TravelProductStyle");
+			}
+			else
+			{
+				return (Style)window.FindResource("DefaultProductStyle");
+			}
+		}
+	}
 
-        public Style HighlightStyle
-        {
-            get;
-            set;
-        }
+	public class SingleCriteriaHighlightStyleSelector : StyleSelector
+	{
+		public Style DefaultStyle
+		{
+			get;
+			set;
+		}
 
-        public string PropertyToEvaluate
-        {
-            get;
-            set;
-        }
+		public Style HighlightStyle
+		{
+			get;
+			set;
+		}
 
-        public string PropertyValueToHighlight
-        {
-            get;
-            set;
-        }
+		public string PropertyToEvaluate
+		{
+			get;
+			set;
+		}
 
-        public override Style SelectStyle(object item,
-          DependencyObject container)
-        {
-            Product product = (Product)item;
+		public string PropertyValueToHighlight
+		{
+			get;
+			set;
+		}
 
-            // Use reflection to get the property to check.
-            Type type = product.GetType();
-            PropertyInfo property = type.GetProperty(PropertyToEvaluate);
+		public override Style SelectStyle(object item, DependencyObject container)
+		{
+			Product product = (Product)item;
 
-            // Decide if this product should be highlighted
-            // based on the property value.
-            if (property.GetValue(product, null).ToString() == PropertyValueToHighlight)
-            {
-                return HighlightStyle;
-            }
-            else
-            {
-                return DefaultStyle;
-            }
-        }
-    }
+			// Use reflection to get the property to check.
+			Type type = product.GetType();
+			PropertyInfo property = type.GetProperty(PropertyToEvaluate);
 
-
+			// Decide if this product should be highlighted
+			// based on the property value.
+			if (property.GetValue(product, null).ToString() == PropertyValueToHighlight)
+			{
+				return HighlightStyle;
+			}
+			else
+			{
+				return DefaultStyle;
+			}
+		}
+	}
 }

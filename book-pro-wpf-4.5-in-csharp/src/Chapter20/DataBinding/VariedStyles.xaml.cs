@@ -1,45 +1,56 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Collections.ObjectModel;
-using StoreDatabase;
-
 namespace DataBinding
 {
-    /// <summary>
-    /// Interaction logic for VariedStyles.xaml
-    /// </summary>
+	using StoreDatabase;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Linq;
+	using System.Windows;
+	using WPFControls;
 
-    public partial class VariedStyles : System.Windows.Window
-    {
+	/// <summary>
+	/// Interaction logic for VariedStyles.xaml
+	/// </summary>
+	public partial class VariedStyles : Dialog
+	{
+		public VariedStyles()
+		{
+			InitializeComponent();
+		}
 
-        public VariedStyles()
-        {
-            InitializeComponent();
-        }
+		private ICollection<Product> products;
+		private string oldCategoryName;
 
-        private ICollection<Product> products;
+		private void cmdGetProducts_Click(object sender, RoutedEventArgs e)
+		{
+			products = App.StoreDb.GetProducts();
+			lstProducts.ItemsSource = products;
+			lstProducts.SelectedItem = products.FirstOrDefault();
+		}
 
-        private void cmdGetProducts_Click(object sender, RoutedEventArgs e)
-        {
-            products = App.StoreDb.GetProducts();
-            lstProducts.ItemsSource = products;
-        }
+		private void cmdApplyChange_Click(object sender, RoutedEventArgs e)
+		{
+			if (string.IsNullOrEmpty(oldCategoryName))
+			{
+				oldCategoryName = ((ObservableCollection<Product>)products)[1].CategoryName;
+				((ObservableCollection<Product>)products)[1].CategoryName = "Travel";
+			}
+			else
+			{
+				((ObservableCollection<Product>)products)[1].CategoryName = oldCategoryName;
+				oldCategoryName = null;
+			}
 
-        private void cmdApplyChange_Click(object sender, RoutedEventArgs e)
-        {
-            ((ObservableCollection<Product>)products)[1].CategoryName = "Travel";
-            StyleSelector selector = lstProducts.ItemContainerStyleSelector;
-            lstProducts.ItemContainerStyleSelector = null;
-            lstProducts.ItemContainerStyleSelector = selector;
-        }
-    }
+			// The brute-force approach to apply style selector for all items
+
+			//StyleSelector selector = lstProducts.ItemContainerStyleSelector;
+			//lstProducts.ItemContainerStyleSelector = null;
+			//lstProducts.ItemContainerStyleSelector = selector;
+
+			// The better way to apply style selection
+			lstProducts.Items.Refresh();
+
+			// TODO: You may choose to run this code automatically in response to certain changes 
+			// by handling events such as PropertyChanged...
+		}
+	}
 }
