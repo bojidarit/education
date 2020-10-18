@@ -250,6 +250,10 @@
       <Project>{E0BEF018-8722-4B11-ACBA-5C6C5E7102D6}</Project>
       <Name>StoreDatabase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\WPFControls\WPFControls.csproj">
+      <Project>{75ebecf7-3b51-4e5b-a62b-d9213517ac74}</Project>
+      <Name>WPFControls</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -1,15 +1,15 @@
-using StoreDatabase;
-using System.Windows;
-
 namespace DataBinding
 {
+	using StoreDatabase;
+	using System;
+	using System.Windows;
+	using WPFControls;
+
 	/// <summary>
 	/// Interaction logic for CheckBoxList.xaml
 	/// </summary>
-
-	public partial class CheckBoxList : System.Windows.Window
+	public partial class CheckBoxList : Dialog
 	{
-
 		public CheckBoxList()
 		{
 			InitializeComponent();
@@ -27,10 +27,10 @@ namespace DataBinding
 
 			if (lstProducts.SelectedItems.Count > 0)
 			{
-				string items = "You selected: ";
+				string items = "Selection:";
 				foreach (Product product in lstProducts.SelectedItems)
 				{
-					items += "\n  * " + product.ToString();
+					items += $"{Environment.NewLine}   * {product}";
 				}
 				MessageBox.Show(items, "Info");
 			}

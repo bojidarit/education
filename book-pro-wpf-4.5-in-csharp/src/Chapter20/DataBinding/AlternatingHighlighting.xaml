@@ -1,10 +1,10 @@
-﻿<Window x:Class="DataBinding.AlternatingHighlighting"
-		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		Title="Alternating Highlighting"
-		WindowStartupLocation="CenterScreen"
-		Height="500"
-		Width="350">
+﻿<controls:Dialog x:Class="DataBinding.AlternatingHighlighting"
+				 xmlns:controls="clr-namespace:WPFControls;assembly=WPFControls"
+				 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				 Title="Alternating Highlighting"
+				 Height="500"
+				 Width="350">
 	<Grid Margin="8">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -62,4 +62,4 @@
 		</ListBox>
 	</Grid>
 
-</Window>
+</controls:Dialog>

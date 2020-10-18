@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using WPFControls;
 
 namespace DataBinding
 {
@@ -11,9 +11,8 @@ namespace DataBinding
 	/// Interaction logic for Window1.xaml
 	/// </summary>
 
-	public partial class Menu : Window
+	public partial class Menu : WindowEx
 	{
-
 		public Menu()
 		{
 			InitializeComponent();
@@ -40,14 +39,6 @@ namespace DataBinding
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Format(), "Missing window");
-			}
-		}
-
-		private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
-		{
-			if(e.Key == Key.Escape)
-			{
-				Application.Current.Shutdown();
 			}
 		}
 	}

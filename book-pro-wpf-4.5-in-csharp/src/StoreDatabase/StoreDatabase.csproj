@@ -82,9 +82,15 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="store.xsc">
+      <DependentUpon>store.xsd</DependentUpon>
+    </None>
     <None Include="store.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="store.xss">
+      <DependentUpon>store.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

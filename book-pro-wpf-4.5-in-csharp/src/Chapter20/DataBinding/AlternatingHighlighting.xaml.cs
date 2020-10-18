@@ -1,13 +1,14 @@
-﻿using StoreDatabase;
-using System.Collections.Generic;
-using System.Windows;
-
-namespace DataBinding
+﻿namespace DataBinding
 {
+	using StoreDatabase;
+	using System.Collections.Generic;
+	using System.Windows;
+	using WPFControls;
+
 	/// <summary>
 	/// Interaction logic for AlternatingHighlighting.xaml
 	/// </summary>
-	public partial class AlternatingHighlighting : Window
+	public partial class AlternatingHighlighting : Dialog
 	{
 		public AlternatingHighlighting()
 		{
