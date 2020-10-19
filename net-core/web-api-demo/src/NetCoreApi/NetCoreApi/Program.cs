@@ -15,6 +15,12 @@ namespace NetCoreApi
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
 					webBuilder.UseStartup<Startup>();
+
+					// Configure endpoints for Kestrel manually
+					//webBuilder.UseKestrel(opts =>
+					//{
+					//	opts.ListenAnyIP(5000);
+					//});
 				});
 	}
 }

@@ -20,7 +20,7 @@
 		[HttpGet]
 		public IActionResult GetData([FromQuery(Name = "data")] string data)
 		{
-			SaveData(data);
+			var message = AppendDataToTextFile(data);
 
 			return Ok();
 		}
@@ -32,12 +32,12 @@
 		[HttpGet("{data}")]
 		public IActionResult Get(string data)
 		{
-			SaveData(data);
+			var message = AppendDataToTextFile(data);
 
-			return Ok();
+			return Ok(message);
 		}
 
-		private void SaveData(string data)
+		private string AppendDataToTextFile(string data)
 		{
 			var myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(myDocuments, outputFolderName);
@@ -49,6 +49,8 @@
 			System.IO.File.AppendAllText(
 				Path.Combine(path, outputFileName),
 				$"{lineBegin}{Environment.NewLine}{data}{Environment.NewLine}{lineEnd}{Environment.NewLine}");
+
+			return $"{{\"messageLength\": {data.Length}}}";
 		}
 	}
 }

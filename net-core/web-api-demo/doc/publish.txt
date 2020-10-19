@@ -1,0 +1,26 @@
+---------------------------------------------------------------------------------------------------
+-- To publish a single-file executable
+-- IMPORTANT: It is not supported to publish an application to a single-file without specifying a RuntimeIdentifier
+---------------------------------------------------------------------------------------------------
+
+dotnet publish -r win10-x64 -p:PublishSingleFile=true
+
+---------------------------------------------------------------------------------------------------
+-- To publish a single-file executable (setting in project file - <project_name>.csproj)
+-- IMPORTANT: It is not supported to publish an application to a single-file without specifying a RuntimeIdentifier
+---------------------------------------------------------------------------------------------------
+
+		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+		<PublishSingleFile>true</PublishSingleFile>
+
+---------------------------------------------------------------------------------------------------
+-- To publish in Release
+---------------------------------------------------------------------------------------------------
+
+dotnet publish -r win10-x64 -p:PublishSingleFile=true -c Release
+
+---------------------------------------------------------------------------------------------------
+-- Execute published API for all URLs
+---------------------------------------------------------------------------------------------------
+
+...\education\net-core\web-api-demo\src\NetCoreApi\NetCoreApi\bin\Debug\netcoreapp3.1\win10-x64\publish> .\NetCoreApi.exe --urls http://0.0.0.0:5000

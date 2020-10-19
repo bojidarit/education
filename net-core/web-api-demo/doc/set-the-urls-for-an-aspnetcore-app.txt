@@ -1,0 +1,61 @@
+---------------------------------------------------------------------------------------------------
+-- Override the default URLs
+-- https://weblog.west-wind.com/posts/2016/sep/28/external-network-access-to-kestrel-and-iis-express-in-aspnet-core#override-the-default-urls
+---------------------------------------------------------------------------------------------------
+
+In order to expose Kestrel externally you either have to bind to a specific machine name, 
+IP Address or 0.0.0.0 which stands for all IP Addresses (thanks to @DamianEdwards and @BradyMHolt for their help).
+
+ASP.NET Core allows overriding the startup URLs as part of the startup process for the Web host 
+and there are a number of ways that you can do this:
+
+    Set the –urls command line parameter
+    Use WebHost.UseUrls()
+    Set up hosting.json
+
+You can override the start this via the launch command line:
+
+dotnet run --urls http://0.0.0.0:5000
+
+---------------------------------------------------------------------------------------------------
+-- KestrelServerOptions.Listen()
+-- https://andrewlock.net/5-ways-to-set-the-urls-for-an-aspnetcore-app/
+---------------------------------------------------------------------------------------------------
+
+Kestrel is configured by default in almost all ASP.NET Core apps. 
+If you wish, you can configure the endpoints for Kestrel manually, or via configuring KestrelServerOptions 
+using the IConfiguration system.
+
+I've never found myself actually needing to do this, and there's a lot of configuration options available, 
+so for the most part I suggest referring to the documentation. 
+As an example, you can use the Listen() functions exposed by KestrelServerOptions:
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        CreateHostBuilder(args).Build().Run();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+                webBuilder.UseKestrel(opts =>
+                {
+                    // Bind directly to a socket handle or Unix socket
+                    // opts.ListenHandle(123554);
+                    // opts.ListenUnixSocket("/tmp/kestrel-test.sock");
+                    opts.Listen(IPAddress.Loopback, port: 5002);
+                    opts.ListenAnyIP(5003);
+                    opts.ListenLocalhost(5004, opts => opts.UseHttps());
+                    opts.ListenLocalhost(5005, opts => opts.UseHttps());
+                });
+
+            });
+}
+
+This configuration sets Kestrel listening on multiple addresses. It's hard-coded in the example above, 
+but it doesn't have to be — you can bind to an IConfiguration instead. When you set the URLs for kestrel in this way, 
+it overrides the URLS configuration value if you've set it through one of the other mechanisms as well, such as environment variables.
