@@ -15,21 +15,18 @@
 			return request.GetEncodedUrl();
 		}
 
-		public static Uri CombineUri(string basePath, string relativePath)
+		public static Uri CombineUri(string basePath, object relativePath)
 		{
 			// Putting slash in the end if missing...
 			string path = basePath.EndsWith("/") ? basePath : $"{basePath}/";
-			Uri baseUri = new Uri(path);
 
-			// ... because if the path do not ends with slash,
-			// combine constructor will trim the last segment.
-			return new Uri(baseUri, relativePath);
+			return new Uri($"{path}{relativePath}");
 		}
 
-		public static Uri CombineRequestPath(HttpRequest request, string relativePath)
+		public static Uri CombineRequestPath(HttpRequest request, object relativePath)
 		{
 			var requestPath = GetHttpRequestPath(request);
-			Uri uri = CombineUri(requestPath, relativePath);
+			Uri uri = CombineUri(requestPath, relativePath.ToString());
 
 			return uri;
 		}
