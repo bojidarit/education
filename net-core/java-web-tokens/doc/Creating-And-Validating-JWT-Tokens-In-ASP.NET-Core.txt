@@ -1,0 +1,5 @@
+Creating And Validating JWT Tokens In ASP.NET Core
+January 15, 2020 by Wade
+
+https://dotnetcoretutorials.com/2020/01/15/creating-and-validating-jwt-tokens-in-asp-net-core/
+
