@@ -4,9 +4,16 @@ namespace SQLiteDapperApi.Dtos
 {
 	public class ProductDto
 	{
+		#region Properties
+
 		public string Name { get; set; }
 
 		public string Description { get; set; }
+
+		#endregion
+
+
+		#region Methods
 
 		public override string ToString() => $"{{Name='{Name}', Description='{Description}'}}";
 
@@ -18,5 +25,7 @@ namespace SQLiteDapperApi.Dtos
 
 			return dto;
 		}
+
+		#endregion
 	}
 }

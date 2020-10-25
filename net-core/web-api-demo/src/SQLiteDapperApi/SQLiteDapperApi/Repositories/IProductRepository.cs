@@ -12,6 +12,10 @@
 
 		Task<ProductModel> GetByName(string name);
 
-		Task Delete(int rowId);
+		Task<ProductModel> GetById(int id);
+
+		Task<int> Delete(int rowId);
+
+		Task<int> Update(int rowId, string name, string desc);
 	}
 }
