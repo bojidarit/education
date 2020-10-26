@@ -1,0 +1,86 @@
+﻿<Window x:Class="JwtDemo.Interface.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		Title="MainWindow"
+		Height="300"
+		Width="650"
+		WindowStartupLocation="CenterScreen">
+
+	<Window.Resources>
+		<Style TargetType="TextBox">
+			<Setter Property="TextWrapping"
+					Value="Wrap" />
+			<Setter Property="AcceptsReturn"
+					Value="True" />
+			<Setter Property="HorizontalAlignment"
+					Value="Stretch" />
+			<Setter Property="VerticalAlignment"
+					Value="Stretch" />
+		</Style>
+	</Window.Resources>
+
+	<Grid Margin="5">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="0" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid Grid.Column="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="0" />
+				<RowDefinition Height="2*" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<TextBox Grid.Row="1"
+					 x:Name="txtJwtEnc"
+					 PreviewKeyUp="TextBoxJwtEnc_PreviewKeyUp"
+					 TextChanged="TextBoxJwtEnc_TextChanged" />
+
+			<TextBox Grid.Row="3"
+					 Foreground="Red"
+					 x:Name="txtHeaderEnc" />
+
+			<TextBox Grid.Row="5"
+					 Foreground="Magenta"
+					 x:Name="txtPayloadEnc" />
+
+			<TextBox Grid.Row="7"
+					 Foreground="Cyan"
+					 x:Name="txtSignatureEnc" />
+
+		</Grid>
+
+
+		<Grid Grid.Column="3">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="0" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<TextBox Grid.Row="1"
+					 Foreground="Red"
+					 x:Name="txtHeaderDec" />
+
+			<TextBox Grid.Row="3"
+					 Foreground="Magenta"
+					 x:Name="txtPayloadDec" />
+
+			<TextBox Grid.Row="5"
+					 Foreground="Cyan"
+					 x:Name="txtSignatureDec" />
+
+		</Grid>
+	</Grid>
+</Window>

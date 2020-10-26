@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtDemo", "JwtDemo\JwtDemo.csproj", "{5B199F30-F150-407D-8869-28E728594D0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtDemo", "JwtDemo\JwtDemo.csproj", "{5B199F30-F150-407D-8869-28E728594D0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtLib", "JwtLib\JwtLib.csproj", "{32C63587-0ED2-4932-9061-157B09B8CA69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtLib", "JwtLib\JwtLib.csproj", "{32C63587-0ED2-4932-9061-157B09B8CA69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtDemo.Interface", "JwtDemo.Interface\JwtDemo.Interface.csproj", "{9E20BA24-F4CD-4F59-A483-CD7D8D8CF046}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{32C63587-0ED2-4932-9061-157B09B8CA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32C63587-0ED2-4932-9061-157B09B8CA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32C63587-0ED2-4932-9061-157B09B8CA69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E20BA24-F4CD-4F59-A483-CD7D8D8CF046}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E20BA24-F4CD-4F59-A483-CD7D8D8CF046}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E20BA24-F4CD-4F59-A483-CD7D8D8CF046}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E20BA24-F4CD-4F59-A483-CD7D8D8CF046}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
