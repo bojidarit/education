@@ -1,0 +1,45 @@
+influxdata / influxdb-client-csharp 
+https://github.com/influxdata/influxdb-client-csharp
+
+Note: Use this client library with InfluxDB 2.x and InfluxDB 1.8+ (see details). 
+For connecting to InfluxDB 1.7 or earlier instances, use the influxdb-csharp client library.
+
+Features
+
+    Supports querying using the Flux language over the InfluxDB 1.7+ REST API (/api/v2/query endpoint)
+    InfluxDB 2.0 client
+        Querying data using the Flux language
+        Writing data using
+            Line Protocol
+            Data Point
+            POCO
+        InfluxDB 2.0 Management API client for managing
+            sources, buckets
+            tasks
+            authorizations
+
+            health check
+            ...
+
+Documentation
+
+The C# clients are implemented for the InfluxDB 2.0 and InfluxDB 1.7+:
+
+1. Client: The reference C# client that allows query, write and InfluxDB 2.0 management.
+2. Client.Legacy: The reference C# client that allows you to perform Flux queries against InfluxDB 1.7+.
+
+How To Use
+
+This clients are a work in progress and hosted in Bonitoo.io Nuget Repository.
+
+If you want to use it with a .Net CLI or Package Manager, you have to specify source of packages. See examples below.
+Writes and Queries in InfluxDB 2.0
+
+The following example demonstrates how to write data to InfluxDB 2.0 and read them back using the Flux language:
+Installation
+
+Use the latest version: .Net CLI
+dotnet add package Influx
+
+Or when using Package Manager
+Install-Package InfluxDB.Client
