@@ -21,6 +21,7 @@
 			if (args.Length < 2)
 			{
 				Console.WriteLine($"Must supply atleast two parameters.{Environment.NewLine}{help}");
+				return;
 			}
 
 			string username = args[0];
