@@ -12,7 +12,7 @@
 	public partial class MainWindow : Window
 	{
 		private bool useCloud = false;
-		private string dbType;
+		private DbType dbType;
 
 		public MainWindow()
 		{
@@ -39,33 +39,8 @@
 			panelMain.IsEnabled = false;
 			try
 			{
-				var result = await Influx.GetHealth(useCloud);
-				MessageBox.Show(AddTypeInfo(result.ToJson(), result), dbType);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, ex.GetType().Name);
-			}
-			finally
-			{
-				panelMain.IsEnabled = true;
-			}
-		}
-
-		private async void ReadyButton_Click(object sender, RoutedEventArgs e)
-		{
-			panelMain.IsEnabled = false;
-			try
-			{
-				var result = await Influx.GetReady(useCloud);
-				if (result == null)
-				{
-					MessageBox.Show("No data.", dbType);
-				}
-				else
-				{
-					MessageBox.Show(AddTypeInfo(result.ToJson(), result), dbType);
-				}
+				var result = await Influx.GetHealthAsync(useCloud);
+				MessageBox.Show(AddTypeInfo(result.ToJson(), result), dbType.ToString());
 			}
 			catch (Exception ex)
 			{
@@ -79,9 +54,42 @@
 
 		private void ComboDbType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			var cbItem = comboDbType.SelectedItem as ComboBoxItem;
-			dbType = cbItem?.Content?.ToString();
-			useCloud = (comboDbType.SelectedIndex == 1);
+			dbType = (DbType)comboDbType.SelectedIndex;
+			useCloud = (comboDbType.SelectedIndex == (int)DbType.Cloud);
+
+			if (buttonLegacyPing != null)
+			{
+				buttonLegacyPing.Visibility = useCloud ? Visibility.Collapsed : Visibility.Visible;
+			}
+		}
+
+		private void ShowSchemaButton_Click(object sender, RoutedEventArgs e)
+		{
+			SchemaDlg.Create(dbType).ShowDialog();
+		}
+
+		private async void PingButton_Click(object sender, RoutedEventArgs e)
+		{
+			if(useCloud)
+			{
+				MessageBox.Show("Use only for OSS.", "Not Supported");
+				return;
+			}
+
+			panelMain.IsEnabled = false;
+			try
+			{
+				var result = await FluxLegacy.PingAsync();
+				MessageBox.Show(AddTypeInfo(result, result), dbType.ToString());
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.GetType().Name);
+			}
+			finally
+			{
+				panelMain.IsEnabled = true;
+			}
 		}
 
 		#endregion

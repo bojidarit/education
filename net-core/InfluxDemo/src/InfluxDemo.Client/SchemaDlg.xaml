@@ -1,0 +1,10 @@
+﻿<local:DlgBase x:Class="InfluxDemo.Client.SchemaDlg"
+			   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			   xmlns:local="clr-namespace:InfluxDemo.Client"
+			   Height="450"
+			   Width="800">
+	<Grid>
+
+	</Grid>
+</local:DlgBase>
