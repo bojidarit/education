@@ -4,7 +4,7 @@
 			   xmlns:local="clr-namespace:InfluxDemo.Client"
 			   Height="450"
 			   Width="800">
-	<Grid>
+	<Grid x:Name="gridMain">
 
 	</Grid>
 </local:DlgBase>

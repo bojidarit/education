@@ -14,7 +14,7 @@
 		{
 			var client = CreateFluxClient();
 
-			if(client == null)
+			if (client == null)
 			{
 				return null;
 			}
@@ -31,9 +31,15 @@
 
 		#region Helpers
 
-		private static FluxClient CreateFluxClient()
+		private static FluxClient CreateFluxClient(bool useAuthentication = false)
 		{
-			var options = new FluxConnectionOptions(ConfData.OssUrl);
+			var options = useAuthentication
+				? new FluxConnectionOptions(
+					ConfData.OssUrl,
+					ConfData.OssUsername,
+					ConfData.OssPassword,
+					FluxConnectionOptions.AuthenticationType.BasicAuthentication)
+				: new FluxConnectionOptions(ConfData.OssUrl);
 
 			var fluxClient = FluxClientFactory.Create(options);
 

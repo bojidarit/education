@@ -7,6 +7,12 @@
 		public static string OssUrl =>
 			ConfigurationManager.AppSettings[nameof(OssUrl)];
 
+		public static string OssUsername =>
+			ConfigurationManager.AppSettings[nameof(OssUsername)];
+
+		public static char[] OssPassword =>
+			ConfigurationManager.AppSettings[nameof(OssPassword)].ToCharArray();
+
 		public static char[] OssToken =>
 			ConfigurationManager.AppSettings[nameof(OssToken)]?.ToCharArray();
 
