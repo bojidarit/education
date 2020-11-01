@@ -18,6 +18,9 @@
 		{
 			InitializeComponent();
 			KeyUp += this.MainWindow_KeyUp;
+
+			comboDbType.SelectedIndex = 0;
+			comboDbType.SelectionChanged += ComboDbType_SelectionChanged;
 		}
 
 		private string AddTypeInfo(string data, object obj) =>
@@ -57,10 +60,9 @@
 			dbType = (DbType)comboDbType.SelectedIndex;
 			useCloud = (comboDbType.SelectedIndex == (int)DbType.Cloud);
 
-			if (buttonLegacyPing != null)
-			{
-				buttonLegacyPing.Visibility = useCloud ? Visibility.Collapsed : Visibility.Visible;
-			}
+			var visibility = useCloud ? Visibility.Collapsed : Visibility.Visible;
+			buttonLegacyPing.Visibility = visibility;
+			buttonShowSchema.Visibility = visibility;
 		}
 
 		private void ShowSchemaButton_Click(object sender, RoutedEventArgs e)
@@ -70,7 +72,7 @@
 
 		private async void PingButton_Click(object sender, RoutedEventArgs e)
 		{
-			if(useCloud)
+			if (useCloud)
 			{
 				MessageBox.Show("Use only for OSS.", "Not Supported");
 				return;

@@ -11,6 +11,12 @@
 			<RowDefinition Height="5" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="5" />
@@ -53,5 +59,34 @@
 				 Grid.Column="7"
 				 x:Name="listFields"
 				 DisplayMemberPath="Field" />
+
+		<TextBlock Grid.Row="5"
+				   Grid.Column="1"
+				   Text="Sample Data" />
+		<TextBox Grid.Row="7"
+				 Grid.Column="1"
+				 Grid.ColumnSpan="7"
+				 x:Name="textBoxSampleData"
+				 TextWrapping="NoWrap"
+				 AcceptsReturn="True"
+				 VerticalScrollBarVisibility="Visible"
+				 HorizontalScrollBarVisibility="Visible"
+				 HorizontalAlignment="Stretch"
+				 VerticalAlignment="Stretch" />
+
+		<DockPanel Grid.Row="9"
+				   Grid.Column="1"
+				   Grid.ColumnSpan="7"
+				   LastChildFill="True">
+			<Button DockPanel.Dock="Left"
+					Content="Load Sample Data"
+					x:Name="buttonLoadSampleData"
+					Click="ButtonLoadSampleData_Click" />
+			<Button DockPanel.Dock="Right"
+					Content="Close"
+					x:Name="buttonClose"
+					Click="ButtonClose_Click" />
+			<TextBlock />
+		</DockPanel>
 	</Grid>
 </local:DlgBase>

@@ -1,6 +1,7 @@
 ﻿namespace InfluxDemo.Client.Database
 {
 	using InfluxDB.Client.Flux;
+	using System;
 	using System.Threading.Tasks;
 
 	// Using Client.Legacy
@@ -24,6 +25,18 @@
 
 			var result = $"{{\"ping\": {ping.ToString().ToLower()}, \"version\": \"{version}\"}}";
 			return result;
+		}
+
+		public static async Task<string> QueryRawAsync(string fluxQuery)
+		{
+			var client = CreateFluxClient();
+
+			if (client == null)
+			{
+				return null;
+			}
+
+			throw new NotImplementedException();
 		}
 
 		#endregion

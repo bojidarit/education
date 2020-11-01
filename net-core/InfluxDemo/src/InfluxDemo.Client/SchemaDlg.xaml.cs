@@ -76,6 +76,38 @@
 			await LoadMeasurementData(db, measurement);
 		}
 
+		private async void ButtonLoadSampleData_Click(object sender, RoutedEventArgs e)
+		{
+			var db = listDatabases.SelectedItem?.ToString();
+			var measurement = listMeasurements.SelectedItem?.ToString();
+
+			if (string.IsNullOrEmpty(db) || string.IsNullOrEmpty(measurement))
+			{
+				return;
+			}
+
+			gridMain.IsEnabled = false;
+			try
+			{
+				var result = await InfluxRest.QueryRawAsync(
+					$"SELECT * FROM {measurement} LIMIT 10", db);
+				textBoxSampleData.Text = result;
+			}
+			catch(Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.GetType().FullName);
+			}
+			finally
+			{
+				gridMain.IsEnabled = true;
+			}
+		}
+
+		private void ButtonClose_Click(object sender, RoutedEventArgs e)
+		{
+			Close();
+		}
+
 		#endregion
 
 

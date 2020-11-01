@@ -9,10 +9,10 @@
 	// Source: https://restsharp.dev/api/
 	public static class InfluxRest
 	{
-		public static async Task<string> QueryRawAsync(string query, string db = null)
+		public static async Task<string> QueryRawAsync(string query, string db = null, Epoch epoch = Epoch.None)
 		{
 			var client = CreateRestClient();
-			var response = await ExecuteQueryAsync(client, query, db);
+			var response = await ExecuteQueryAsync(client, query, db, epoch);
 			if (!response.IsSuccessful)
 			{
 				var content = string.IsNullOrEmpty(response.Content)
@@ -20,7 +20,7 @@
 					: $"{Environment.NewLine}*** Content: {response.Content}";
 				throw new Exception(
 					$"==> Response status: {response.StatusCode}{content}" +
-						$"{Environment.NewLine}*** Error: {response.ErrorMessage}", 
+						$"{Environment.NewLine}*** Error: {response.ErrorMessage}",
 					response.ErrorException);
 			}
 
@@ -40,16 +40,11 @@
 			return client;
 		}
 
-		private static async Task<IRestResponse> ExecuteQueryAsync(RestClient client, string query, string db = null)
-		{
-			RestRequest request = QueryGetRequest(query, db);
-			var response = await Task.Run(() => client.Execute(request));
-			//var response = await client.ExecuteAsync(request, callback);
-			
-			return response;
-		}
-
-		private static RestRequest QueryGetRequest(string query, string db = null)
+		private static async Task<IRestResponse> ExecuteQueryAsync(
+			RestClient client,
+			string query,
+			string db = null,
+			Epoch epoch = Epoch.None)
 		{
 			var restRequest = new RestRequest("query", Method.GET);
 			restRequest.AddParameter("q", query, ParameterType.QueryString);
@@ -59,15 +54,14 @@
 				restRequest.AddParameter("db", db, ParameterType.QueryString);
 			}
 
-			return restRequest;
-		}
+			if (epoch != Epoch.None)
+			{
+				restRequest.AddParameter("epoch", epoch.ToString().ToLower(), ParameterType.QueryString);
+			}
 
-		private static RestRequest QueryPostRequest(string body)
-		{
-			var restRequest = new RestRequest("query", Method.POST);
-			restRequest.AddParameter("application/json", body, ParameterType.RequestBody);
+			var response = await Task.Run(() => client.Execute(restRequest));
 
-			return restRequest;
+			return response;
 		}
 	}
 }

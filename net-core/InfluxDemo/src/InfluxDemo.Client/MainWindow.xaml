@@ -17,20 +17,18 @@
 
 	<StackPanel x:Name="panelMain"
 				Orientation="Vertical">
-		
+
 		<!--Database type-->
 		<DockPanel LastChildFill="True"
 				   Margin="5,5,5,0">
 			<TextBlock Text="DB Type"
 					   Margin="5" />
-			<ComboBox x:Name="comboDbType"
-					  SelectionChanged="ComboDbType_SelectionChanged"
-					  SelectedIndex="0">
+			<ComboBox x:Name="comboDbType">
 				<ComboBoxItem>OSS</ComboBoxItem>
 				<ComboBoxItem>Cloud</ComboBoxItem>
 			</ComboBox>
 		</DockPanel>
-		
+
 		<!--Functional buttons-->
 		<Button Content="Heath Check"
 				Click="HeathButton_Click" />
@@ -38,6 +36,7 @@
 				x:Name="buttonLegacyPing"
 				Click="PingButton_Click" />
 		<Button Content="Show Schema"
+				x:Name="buttonShowSchema"
 				Click="ShowSchemaButton_Click" />
 	</StackPanel>
 </Window>
