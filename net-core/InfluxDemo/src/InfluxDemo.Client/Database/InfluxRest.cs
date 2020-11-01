@@ -5,12 +5,14 @@
 	using System.Reflection;
 	using System.Threading.Tasks;
 
+	// RestSharp library used
+	// Source: https://restsharp.dev/api/
 	public static class InfluxRest
 	{
-		public static async Task<string> QueryRawAsync(string query)
+		public static async Task<string> QueryRawAsync(string query, string db = null)
 		{
 			var client = CreateRestClient();
-			var response = await ExecuteQueryAsync(client, query);
+			var response = await ExecuteQueryAsync(client, query, db);
 			if (!response.IsSuccessful)
 			{
 				var content = string.IsNullOrEmpty(response.Content)
@@ -38,19 +40,24 @@
 			return client;
 		}
 
-		private static async Task<IRestResponse> ExecuteQueryAsync(RestClient client, string query)
+		private static async Task<IRestResponse> ExecuteQueryAsync(RestClient client, string query, string db = null)
 		{
-			RestRequest request = QueryGetRequest(query);
+			RestRequest request = QueryGetRequest(query, db);
 			var response = await Task.Run(() => client.Execute(request));
 			//var response = await client.ExecuteAsync(request, callback);
 			
 			return response;
 		}
 
-		private static RestRequest QueryGetRequest(string query)
+		private static RestRequest QueryGetRequest(string query, string db = null)
 		{
 			var restRequest = new RestRequest("query", Method.GET);
 			restRequest.AddParameter("q", query, ParameterType.QueryString);
+
+			if (!string.IsNullOrEmpty(db))
+			{
+				restRequest.AddParameter("db", db, ParameterType.QueryString);
+			}
 
 			return restRequest;
 		}

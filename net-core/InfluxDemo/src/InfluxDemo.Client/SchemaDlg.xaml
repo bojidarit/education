@@ -5,6 +5,53 @@
 			   Height="450"
 			   Width="800">
 	<Grid x:Name="gridMain">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="5" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="1.2*" />
+			<ColumnDefinition Width="5" />
+		</Grid.ColumnDefinitions>
 
+		<TextBlock Grid.Row="1"
+				   Grid.Column="1"
+				   Text="Databases" />
+		<ListBox Grid.Row="3"
+				 Grid.Column="1"
+				 x:Name="listDatabases" />
+
+		<TextBlock Grid.Row="1"
+				   Grid.Column="3"
+				   Text="Measurements" />
+		<ListBox Grid.Row="3"
+				 Grid.Column="3"
+				 x:Name="listMeasurements" />
+
+		<TextBlock Grid.Row="1"
+				   Grid.Column="5"
+				   Text="Tags" />
+		<ListBox Grid.Row="3"
+				 Grid.Column="5"
+				 x:Name="listTags"
+				 DisplayMemberPath="Key" />
+
+		<TextBlock Grid.Row="1"
+				   Grid.Column="7"
+				   Text="Fields" />
+		<ListBox Grid.Row="3"
+				 Grid.Column="7"
+				 x:Name="listFields"
+				 DisplayMemberPath="Field" />
 	</Grid>
 </local:DlgBase>
