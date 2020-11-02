@@ -81,10 +81,12 @@
 			<Button DockPanel.Dock="Left"
 					Content="Load Sample Data"
 					x:Name="buttonLoadSampleData"
+					Style="{DynamicResource ButtonGeneral}"
 					Click="ButtonLoadSampleData_Click" />
 			<Button DockPanel.Dock="Right"
 					Content="Close"
 					x:Name="buttonClose"
+					Style="{DynamicResource ButtonGeneral}"
 					Click="ButtonClose_Click" />
 			<TextBlock />
 		</DockPanel>

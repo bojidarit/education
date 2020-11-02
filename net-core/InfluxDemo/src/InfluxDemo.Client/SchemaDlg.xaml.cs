@@ -13,6 +13,8 @@
 	/// </summary>
 	public partial class SchemaDlg : DlgBase
 	{
+		#region Fields and Constants
+
 		private const string SchemaMeasurements = "MEASUREMENTS";
 		private const string SchemaTagKeys = "TAG KEYS";
 		private const string SchemaFieldKeys = "FIELD KEYS";
@@ -22,6 +24,9 @@
 		private List<string> measurements;
 		private List<TagKeyItem> tagKeys;
 		private List<FieldKeyItem> fieldKeys;
+
+		#endregion
+
 
 		#region Constructor
 
@@ -144,12 +149,18 @@
 				await LoadFieldKeys(database, measurement);
 				await LoadTagKeys(database, measurement);
 			}
+			else
+			{
+				listFields.ItemsSource = null;
+				listTags.ItemsSource = null;
+			}
 		}
 
 		private async Task LoadTagKeys(string database, string measurement)
 		{
-			if (string.IsNullOrEmpty(database))
+			if (string.IsNullOrEmpty(database) || string.IsNullOrEmpty(measurement))
 			{
+				listTags.ItemsSource = null;
 				return;
 			}
 
@@ -171,8 +182,9 @@
 
 		private async Task LoadFieldKeys(string database, string measurement)
 		{
-			if (string.IsNullOrEmpty(database))
+			if (string.IsNullOrEmpty(database) || string.IsNullOrEmpty(measurement))
 			{
+				listFields.ItemsSource = null;
 				return;
 			}
 
