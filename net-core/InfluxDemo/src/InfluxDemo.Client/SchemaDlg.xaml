@@ -106,6 +106,16 @@
 					x:Name="buttonLoadSampleData"
 					Style="{DynamicResource ButtonGeneral}"
 					Click="ButtonLoadSampleData_Click" />
+			<Button DockPanel.Dock="Left"
+					Content="Get First"
+					x:Name="buttonGetFirst"
+					Style="{DynamicResource ButtonGeneral}"
+					Click="ButtonGetFirst_Click" />
+			<Button DockPanel.Dock="Left"
+					Content="Get Last"
+					x:Name="buttonGetLast"
+					Style="{DynamicResource ButtonGeneral}"
+					Click="ButtonGetLast_Click" />
 			<Button DockPanel.Dock="Right"
 					Content="Close"
 					x:Name="buttonClose"

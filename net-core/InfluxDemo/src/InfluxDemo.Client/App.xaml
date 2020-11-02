@@ -10,7 +10,7 @@
 			<Setter Property="Padding"
 					Value="3" />
 			<Setter Property="MinWidth"
-					Value="100" />
+					Value="70" />
 		</Style>
 	</Application.Resources>
 </Application>

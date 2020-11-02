@@ -83,64 +83,36 @@
 
 		private async void ButtonLoadSampleData_Click(object sender, RoutedEventArgs e)
 		{
-			var db = listDatabases.SelectedItem?.ToString();
-			var measurement = listMeasurements.SelectedItem?.ToString();
-
-			if (string.IsNullOrEmpty(db) || string.IsNullOrEmpty(measurement))
+			if (!GetQueryParameters(out var db, out var measurement))
 			{
 				return;
 			}
 
 			int limit = int.TryParse(textBoxLimit.Text, out var num) ? num : 10;
-			var result = await RunRawQuery($"SELECT * FROM {measurement} LIMIT {limit}", db);
-			textBoxSampleData.Text = result;
-
-			LoadDataGridFromCsv(result);
-
-			//using (TextReader textReader = new StringReader(result))
-			//{
-			//	using (var csvReader = new CsvReader(textReader, CultureInfo.InvariantCulture))
-			//	{
-			//		var records = csvReader.GetRecords()
-			//	}
-			//}
+			var csvResult = await RunRawQuery($"SELECT * FROM {measurement} LIMIT {limit}", db);
+			LoadSampleData(csvResult);
 		}
 
-		private void LoadDataGridFromCsv(string csv)
+		private async void ButtonGetFirst_Click(object sender, RoutedEventArgs e)
 		{
-			gridMain.IsEnabled = false;
-			try
+			if (!GetQueryParameters(out var db, out var measurement))
 			{
-				var dataTable = Helper.GetDataTabletFromCsvString(csv);
-				dataGridData.ItemsSource = dataTable.DefaultView;
+				return;
 			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, ex.GetType().FullName);
-			}
-			finally
-			{
-				gridMain.IsEnabled = true;
-			}
+
+			var csvResult = await RunRawQuery($"SELECT FIRST(*) FROM {measurement}", db);
+			LoadSampleData(csvResult);
 		}
 
-		private async Task<string> RunRawQuery(string query, string db)
+		private async void ButtonGetLast_Click(object sender, RoutedEventArgs e)
 		{
-			gridMain.IsEnabled = false;
-			try
+			if (!GetQueryParameters(out var db, out var measurement))
 			{
-				var result = await InfluxRest.QueryRawAsync(query, db);
-				return result;
+				return;
 			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, ex.GetType().FullName);
-			}
-			finally
-			{
-				gridMain.IsEnabled = true;
-			}
-			return null;
+
+			var csvResult = await RunRawQuery($"SELECT LAST(*) FROM {measurement}", db);
+			LoadSampleData(csvResult);
 		}
 
 		private void ButtonClose_Click(object sender, RoutedEventArgs e)
@@ -290,6 +262,62 @@
 			}
 
 			return null;
+		}
+
+		private void LoadDataGridFromCsv(string csv)
+		{
+			gridMain.IsEnabled = false;
+			try
+			{
+				var dataTable = Helper.GetDataTabletFromCsvString(csv);
+				dataGridData.ItemsSource = dataTable.DefaultView;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.GetType().FullName);
+			}
+			finally
+			{
+				gridMain.IsEnabled = true;
+			}
+		}
+
+		private async Task<string> RunRawQuery(string query, string db)
+		{
+			gridMain.IsEnabled = false;
+			try
+			{
+				var result = await InfluxRest.QueryRawAsync(query, db);
+				return result;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.GetType().FullName);
+			}
+			finally
+			{
+				gridMain.IsEnabled = true;
+			}
+			return null;
+		}
+
+		private void LoadSampleData(string csv)
+		{
+			textBoxSampleData.Text = csv;
+			LoadDataGridFromCsv(csv);
+		}
+
+		private bool GetQueryParameters(out string db, out string measurement)
+		{
+			db = listDatabases.SelectedItem?.ToString();
+			measurement = listMeasurements.SelectedItem?.ToString();
+
+			if (string.IsNullOrEmpty(db) || string.IsNullOrEmpty(measurement))
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		#endregion
