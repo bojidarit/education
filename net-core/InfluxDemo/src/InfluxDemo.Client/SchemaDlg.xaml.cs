@@ -89,7 +89,7 @@
 			}
 
 			int limit = int.TryParse(textBoxLimit.Text, out var num) ? num : 10;
-			var csvResult = await RunRawQuery($"SELECT * FROM {measurement} LIMIT {limit}", db);
+			var csvResult = await RunRawQuery($"SELECT * FROM \"{measurement}\" LIMIT {limit}", db);
 			LoadSampleData(csvResult);
 		}
 
@@ -100,7 +100,7 @@
 				return;
 			}
 
-			var csvResult = await RunRawQuery($"SELECT FIRST(*) FROM {measurement}", db);
+			var csvResult = await RunRawQuery($"SELECT FIRST(*) FROM \"{measurement}\"", db);
 			LoadSampleData(csvResult);
 		}
 
@@ -111,7 +111,18 @@
 				return;
 			}
 
-			var csvResult = await RunRawQuery($"SELECT LAST(*) FROM {measurement}", db);
+			var csvResult = await RunRawQuery($"SELECT LAST(*) FROM \"{measurement}\"", db);
+			LoadSampleData(csvResult);
+		}
+
+		private async void ButtonGetCount_Click(object sender, RoutedEventArgs e)
+		{
+			if (!GetQueryParameters(out var db, out var measurement))
+			{
+				return;
+			}
+
+			var csvResult = await RunRawQuery($"SELECT COUNT(*) FROM \"{measurement}\"", db);
 			LoadSampleData(csvResult);
 		}
 
@@ -171,7 +182,7 @@
 				return;
 			}
 
-			var query = $"SHOW {SchemaTagKeys} FROM {measurement}";
+			var query = $"SHOW {SchemaTagKeys} FROM \"{measurement}\"";
 			var csv = await ExecuteQueryAsync(query, database);
 
 			if (string.IsNullOrEmpty(csv))
@@ -195,7 +206,7 @@
 				return;
 			}
 
-			var query = $"SHOW {SchemaFieldKeys} FROM {measurement}";
+			var query = $"SHOW {SchemaFieldKeys} FROM \"{measurement}\"";
 			var csv = await ExecuteQueryAsync(query, database);
 
 			if (string.IsNullOrEmpty(csv))
@@ -244,7 +255,8 @@
 			var lines = Helper.SplitByLine(csv).Where(l => l.StartsWith(title));
 			var dbs = lines
 				.Select(l => func(l))
-				.Where(l => !string.IsNullOrEmpty(l) && !l.StartsWith("_"));
+				//.Where(l => !string.IsNullOrEmpty(l) && !l.StartsWith("_"));
+				.Where(l => !string.IsNullOrEmpty(l)); // Showing internal databases
 
 			return dbs.ToList();
 		}

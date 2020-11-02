@@ -116,6 +116,12 @@
 					x:Name="buttonGetLast"
 					Style="{DynamicResource ButtonGeneral}"
 					Click="ButtonGetLast_Click" />
+			<Button DockPanel.Dock="Left"
+					Content="Get Count"
+					x:Name="buttonGetCount"
+					Style="{DynamicResource ButtonGeneral}"
+					Click="ButtonGetCount_Click" />
+
 			<Button DockPanel.Dock="Right"
 					Content="Close"
 					x:Name="buttonClose"
