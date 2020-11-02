@@ -31,7 +31,7 @@
 		#region Constructor
 
 		public SchemaDlg(DbType dbType)
-			: base($"Show DB Schema from [{dbType}]", dbType)
+			: base($"Show DB Schema", dbType)
 		{
 			InitializeComponent();
 			Loaded += this.SchemaDlg_Loaded;
@@ -91,14 +91,30 @@
 				return;
 			}
 
+			int limit = int.TryParse(textBoxLimit.Text, out var num) ? num : 10;
+			var result = await RunRawQuery($"SELECT * FROM {measurement} LIMIT {limit}", db);
+			textBoxSampleData.Text = result;
+
+			LoadDataGridFromCsv(result);
+
+			//using (TextReader textReader = new StringReader(result))
+			//{
+			//	using (var csvReader = new CsvReader(textReader, CultureInfo.InvariantCulture))
+			//	{
+			//		var records = csvReader.GetRecords()
+			//	}
+			//}
+		}
+
+		private void LoadDataGridFromCsv(string csv)
+		{
 			gridMain.IsEnabled = false;
 			try
 			{
-				var result = await InfluxRest.QueryRawAsync(
-					$"SELECT * FROM {measurement} LIMIT 10", db);
-				textBoxSampleData.Text = result;
+				var dataTable = Helper.GetDataTabletFromCsvString(csv);
+				dataGridData.ItemsSource = dataTable.DefaultView;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message, ex.GetType().FullName);
 			}
@@ -106,6 +122,25 @@
 			{
 				gridMain.IsEnabled = true;
 			}
+		}
+
+		private async Task<string> RunRawQuery(string query, string db)
+		{
+			gridMain.IsEnabled = false;
+			try
+			{
+				var result = await InfluxRest.QueryRawAsync(query, db);
+				return result;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.GetType().FullName);
+			}
+			finally
+			{
+				gridMain.IsEnabled = true;
+			}
+			return null;
 		}
 
 		private void ButtonClose_Click(object sender, RoutedEventArgs e)
