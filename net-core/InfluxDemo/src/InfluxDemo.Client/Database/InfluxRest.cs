@@ -2,6 +2,8 @@
 {
 	using RestSharp;
 	using System;
+	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 	using System.Threading.Tasks;
 
@@ -13,19 +15,31 @@
 		{
 			var client = CreateRestClient();
 			var response = await ExecuteQueryAsync(client, query, db, epoch);
-			if (!response.IsSuccessful)
+			var content = response.Content;
+			var contentLength = content?.Length ?? -1;
+
+			if (response.IsSuccessful)
 			{
-				var content = string.IsNullOrEmpty(response.Content)
+				Debug.WriteLine($"<== Response status: {response.StatusCode}; " +
+					$"Content type: '{response.ContentType}'; Content Length: {contentLength}");
+			}
+			else
+			{
+				var contentStr = (contentLength <= 0)
 					? string.Empty
 					: $"{Environment.NewLine}*** Content: {response.Content}";
-				throw new Exception(
-					$"==> Response status: {response.StatusCode}{content}" +
-						$"{Environment.NewLine}*** Error: {response.ErrorMessage}",
-					response.ErrorException);
+				var error = $"<== Response status: {response.StatusCode}{contentStr}" +
+						$"{Environment.NewLine}*** Error: {response.ErrorMessage}";
+
+				Debug.WriteLine(error);
+
+				throw new Exception(error, response.ErrorException);
 			}
 
-			return response.Content;
+			return content;
 		}
+
+		#region Helpers
 
 		private static RestClient CreateRestClient(string accept = "application/csv")
 		{
@@ -36,6 +50,9 @@
 
 			var assemblyName = Assembly.GetCallingAssembly().GetName();
 			client.UserAgent = $"{assemblyName}/OSS";
+
+			var parameters = client.DefaultParameters.Select(p => $"[{p}]");
+			Debug.WriteLine($"==> Rest Client Default Parameters: {string.Join(", ", parameters)}");
 
 			return client;
 		}
@@ -59,9 +76,15 @@
 				restRequest.AddParameter("epoch", epoch.ToString().ToLower(), ParameterType.QueryString);
 			}
 
+			Debug.WriteLine($"==> Sending request to: {client.BaseUrl}");
+			var parameters = restRequest.Parameters.Select(p => $"[{p}]");
+			Debug.WriteLine($"==> Rest Request Parameters: {string.Join(", ", parameters)}");
+
 			var response = await Task.Run(() => client.Execute(restRequest));
 
 			return response;
 		}
+
+		#endregion
 	}
 }
