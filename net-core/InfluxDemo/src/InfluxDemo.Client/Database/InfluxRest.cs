@@ -2,16 +2,106 @@
 {
 	using RestSharp;
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
 	using System.Threading.Tasks;
+	using System.Windows;
 
 	// RestSharp library used
 	// Source: https://restsharp.dev/api/
 	public static class InfluxRest
 	{
-		public static async Task<string> QueryRawAsync(string query, string db = null, Epoch epoch = Epoch.None)
+		private const string SchemaMeasurements = "MEASUREMENTS";
+		private const string SchemaFieldKeys = "FIELD KEYS";
+		private const string SchemaTagKeys = "TAG KEYS";
+
+		#region Schema Methods
+
+		public static async Task<List<string>> GetDatabases()
+		{
+			var csv = await GetRawAsync("SHOW DATABASES");
+			if (string.IsNullOrEmpty(csv))
+			{
+				return null;
+			}
+
+			return Helper.CsvGetLastColumn(csv);
+		}
+
+		public static async Task<List<string>> GetMeasurements(string database)
+		{
+			var csv = await GetRawAsync($"SHOW {SchemaMeasurements}", database);
+			if (string.IsNullOrEmpty(csv))
+			{
+				return null;
+			}
+
+			return Helper.CsvGetLastColumn(csv);
+		}
+
+		public static async Task<List<TagKeyItem>> GetTagKeys(string db, string measure)
+		{
+			var csv = await GetRawAsync($"SHOW {SchemaTagKeys} FROM \"{measure}\"", db);
+			if (string.IsNullOrEmpty(csv))
+			{
+				return null;
+			}
+
+			var helper = new { tagKey = string.Empty };
+			var list = Helper.MapToAnonymousCsv(csv, helper);
+
+			var result = list.Select(i => new TagKeyItem
+			{
+				Measurement = measure,
+				Key = i.tagKey
+			}).ToList();
+
+			return result;
+		}
+
+		public static async Task<List<FieldKeyItem>> GetFieldKeys(string db, string measure)
+		{
+			var csv = await GetRawAsync($"SHOW {SchemaFieldKeys} FROM \"{measure}\"", db);
+			if (string.IsNullOrEmpty(csv))
+			{
+				return null;
+			}
+
+			var helper = new
+			{
+				name = string.Empty,
+				fieldKey = string.Empty,
+				fieldType = string.Empty,
+			};
+			var list = Helper.MapToAnonymousCsv(csv, helper);
+			var fieldKeys = list.Select(i => new FieldKeyItem(i.name, i.fieldKey, i.fieldType)).ToList();
+
+			return fieldKeys;
+		}
+
+		public static async Task<string> GetRawAsync(string query, string db = null)
+		{
+			try
+			{
+				var content = await QueryRawAsync(query, db);
+				return content;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, query);
+			}
+
+			return null;
+		}
+
+		#endregion
+
+
+		#region Helpers
+
+		private static async Task<string> QueryRawAsync(string query, string db = null, Epoch epoch = Epoch.S)
 		{
 			var client = CreateRestClient();
 			var response = await ExecuteQueryAsync(client, query, db, epoch);
@@ -38,8 +128,6 @@
 
 			return content;
 		}
-
-		#region Helpers
 
 		private static RestClient CreateRestClient(string accept = "application/csv")
 		{

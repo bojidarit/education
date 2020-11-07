@@ -4,6 +4,17 @@
 
 	public class FieldKeyItem
 	{
+		public FieldKeyItem()
+		{
+		}
+
+		public FieldKeyItem(string measure, string key, string type)
+		{
+			Measurement = measure;
+			Key = key;
+			Type = type;
+		}
+
 		public string Measurement { get; set; }
 
 		public string Key { get; set; }

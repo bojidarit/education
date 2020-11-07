@@ -121,6 +121,11 @@
 					x:Name="buttonGetCount"
 					Style="{DynamicResource ButtonGeneral}"
 					Click="ButtonGetCount_Click" />
+			<Button DockPanel.Dock="Left"
+					Content="Load CsvHelper"
+					x:Name="buttonLoadCsvHelper"
+					Style="{DynamicResource ButtonGeneral}"
+					Click="ButtonLoadCsvHelper_Click" />
 
 			<Button DockPanel.Dock="Right"
 					Content="Close"

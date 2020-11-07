@@ -15,12 +15,7 @@
 	{
 		#region Fields and Constants
 
-		private const string SchemaMeasurements = "MEASUREMENTS";
-		private const string SchemaTagKeys = "TAG KEYS";
-		private const string SchemaFieldKeys = "FIELD KEYS";
-
 		private DbType dbType;
-		private List<string> databases;
 		private List<string> measurements;
 		private List<TagKeyItem> tagKeys;
 		private List<FieldKeyItem> fieldKeys;
@@ -47,7 +42,13 @@
 
 		private async void SchemaDlg_Loaded(object sender, RoutedEventArgs e)
 		{
-			await LoadDatabases();
+			var databases = await InfluxRest.GetDatabases();
+			if (databases == null)
+			{
+				return;
+			}
+
+			listDatabases.ItemsSource = databases;
 			var db = databases.FirstOrDefault();
 			listDatabases.SelectedItem = db;
 
@@ -131,6 +132,11 @@
 			Close();
 		}
 
+		private void ButtonLoadCsvHelper_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
 		#endregion
 
 
@@ -138,13 +144,12 @@
 
 		private async Task LoadDatabases()
 		{
-			var query = "SHOW DATABASES";
-			var csv = await ExecuteQueryAsync(query);
-			databases = string.IsNullOrEmpty(csv)
-				? new List<string>()
-				: ExtractDataList(csv, nameof(databases));
+			//var query = "SHOW DATABASES";
+			//var csv = await InfluxRest.GetRawAsync(query);
+			//databases = string.IsNullOrEmpty(csv)
+			//	? new List<string>()
+			//	: ExtractDataList(csv, nameof(databases));
 
-			listDatabases.ItemsSource = databases;
 		}
 
 		private async Task LoadDatabaseSchema(string database)
@@ -182,19 +187,7 @@
 				return;
 			}
 
-			var query = $"SHOW {SchemaTagKeys} FROM \"{measurement}\"";
-			var csv = await ExecuteQueryAsync(query, database);
-
-			if (string.IsNullOrEmpty(csv))
-			{
-				tagKeys = new List<TagKeyItem>();
-			}
-			else
-			{
-				var csvLines = Helper.SplitByLine(csv).Skip(1);
-				tagKeys = csvLines.Select(l => TagKeyItem.Create(l)).ToList();
-			}
-
+			tagKeys = await InfluxRest.GetTagKeys(database, measurement);
 			listTags.ItemsSource = tagKeys;
 		}
 
@@ -206,19 +199,7 @@
 				return;
 			}
 
-			var query = $"SHOW {SchemaFieldKeys} FROM \"{measurement}\"";
-			var csv = await ExecuteQueryAsync(query, database);
-
-			if (string.IsNullOrEmpty(csv))
-			{
-				fieldKeys = new List<FieldKeyItem>();
-			}
-			else
-			{
-				var csvLines = Helper.SplitByLine(csv).Skip(1);
-				fieldKeys = csvLines.Select(l => FieldKeyItem.Create(l)).ToList();
-			}
-
+			fieldKeys = await InfluxRest.GetFieldKeys(database, measurement);
 			listFields.ItemsSource = fieldKeys;
 		}
 
@@ -229,51 +210,8 @@
 				return;
 			}
 
-			var query = $"SHOW {SchemaMeasurements}";
-			var csv = await ExecuteQueryAsync(query, database);
-			measurements = string.IsNullOrEmpty(csv)
-				? new List<string>()
-				: ExtractDataList(csv, nameof(measurements));
-
+			measurements = await InfluxRest.GetMeasurements(database);
 			listMeasurements.ItemsSource = measurements;
-		}
-
-		private List<string> ExtractDataList(string csv, string title)
-		{
-			Func<string, string> func = (line) =>
-			{
-				var data = string.Empty;
-				var idx = line.LastIndexOf(",");
-				if (idx >= 0)
-				{
-					data = line.Substring(idx + 1);
-				}
-
-				return data;
-			};
-
-			var lines = Helper.SplitByLine(csv).Where(l => l.StartsWith(title));
-			var dbs = lines
-				.Select(l => func(l))
-				//.Where(l => !string.IsNullOrEmpty(l) && !l.StartsWith("_"));
-				.Where(l => !string.IsNullOrEmpty(l)); // Showing internal databases
-
-			return dbs.ToList();
-		}
-
-		private async Task<string> ExecuteQueryAsync(string query, string db = null)
-		{
-			try
-			{
-				var content = await InfluxRest.QueryRawAsync(query, db);
-				return content;
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, query);
-			}
-
-			return null;
 		}
 
 		private void LoadDataGridFromCsv(string csv)
@@ -299,7 +237,7 @@
 			gridMain.IsEnabled = false;
 			try
 			{
-				var result = await InfluxRest.QueryRawAsync(query, db);
+				var result = await InfluxRest.GetRawAsync(query, db);
 				return result;
 			}
 			catch (Exception ex)

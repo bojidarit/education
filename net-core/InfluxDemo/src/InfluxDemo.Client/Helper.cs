@@ -1,9 +1,11 @@
 ﻿namespace InfluxDemo.Client
 {
+	using CsvHelper;
 	using Microsoft.VisualBasic.FileIO;
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 
@@ -62,6 +64,43 @@
 				}
 			}
 			return csvData;
+		}
+
+		public static List<string> CsvGetLastColumn(string csv)
+		{
+			if (string.IsNullOrEmpty(csv))
+			{
+				return null;
+			}
+
+			var result = new List<string>();
+
+			var list = SplitByLine(csv).Skip(1);
+			foreach (var item in list)
+			{
+				var arr = item.Split(',');
+				if (arr != null && arr.Length > 0)
+				{
+					result.Add(arr.Last());
+				}
+			}
+
+			return result;
+		}
+
+		public static IEnumerable<T> MapCsv<T>(string text)
+		{
+			using var reader = new StringReader(text);
+			using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+			return csv.GetRecords<T>();
+		}
+
+		public static List<T> MapToAnonymousCsv<T>(string text, T typeHelper)
+		{
+			using var reader = new StringReader(text);
+			using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+			var result = csv.GetRecords(typeHelper);
+			return result.ToList();
 		}
 	}
 }
