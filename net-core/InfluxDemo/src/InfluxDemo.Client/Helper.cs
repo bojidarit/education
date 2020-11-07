@@ -92,7 +92,7 @@
 		{
 			using var reader = new StringReader(text);
 			using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-			return csv.GetRecords<T>();
+			return csv.GetRecords<T>().ToList();
 		}
 
 		public static List<T> MapToAnonymousCsv<T>(string text, T typeHelper)
