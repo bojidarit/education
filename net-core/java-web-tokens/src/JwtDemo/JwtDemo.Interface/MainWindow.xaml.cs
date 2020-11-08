@@ -1,7 +1,9 @@
 ﻿namespace JwtDemo.Interface
 {
+	using JwtLib;
 	using Newtonsoft.Json;
 	using System;
+	using System.IdentityModel.Tokens.Jwt;
 	using System.Text;
 	using System.Windows;
 	using System.Windows.Controls;
@@ -23,7 +25,7 @@
 
 		private void MainWindow_KeyUp(object sender, KeyEventArgs e)
 		{
-			if(e.Key == Key.Escape)
+			if (e.Key == Key.Escape)
 			{
 				Application.Current.Shutdown();
 			}
@@ -49,10 +51,61 @@
 		private void TranslateJwt(TextBox textBox)
 		{
 			var jwt = textBox?.Text;
-			SetData(jwt);
+
+			SplitToken(jwt);
+
 		}
 
-		private void SetData(string jwtEnc)
+
+		public bool SplitToken(string token)
+		{
+			txtHeaderEnc.Text = string.Empty;
+			txtPayloadEnc.Text = string.Empty;
+			txtSignatureEnc.Text = string.Empty;
+
+			txtHeaderDec.Text = string.Empty;
+			txtPayloadDec.Text = string.Empty;
+			txtSignatureDec.Text = string.Empty;
+
+			JwtSecurityToken jwt = null;
+			try
+			{
+				jwt = Analyze.CreateSecurityToken(token);
+				if (jwt == null)
+				{
+					return false;
+				}
+			}
+			catch(Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.GetType().FullName);
+				return false;
+			}
+
+			txtHeaderEnc.Text = jwt.EncodedHeader;
+			txtPayloadEnc.Text = jwt.EncodedPayload;
+			txtSignatureEnc.Text = jwt.RawSignature;
+
+			var arr = jwt.ToString().Split('.');
+			if (arr == null)
+			{
+				return false;
+			}
+
+			if (arr.Length >= 1)
+			{
+				txtHeaderDec.Text = Helper.BeautifyJson(arr[0]);
+			}
+
+			if (arr.Length >= 2)
+			{
+				txtPayloadDec.Text = Helper.BeautifyJson(arr[1]);
+			}
+
+			return true;
+		}
+
+		private void DecodeData(string jwtEnc)
 		{
 			txtHeaderEnc.Text = string.Empty;
 			txtPayloadEnc.Text = string.Empty;
@@ -95,7 +148,7 @@
 				var json = JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
 				return json;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				return $"{ex.GetType().FullName}{Environment.NewLine}{ex.Message}";
 			}
