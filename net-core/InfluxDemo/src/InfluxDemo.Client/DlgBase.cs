@@ -6,7 +6,7 @@
 
 	public class DlgBase : Window
 	{
-		public DlgBase(string title, DbType dbType)
+		public DlgBase(string title, InfluxDbType dbType)
 			: base()
 		{
 			WindowStartupLocation = WindowStartupLocation.CenterScreen;

@@ -12,7 +12,7 @@
 	public partial class MainWindow : Window
 	{
 		private bool useCloud = false;
-		private DbType dbType;
+		private InfluxDbType dbType;
 
 		public MainWindow()
 		{
@@ -57,8 +57,8 @@
 
 		private void ComboDbType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			dbType = (DbType)comboDbType.SelectedIndex;
-			useCloud = (comboDbType.SelectedIndex == (int)DbType.Cloud);
+			dbType = (InfluxDbType)comboDbType.SelectedIndex;
+			useCloud = (comboDbType.SelectedIndex == (int)InfluxDbType.Cloud);
 
 			var visibility = useCloud ? Visibility.Collapsed : Visibility.Visible;
 			buttonLegacyPing.Visibility = visibility;

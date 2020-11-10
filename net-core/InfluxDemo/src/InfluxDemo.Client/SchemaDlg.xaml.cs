@@ -3,6 +3,7 @@
 	using InfluxDemo.Client.Database;
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows;
@@ -15,7 +16,7 @@
 	{
 		#region Fields and Constants
 
-		private DbType dbType;
+		private InfluxDbType dbType;
 		private List<string> measurements;
 		private List<TagKeyItem> tagKeys;
 		private List<FieldKeyItem> fieldKeys;
@@ -25,7 +26,7 @@
 
 		#region Constructor
 
-		public SchemaDlg(DbType dbType)
+		public SchemaDlg(InfluxDbType dbType)
 			: base($"Show DB Schema", dbType)
 		{
 			InitializeComponent();
@@ -33,7 +34,7 @@
 			this.dbType = dbType;
 		}
 
-		public static SchemaDlg Create(DbType dbType) => new SchemaDlg(dbType);
+		public static SchemaDlg Create(InfluxDbType dbType) => new SchemaDlg(dbType);
 
 		#endregion
 
@@ -130,11 +131,6 @@
 		private void ButtonClose_Click(object sender, RoutedEventArgs e)
 		{
 			Close();
-		}
-
-		private void ButtonLoadCsvHelper_Click(object sender, RoutedEventArgs e)
-		{
-
 		}
 
 		private async void ButtonDeleteAllPoints_Click(object sender, RoutedEventArgs e)
@@ -234,6 +230,23 @@
 			try
 			{
 				var dataTable = Helper.GetDataTabletFromCsvString(csv);
+
+				var indexColumn = "idx_col";
+				dataTable.Columns.Add(indexColumn, typeof(long));
+				var timeString = "dt_col";
+				dataTable.Columns.Add(timeString, typeof(string));
+
+				var index = 1L;
+				foreach (var row in dataTable.AsEnumerable())
+				{
+					row[indexColumn] = index++;
+					if (long.TryParse(row["time"].ToString(), out var time))
+					{
+						var datetime = DateTimeOffset.FromUnixTimeSeconds(time).DateTime;
+						row[timeString] = datetime.ToString(Helper.TimeFormatSeconds);
+					}
+				}
+
 				dataGridData.ItemsSource = dataTable.DefaultView;
 			}
 			catch (Exception ex)

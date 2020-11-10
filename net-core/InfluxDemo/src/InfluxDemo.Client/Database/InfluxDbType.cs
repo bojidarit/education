@@ -1,6 +1,6 @@
 ﻿namespace InfluxDemo.Client.Database
 {
-	public enum DbType
+	public enum InfluxDbType
 	{
 		OSS = 0,
 		Cloud = 1,

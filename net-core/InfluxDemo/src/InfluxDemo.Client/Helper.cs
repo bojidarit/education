@@ -11,6 +11,8 @@
 
 	public static class Helper
 	{
+		public static readonly string TimeFormatSeconds = "yyyy-MM-ddTHH:mm:ssK";
+
 		public static List<string> SplitByLine(string lines)
 		{
 			if (string.IsNullOrEmpty(lines))
