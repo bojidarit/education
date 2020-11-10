@@ -96,6 +96,31 @@
 			return null;
 		}
 
+		public static async Task<bool> ExecuteAsync(string query, string db)
+		{
+			var client = CreateRestClient();
+			var response = await ExecuteQueryAsync(client, query, db);
+			if (response == null)
+			{
+				return false;
+			}
+
+			if (response.IsSuccessful)
+			{
+				Debug.WriteLine($"<== Response status: {response.StatusCode}; ");
+				return true;
+			}
+			else
+			{
+				var error = $"<== Response status: {response.StatusCode}" +
+						$"{Environment.NewLine}*** Error: {response.ErrorMessage}";
+
+				Debug.WriteLine(error);
+
+				throw new Exception(error, response.ErrorException);
+			}
+		}
+
 		#endregion
 
 

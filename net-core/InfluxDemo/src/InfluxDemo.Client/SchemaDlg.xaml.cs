@@ -137,20 +137,34 @@
 
 		}
 
+		private async void ButtonDeleteAllPoints_Click(object sender, RoutedEventArgs e)
+		{
+			if (!GetQueryParameters(out var db, out var measurement))
+			{
+				return;
+			}
+
+			var measureName = $"{db}..{measurement}";
+			var result = MessageBox.Show(
+				$"Do you really want to delete All Points from measurement [{measureName}]?",
+				"Please confirm",
+				MessageBoxButton.YesNo,
+				MessageBoxImage.Question) == MessageBoxResult.Yes;
+			if (!result)
+			{
+				return;
+			}
+
+			if (await ExecuteQueryAsync($"DELETE FROM {measurement}", db))
+			{
+				MessageBox.Show("Delete operation is successfull.", "Completed");
+			}
+		}
+
 		#endregion
 
 
 		#region Helpers
-
-		private async Task LoadDatabases()
-		{
-			//var query = "SHOW DATABASES";
-			//var csv = await InfluxRest.GetRawAsync(query);
-			//databases = string.IsNullOrEmpty(csv)
-			//	? new List<string>()
-			//	: ExtractDataList(csv, nameof(databases));
-
-		}
 
 		private async Task LoadDatabaseSchema(string database)
 		{
@@ -249,6 +263,25 @@
 				gridMain.IsEnabled = true;
 			}
 			return null;
+		}
+
+		private async Task<bool> ExecuteQueryAsync(string query, string db)
+		{
+			gridMain.IsEnabled = false;
+			try
+			{
+				var result = await InfluxRest.ExecuteAsync(query, db);
+				return result;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.GetType().FullName);
+			}
+			finally
+			{
+				gridMain.IsEnabled = true;
+			}
+			return false;
 		}
 
 		private void LoadSampleData(string csv)

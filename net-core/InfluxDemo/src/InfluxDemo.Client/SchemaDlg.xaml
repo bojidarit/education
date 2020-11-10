@@ -84,17 +84,17 @@
 				  CanUserAddRows="False"
 				  CanUserDeleteRows="False"
 				  IsReadOnly="True">
-			
+
 		</DataGrid>
-		
+
 		<DockPanel Grid.Row="11"
 				   Grid.Column="1"
 				   Grid.ColumnSpan="7"
 				   LastChildFill="True">
 			<TextBlock DockPanel.Dock="Left"
-					   Text="Limit" 
+					   Text="Limit"
 					   VerticalAlignment="Center"
-					   Margin="5"/>
+					   Margin="5" />
 			<TextBox DockPanel.Dock="Left"
 					 x:Name="textBoxLimit"
 					 Height="21"
@@ -122,10 +122,16 @@
 					Style="{DynamicResource ButtonGeneral}"
 					Click="ButtonGetCount_Click" />
 			<Button DockPanel.Dock="Left"
+					Content="Delete All"
+					ToolTip="Deleting all points in the selected measurement"
+					x:Name="buttonDelete"
+					Style="{DynamicResource ButtonGeneral}"
+					Click="ButtonDeleteAllPoints_Click" />
+			<!--<Button DockPanel.Dock="Left"
 					Content="Load CsvHelper"
 					x:Name="buttonLoadCsvHelper"
 					Style="{DynamicResource ButtonGeneral}"
-					Click="ButtonLoadCsvHelper_Click" />
+					Click="ButtonLoadCsvHelper_Click" />-->
 
 			<Button DockPanel.Dock="Right"
 					Content="Close"
