@@ -27,18 +27,6 @@
 			return result;
 		}
 
-		public static async Task<string> QueryRawAsync(string fluxQuery)
-		{
-			var client = CreateFluxClient();
-
-			if (client == null)
-			{
-				return null;
-			}
-
-			throw new NotImplementedException();
-		}
-
 		#endregion
 
 

@@ -13,6 +13,8 @@
 			<RowDefinition Height="5" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
 			<RowDefinition Height="0.7*" />
 			<RowDefinition Height="5" />
 			<RowDefinition Height="1.5*" />
@@ -62,10 +64,23 @@
 				 x:Name="listFields"
 				 DisplayMemberPath="Field" />
 
-		<TextBlock Grid.Row="5"
+		<!--Query sent-->
+		<TextBox Grid.Row="5"
+				 Grid.Column="1"
+				 Grid.ColumnSpan="7"
+				 x:Name="textBoxQuery"
+				 TextWrapping="Wrap"
+				 Height="30"
+				 IsReadOnly="True"
+				 FontFamily="Courier New"
+				 HorizontalAlignment="Stretch"
+				 VerticalScrollBarVisibility="Visible" />
+
+		<!--Sample data raw-->
+		<TextBlock Grid.Row="7"
 				   Grid.Column="1"
 				   Text="Sample Data" />
-		<TextBox Grid.Row="7"
+		<TextBox Grid.Row="9"
 				 Grid.Column="1"
 				 Grid.ColumnSpan="7"
 				 x:Name="textBoxSampleData"
@@ -76,7 +91,8 @@
 				 HorizontalAlignment="Stretch"
 				 VerticalAlignment="Stretch" />
 
-		<DataGrid Grid.Row="9"
+		<!--Sample data int table-->
+		<DataGrid Grid.Row="11"
 				  Grid.Column="1"
 				  Grid.ColumnSpan="7"
 				  x:Name="dataGridData"
@@ -87,7 +103,8 @@
 
 		</DataGrid>
 
-		<DockPanel Grid.Row="11"
+		<!--Footer buttons-->
+		<DockPanel Grid.Row="13"
 				   Grid.Column="1"
 				   Grid.ColumnSpan="7"
 				   LastChildFill="True">

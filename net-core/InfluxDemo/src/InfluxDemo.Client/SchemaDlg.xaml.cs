@@ -91,7 +91,9 @@
 			}
 
 			int limit = int.TryParse(textBoxLimit.Text, out var num) ? num : 10;
-			var csvResult = await RunRawQuery($"SELECT * FROM \"{measurement}\" LIMIT {limit}", db);
+			var query = $"SELECT * FROM \"{measurement}\" LIMIT {limit}";
+			textBoxQuery.Text = query;
+			var csvResult = await RunRawQuery(query, db);
 			LoadSampleData(csvResult);
 		}
 
@@ -102,7 +104,10 @@
 				return;
 			}
 
-			var csvResult = await RunRawQuery($"SELECT FIRST(*) FROM \"{measurement}\"", db);
+			var field = GetSelectedFieldKey();
+			var query = $"SELECT FIRST({field}) FROM \"{measurement}\"";
+			textBoxQuery.Text = query;
+			var csvResult = await RunRawQuery(query, db);
 			LoadSampleData(csvResult);
 		}
 
@@ -113,7 +118,10 @@
 				return;
 			}
 
-			var csvResult = await RunRawQuery($"SELECT LAST(*) FROM \"{measurement}\"", db);
+			var field = GetSelectedFieldKey();
+			var query = $"SELECT LAST({field}) FROM \"{measurement}\"";
+			textBoxQuery.Text = query;
+			var csvResult = await RunRawQuery(query, db);
 			LoadSampleData(csvResult);
 		}
 
@@ -124,7 +132,10 @@
 				return;
 			}
 
-			var csvResult = await RunRawQuery($"SELECT COUNT(*) FROM \"{measurement}\"", db);
+			var field = GetSelectedFieldKey();
+			var query = $"SELECT COUNT({field}) FROM \"{measurement}\"";
+			textBoxQuery.Text = query;
+			var csvResult = await RunRawQuery(query, db);
 			LoadSampleData(csvResult);
 		}
 
@@ -151,7 +162,9 @@
 				return;
 			}
 
-			if (await ExecuteQueryAsync($"DELETE FROM {measurement}", db))
+			var query = $"DELETE FROM {measurement}";
+			textBoxQuery.Text = query;
+			if (await ExecuteQueryAsync(query, db))
 			{
 				MessageBox.Show("Delete operation is successfull.", "Completed");
 			}
@@ -314,6 +327,13 @@
 			}
 
 			return true;
+		}
+
+		private string GetSelectedFieldKey()
+		{
+			var fieldSelected = listFields.SelectedItem as FieldKeyItem;
+			var field = (fieldSelected != null) ? fieldSelected.Key : "*";
+			return field;
 		}
 
 		#endregion
