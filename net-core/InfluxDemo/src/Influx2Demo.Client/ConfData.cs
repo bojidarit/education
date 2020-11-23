@@ -13,11 +13,17 @@
 		public static char[] OssFullAccessToken =>
 			GetAppConfigValue(MethodBase.GetCurrentMethod().Name).ToCharArray();
 
+		public static string OssOrganizationId =>
+			GetAppConfigValue(MethodBase.GetCurrentMethod().Name);
+
 		public static string CloudUrl =>
 			GetAppConfigValue(MethodBase.GetCurrentMethod().Name);
 
 		public static char[] CloudFullAccessToken =>
 			GetAppConfigValue(MethodBase.GetCurrentMethod().Name).ToCharArray();
+
+		public static string CloudOrganizationId =>
+			GetAppConfigValue(MethodBase.GetCurrentMethod().Name);
 
 		#endregion
 

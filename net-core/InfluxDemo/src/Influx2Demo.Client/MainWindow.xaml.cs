@@ -89,7 +89,8 @@
 
 		private void ShowSchemaButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			var dlg = SchemaDlg.Create(dbType);
+			dlg.ShowDialog();
 		}
 
 		#endregion

@@ -1,0 +1,175 @@
+﻿<local:DlgBase x:Class="Influx2Demo.Client.SchemaDlg"
+			   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			   xmlns:local="clr-namespace:Influx2Demo.Client"
+			   xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+			   Height="600"
+			   Width="900">
+
+	<xceed:BusyIndicator x:Name="busyMain">
+
+		<Grid x:Name="gridMain">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="2.3*" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="5" />
+			</Grid.ColumnDefinitions>
+
+			<!-- Buckets list -->
+			<TextBlock Grid.Row="1"
+					   Grid.Column="1"
+					   Text="Buckets" />
+			<ListBox Grid.Row="3"
+					 Grid.Column="1"
+					 x:Name="listBuckets"
+					 DisplayMemberPath="NameWithRetention" />
+
+			<!--Measurements list (in selected bucket)-->
+			<TextBlock Grid.Row="1"
+					   Grid.Column="3"
+					   Text="Measurements" />
+			<ListBox Grid.Row="3"
+					 Grid.Column="3"
+					 x:Name="listMeasurements" />
+
+			<!--Tags list (for selected measurement)-->
+			<TextBlock Grid.Row="1"
+					   Grid.Column="5"
+					   Text="Tags" />
+			<ListBox Grid.Row="3"
+					 Grid.Column="5"
+					 x:Name="listTags" />
+
+			<!--Fields list (for selected measurement)-->
+			<TextBlock Grid.Row="1"
+					   Grid.Column="7"
+					   Text="Fields" />
+			<ListBox Grid.Row="3"
+					 Grid.Column="7"
+					 x:Name="listFields" />
+
+			<!--Line-protocol for selected measure-->
+			<TextBox Grid.Row="5"
+					 Grid.Column="1"
+					 Grid.ColumnSpan="7"
+					 x:Name="textBoxLineProtocol"
+					 IsReadOnly="True"
+					 ToolTip="Line-protocol for selected measure" />
+
+			<!--Query sent-->
+			<TextBox Grid.Row="7"
+					 Grid.Column="1"
+					 Grid.ColumnSpan="7"
+					 x:Name="textBoxQuery"
+					 ToolTip="Query sent"
+					 TextWrapping="Wrap"
+					 Height="30"
+					 IsReadOnly="True"
+					 FontFamily="Courier New"
+					 HorizontalAlignment="Stretch"
+					 VerticalScrollBarVisibility="Visible" />
+
+			<TabControl Grid.Row="9"
+						Grid.Column="1"
+						Grid.ColumnSpan="7">
+
+				<!--Sample data int table-->
+				<TabItem Header="Sample Data in table">
+					<DataGrid x:Name="dataGridData"
+							  AutoGenerateColumns="True"
+							  CanUserAddRows="False"
+							  CanUserDeleteRows="False"
+							  IsReadOnly="True">
+
+					</DataGrid>
+				</TabItem>
+
+				<!--Sample data raw-->
+				<TabItem Header="Raw CSV">
+					<TextBox x:Name="textBoxSampleData"
+							 TextWrapping="NoWrap"
+							 AcceptsReturn="True"
+							 VerticalScrollBarVisibility="Visible"
+							 HorizontalScrollBarVisibility="Visible"
+							 HorizontalAlignment="Stretch"
+							 VerticalAlignment="Stretch" />
+				</TabItem>
+
+			</TabControl>
+
+
+			<!--Footer buttons-->
+			<DockPanel Grid.Row="11"
+					   Grid.Column="1"
+					   Grid.ColumnSpan="7"
+					   LastChildFill="True">
+				<TextBlock DockPanel.Dock="Left"
+						   Text="Limit"
+						   VerticalAlignment="Center"
+						   Margin="5" />
+				<TextBox DockPanel.Dock="Left"
+						 x:Name="textBoxLimit"
+						 Height="21"
+						 Width="50"
+						 VerticalContentAlignment="Center"
+						 Text="100" />
+				<!--<Button DockPanel.Dock="Left"
+						Content="Load Sample Data"
+						x:Name="buttonLoadSampleData"
+						Style="{DynamicResource ButtonGeneral}"
+						Click="ButtonLoadSampleData_Click" />
+				<Button DockPanel.Dock="Left"
+						Content="Get First"
+						x:Name="buttonGetFirst"
+						Style="{DynamicResource ButtonGeneral}"
+						Click="ButtonGetFirst_Click" />
+				<Button DockPanel.Dock="Left"
+						Content="Get Last"
+						x:Name="buttonGetLast"
+						Style="{DynamicResource ButtonGeneral}"
+						Click="ButtonGetLast_Click" />
+				<Button DockPanel.Dock="Left"
+						Content="Get Count"
+						x:Name="buttonGetCount"
+						Style="{DynamicResource ButtonGeneral}"
+						Click="ButtonGetCount_Click" />
+				<Button DockPanel.Dock="Left"
+						Content="Delete All"
+						ToolTip="Deleting all points in the selected measurement"
+						x:Name="buttonDelete"
+						Style="{DynamicResource ButtonGeneral}"
+						Click="ButtonDeleteAllPoints_Click" />-->
+
+				<Button DockPanel.Dock="Right"
+						Content="Close"
+						x:Name="buttonClose"
+						Style="{DynamicResource ButtonGeneral}"
+						Click="ButtonClose_Click" />
+				<TextBlock />
+			</DockPanel>
+		</Grid>
+
+	</xceed:BusyIndicator>
+
+</local:DlgBase>

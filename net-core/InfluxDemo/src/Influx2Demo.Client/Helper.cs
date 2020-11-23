@@ -6,13 +6,13 @@
 	public static class Helper
 	{
 
-		#region Influx Related MEthods
+		#region Influx Related Methods
 
 		public static InfluxApi CreateInfluxApi(InfluxDbType dbType)
 		{
 			var api = (dbType == InfluxDbType.OSS)
-				? new InfluxApi(ConfData.OssUrl, ConfData.OssFullAccessToken)
-				: new InfluxApi(ConfData.CloudUrl, ConfData.CloudFullAccessToken);
+				? new InfluxApi(ConfData.OssUrl, ConfData.OssFullAccessToken, ConfData.OssOrganizationId)
+				: new InfluxApi(ConfData.CloudUrl, ConfData.CloudFullAccessToken, ConfData.CloudOrganizationId);
 
 			return api;
 		}

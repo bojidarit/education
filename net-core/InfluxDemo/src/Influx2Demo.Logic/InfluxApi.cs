@@ -1,23 +1,61 @@
-﻿using InfluxDB.Client;
-using InfluxDB.Client.Api.Domain;
-using System.Threading.Tasks;
-
-namespace Influx2Demo.Logic
+﻿namespace Influx2Demo.Logic
 {
+	using Influx2Demo.Logic.DataStructures;
+	using InfluxDB.Client;
+	using InfluxDB.Client.Api.Domain;
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Threading.Tasks;
+
 	// InfluxDB Client API
 	// The reference C# client that allows query, write and InfluxDB 2.0 management.
 	public class InfluxApi
 	{
+		#region Constants
+
+		private const string autoRetentionPolicy = "autogen";
+		private const string DefaultNegativeDuration = "-5y";
+		public const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ssZ";
+
+
+		// Schema flux commands
+		private static readonly string SchemaBuckets =
+			$"buckets() |> keep(columns: [{"name".Quote()}, {"id".Quote()}, {"retentionPeriod".Quote()}])";
+		private static readonly string SchemaImport =
+			$"import {"influxdata/influxdb/schema".Quote()}";
+		private const string SchemaMeasurements =
+			"schema.measurements(bucket: {0})";
+
+		// xKeys functions searches within "last 30 days" ONLY!!!
+		// "schema.measurementFieldKeys(bucket: {0}, measurement: {1})";
+		// "schema.measurementTagKeys(bucket: {0}, measurement: {1})";
+
+		private const string SchemaFieldKeys =
+			"schema.tagKeys(bucket: {0}, predicate: (r) => r._measurement == {1}, start: {2})";
+		private const string SchemaTagKeys =
+			"schema.fieldKeys(bucket: {0}, predicate: (r) => r._measurement == {1}, start: {2})";
+
+		#endregion
+
+
 		#region Constructors
 
 		public InfluxApi()
 		{
 		}
 
-		public InfluxApi(string url, char[] token)
+		public InfluxApi(string url, char[] token, string orgId)
 		{
+			if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(orgId))
+			{
+				throw new ArgumentException();
+			}
+
 			Url = url;
 			Token = token;
+			OrganizationId = orgId;
 		}
 
 		#endregion
@@ -29,10 +67,12 @@ namespace Influx2Demo.Logic
 
 		public char[] Token { get; set; }
 
+		public string OrganizationId { get; private set; }
+
 		#endregion
 
 
-		#region Public Methods
+		#region General Methods
 
 		// Get the health of an instance anytime during execution
 		public async Task<HealthCheck> GetHealthAsync()
@@ -42,6 +82,7 @@ namespace Influx2Demo.Logic
 				// Log HTTP Request and Response
 				//client.SetLogLevel(LogLevel.Headers);
 
+				Debug.WriteLine($"==> Getting {typeof(HealthCheck).FullName}...");
 				return await client.HealthAsync();
 			}
 		}
@@ -51,14 +92,77 @@ namespace Influx2Demo.Logic
 		{
 			using (var client = CreateInfluxClient())
 			{
+				Debug.WriteLine($"==> Getting {typeof(Ready).FullName}...");
 				return await client.ReadyAsync();
+			}
+		}
+
+		public async Task<List<T>> FluxQueryAsync<T>(string flux)
+		{
+			using (var influxDBClient = InfluxDBClientFactory.Create(Url, Token))
+			{
+				Debug.WriteLine($"==> Executing flux query{Environment.NewLine}{flux}");
+				var result = await influxDBClient.GetQueryApi().QueryAsync<T>(flux, OrganizationId);
+				return result;
+			}
+		}
+
+		public async Task<string> FluxQueryRawAsync<T>(string flux)
+		{
+			using (var influxDBClient = InfluxDBClientFactory.Create(Url, Token))
+			{
+				Debug.WriteLine($"==> Executing flux query{Environment.NewLine}{flux}");
+				var result = await influxDBClient.GetQueryApi().QueryRawAsync(flux, OrganizationId);
+				return result;
 			}
 		}
 
 		#endregion
 
 
+		#region Schema Methods
+
+		public async Task<List<BucketDto>> GetBuckets(bool showSystem = false)
+		{
+			var all = await FluxQueryAsync<BucketDto>(SchemaBuckets);
+			return showSystem ? all : all.Where(b => !b.IsSystem()).ToList();
+		}
+
+		public async Task<List<string>> GetMeasurements(string bucket)
+		{
+			var flux = $"{SchemaImport}{Environment.NewLine}" +
+				$"{string.Format(SchemaMeasurements, bucket.Quote())}";
+			var all = await FluxQueryAsync<ValueDto>(flux);
+
+			return all.Select(i => i.Value).ToList();
+		}
+
+		public async Task<List<string>> GetTagKeys(string bucket, string measurement)
+		{
+			var flux = $"{SchemaImport}{Environment.NewLine}" +
+				$"{string.Format(SchemaTagKeys, bucket.Quote(), measurement.Quote(), DefaultNegativeDuration)}";
+			var all = await FluxQueryAsync<ValueDto>(flux);
+
+			return GetKeysRealValues(all);
+		}
+
+		public async Task<List<string>> GetFieldKeys(string bucket, string measurement)
+		{
+			var flux = $"{SchemaImport}{Environment.NewLine}" +
+				$"{string.Format(SchemaFieldKeys, bucket.Quote(), measurement.Quote(), DefaultNegativeDuration)}";
+			var all = await FluxQueryAsync<ValueDto>(flux);
+
+			return GetKeysRealValues(all);
+		}
+
+		#endregion
+
+
 		#region Helpers
+
+		private List<string> GetKeysRealValues(List<ValueDto> values) =>
+			values.Where(i => !i.Value.StartsWith("_")).Select(i => i.Value).ToList();
+
 
 		private InfluxDBClient CreateInfluxClient()
 		{
