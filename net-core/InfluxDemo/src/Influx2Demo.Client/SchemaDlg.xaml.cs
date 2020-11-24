@@ -144,7 +144,7 @@
 			return true;
 		}
 
-		private void ShowCsvResult(string csv, string measure)
+		private void ShowCsvResult(string csv, string measure, string func)
 		{
 			textBoxSampleData.Text = csv;
 			if (string.IsNullOrEmpty(csv))
@@ -157,12 +157,12 @@
 			var dataTable = DataParser.MakeDataTableFromCsv(trimmedCsv);
 			Helper.UpgradeInfluxCsvTable(dataTable);
 
-			tabItemTable.Header = $"[{measure}] {dataTable.DefaultView.Count} row(s)";
+			tabItemTable.Header = $"[{measure}]:[{func}] {dataTable.DefaultView.Count} row(s)";
 
 			dataGridData.ItemsSource = (dataTable == null) ? null : dataTable.DefaultView;
 		}
 
-		private async Task LoadSampleData(string measure, string flux)
+		private async Task LoadSampleData(string measure, string flux, string func)
 		{
 			IsInBusyState = true;
 			try
@@ -171,7 +171,7 @@
 				textBoxQuery.Text = flux;
 
 				var csv = await api.FluxQueryRawAsync(flux);
-				ShowCsvResult(csv, measure);
+				ShowCsvResult(csv, measure, func);
 			}
 			catch (Exception ex)
 			{
@@ -195,7 +195,7 @@
 			var fieldKey = listFields.SelectedItem?.ToString();
 
 			var flux = InfluxApi.GetSingleRecordFlux(bucket?.Name, measure, funcName, isFuncSelector, fieldKey);
-			await LoadSampleData(measure, flux);
+			await LoadSampleData(measure, flux, funcName);
 		}
 
 		#endregion
@@ -288,8 +288,9 @@
 				return;
 			}
 
-			var flux = InfluxApi.GetSampleDataFlux(bucket?.Name, measure, limit);
-			await LoadSampleData(measure, flux);
+			var fieldKey = listFields.SelectedItem?.ToString();
+			var flux = InfluxApi.GetSampleDataFlux(bucket?.Name, measure, limit, fieldKey);
+			await LoadSampleData(measure, flux, "all");
 		}
 
 		private async void ButtonGetFirst_Click(object sender, RoutedEventArgs e)

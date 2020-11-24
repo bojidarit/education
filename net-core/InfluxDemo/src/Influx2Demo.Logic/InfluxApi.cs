@@ -179,10 +179,12 @@
 			return list;
 		}
 
-		public static string GetSampleDataFlux(string bucket, string measurement, int limit)
+		public static string GetSampleDataFlux(string bucket, string measurement, int limit, string fieldKey)
 		{
 			var list = GetMinimumFlux(bucket);
-			list.Add($"  |> filter(fn:(r) => r._measurement == {measurement.Quote()})");
+			var fieldFilter = GetFieldFilter(fieldKey);
+
+			list.Add($"  |> filter(fn:(r) => r._measurement == {measurement.Quote()}{fieldFilter})");
 			list.Add($"  |> schema.fieldsAsCols()");
 			list.Add($"  |> {FluxDropRedundantCols}");
 			list.Add($"  |> limit(n: {limit})");
@@ -195,9 +197,7 @@
 		public static string GetSingleRecordFlux(string bucket, string measurement, string funcName, bool isFuncSelector, string fieldKey)
 		{
 			var list = GetMinimumFlux(bucket);
-			var fieldFilter = string.IsNullOrEmpty(fieldKey)
-				? string.Empty
-				: $" and r._field == {fieldKey.Quote()}";
+			var fieldFilter = GetFieldFilter(fieldKey);
 
 			list.Add($"  |> filter(fn:(r) => r._measurement == {measurement.Quote()}{fieldFilter})");
 			list.Add($"  |> {FluxDropRedundantCols}");
@@ -208,6 +208,15 @@
 			}
 
 			return string.Join("", list);
+		}
+
+		private static string GetFieldFilter(string fieldKey)
+		{
+			var fieldFilter = string.IsNullOrEmpty(fieldKey)
+				? string.Empty
+				: $" and r._field == {fieldKey.Quote()}";
+
+			return fieldFilter;
 		}
 
 		#endregion
