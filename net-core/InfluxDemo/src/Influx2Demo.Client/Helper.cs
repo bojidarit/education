@@ -2,6 +2,7 @@
 {
 	using Influx2Demo.Logic;
 	using Influx2Demo.Logic.DataStructures.Enumerations;
+	using System.Data;
 
 	public static class Helper
 	{
@@ -15,6 +16,20 @@
 				: new InfluxApi(ConfData.CloudUrl, ConfData.CloudFullAccessToken, ConfData.CloudOrganizationId);
 
 			return api;
+		}
+
+		public static void UpgradeInfluxCsvTable(DataTable dataTable)
+		{
+			dataTable.Columns.RemoveAt(0);
+			dataTable.Columns.RemoveAt(0);
+
+			var indexColumn = dataTable.Columns.Add("#", typeof(long));
+			indexColumn.SetOrdinal(0);
+			long index = 1L;
+			foreach (var row in dataTable.AsEnumerable())
+			{
+				row[indexColumn.Ordinal] = index++;
+			}
 		}
 
 		#endregion

@@ -87,6 +87,7 @@
 					 Height="30"
 					 IsReadOnly="True"
 					 FontFamily="Courier New"
+					 FontWeight="Bold"
 					 HorizontalAlignment="Stretch"
 					 VerticalScrollBarVisibility="Visible" />
 
@@ -95,7 +96,8 @@
 						Grid.ColumnSpan="7">
 
 				<!--Sample data int table-->
-				<TabItem Header="Sample Data in table">
+				<TabItem x:Name="tabItemTable"
+						 Header="Sample Data">
 					<DataGrid x:Name="dataGridData"
 							  AutoGenerateColumns="True"
 							  CanUserAddRows="False"
@@ -126,20 +128,22 @@
 					   LastChildFill="True">
 				<TextBlock DockPanel.Dock="Left"
 						   Text="Limit"
-						   VerticalAlignment="Center"
-						   Margin="5" />
+						   VerticalAlignment="Center" />
 				<TextBox DockPanel.Dock="Left"
 						 x:Name="textBoxLimit"
 						 Height="21"
 						 Width="50"
+						 Margin="5,0"
 						 VerticalContentAlignment="Center"
 						 Text="100" />
-				<!--<Button DockPanel.Dock="Left"
+
+				<Button DockPanel.Dock="Left"
 						Content="Load Sample Data"
 						x:Name="buttonLoadSampleData"
 						Style="{DynamicResource ButtonGeneral}"
 						Click="ButtonLoadSampleData_Click" />
-				<Button DockPanel.Dock="Left"
+
+				<!--<Button DockPanel.Dock="Left"
 						Content="Get First"
 						x:Name="buttonGetFirst"
 						Style="{DynamicResource ButtonGeneral}"

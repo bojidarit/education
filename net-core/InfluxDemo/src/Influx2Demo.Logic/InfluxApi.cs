@@ -5,6 +5,7 @@
 	using InfluxDB.Client.Api.Domain;
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -107,7 +108,7 @@
 			}
 		}
 
-		public async Task<string> FluxQueryRawAsync<T>(string flux)
+		public async Task<string> FluxQueryRawAsync(string flux)
 		{
 			using (var influxDBClient = InfluxDBClientFactory.Create(Url, Token))
 			{
@@ -115,6 +116,13 @@
 				var result = await influxDBClient.GetQueryApi().QueryRawAsync(flux, OrganizationId);
 				return result;
 			}
+		}
+
+		public async Task<DataTable> FluxQueryToDataTableAsync(string flux)
+		{
+			var csv = await FluxQueryRawAsync(flux);
+			var dataTable = DataParser.MakeDataTableFromCsv(csv);
+			return dataTable;
 		}
 
 		#endregion
@@ -158,11 +166,26 @@
 		#endregion
 
 
+		#region Flux Query Generation
+
+		public string GetSampleDataFlux(string bucket, string measurement, int limit)
+		{
+			var list = new List<string>();
+			list.Add($"{SchemaImport}{Environment.NewLine}");
+			list.Add($"from(bucket: {bucket.Quote()})");
+			list.Add($"  |> range(start: {DefaultNegativeDuration})");
+			list.Add($"  |> filter(fn:(r) => r._measurement == {measurement.Quote()})");
+			list.Add($"  |> schema.fieldsAsCols()");
+			list.Add($"  |> drop(columns: [{"_start".Quote()}, {"_stop".Quote()}, {"_measurement".Quote()}])");
+			list.Add($"  |> limit(n: {limit})");
+
+			return string.Join("", list);
+		}
+
+		#endregion
+
+
 		#region Helpers
-
-		private List<string> GetKeysRealValues(List<ValueDto> values) =>
-			values.Where(i => !i.Value.StartsWith("_")).Select(i => i.Value).ToList();
-
 
 		private InfluxDBClient CreateInfluxClient()
 		{
@@ -170,6 +193,9 @@
 			var client = InfluxDBClientFactory.Create(Url, Token);
 			return client;
 		}
+
+		private List<string> GetKeysRealValues(List<ValueDto> values) =>
+			values.Where(i => !i.Value.StartsWith("_")).Select(i => i.Value).ToList();
 
 		#endregion
 	}
