@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:Influx2Demo.Client"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
-    </Application.Resources>
+		<Style x:Key="ButtonGeneral"
+			   TargetType="Button">
+			<Setter Property="Margin"
+					Value="5,0,0,0" />
+			<Setter Property="Padding"
+					Value="3,1" />
+			<Setter Property="MinWidth"
+					Value="70" />
+		</Style>
+	</Application.Resources>
 </Application>

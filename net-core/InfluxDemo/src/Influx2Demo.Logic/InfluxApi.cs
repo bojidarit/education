@@ -16,10 +16,11 @@
 	{
 		#region Constants
 
-		private const string autoRetentionPolicy = "autogen";
 		private const string DefaultNegativeDuration = "-5y";
 		public const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ssZ";
 
+		public static readonly string FluxDropRedundantCols =
+			$"drop(columns: [{"_start".Quote()}, {"_stop".Quote()}, {"_measurement".Quote()}])";
 
 		// Schema flux commands
 		private static readonly string SchemaBuckets =
@@ -34,9 +35,9 @@
 		// "schema.measurementTagKeys(bucket: {0}, measurement: {1})";
 
 		private const string SchemaFieldKeys =
-			"schema.tagKeys(bucket: {0}, predicate: (r) => r._measurement == {1}, start: {2})";
-		private const string SchemaTagKeys =
 			"schema.fieldKeys(bucket: {0}, predicate: (r) => r._measurement == {1}, start: {2})";
+		private const string SchemaTagKeys =
+			"schema.tagKeys(bucket: {0}, predicate: (r) => r._measurement == {1}, start: {2})";
 
 		#endregion
 
@@ -168,16 +169,43 @@
 
 		#region Flux Query Generation
 
-		public string GetSampleDataFlux(string bucket, string measurement, int limit)
+		public static List<string> GetMinimumFlux(string bucket)
 		{
 			var list = new List<string>();
 			list.Add($"{SchemaImport}{Environment.NewLine}");
 			list.Add($"from(bucket: {bucket.Quote()})");
 			list.Add($"  |> range(start: {DefaultNegativeDuration})");
+
+			return list;
+		}
+
+		public static string GetSampleDataFlux(string bucket, string measurement, int limit)
+		{
+			var list = GetMinimumFlux(bucket);
 			list.Add($"  |> filter(fn:(r) => r._measurement == {measurement.Quote()})");
 			list.Add($"  |> schema.fieldsAsCols()");
-			list.Add($"  |> drop(columns: [{"_start".Quote()}, {"_stop".Quote()}, {"_measurement".Quote()}])");
+			list.Add($"  |> {FluxDropRedundantCols}");
 			list.Add($"  |> limit(n: {limit})");
+
+			return string.Join("", list);
+		}
+
+		// Selector functions like: firs(), last(), etc.
+		// Aggregate Function like: count()
+		public static string GetSingleRecordFlux(string bucket, string measurement, string funcName, bool isFuncSelector, string fieldKey)
+		{
+			var list = GetMinimumFlux(bucket);
+			var fieldFilter = string.IsNullOrEmpty(fieldKey)
+				? string.Empty
+				: $" and r._field == {fieldKey.Quote()}";
+
+			list.Add($"  |> filter(fn:(r) => r._measurement == {measurement.Quote()}{fieldFilter})");
+			list.Add($"  |> {FluxDropRedundantCols}");
+			list.Add($"  |> {funcName}()");
+			if (isFuncSelector)
+			{
+				list.Add($"  |> schema.fieldsAsCols()");
+			}
 
 			return string.Join("", list);
 		}

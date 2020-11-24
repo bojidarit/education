@@ -133,35 +133,38 @@
 						 x:Name="textBoxLimit"
 						 Height="21"
 						 Width="50"
-						 Margin="5,0"
+						 Margin="5,0,0,0"
 						 VerticalContentAlignment="Center"
 						 Text="100" />
 
 				<Button DockPanel.Dock="Left"
-						Content="Load Sample Data"
 						x:Name="buttonLoadSampleData"
+						Content="Load Sample"
 						Style="{DynamicResource ButtonGeneral}"
 						Click="ButtonLoadSampleData_Click" />
 
-				<!--<Button DockPanel.Dock="Left"
-						Content="Get First"
+				<Button DockPanel.Dock="Left"
 						x:Name="buttonGetFirst"
+						Content="Get First"
 						Style="{DynamicResource ButtonGeneral}"
 						Click="ButtonGetFirst_Click" />
+				
 				<Button DockPanel.Dock="Left"
-						Content="Get Last"
 						x:Name="buttonGetLast"
+						Content="Get Last"
 						Style="{DynamicResource ButtonGeneral}"
 						Click="ButtonGetLast_Click" />
+				
 				<Button DockPanel.Dock="Left"
-						Content="Get Count"
 						x:Name="buttonGetCount"
+						Content="Get Count"
 						Style="{DynamicResource ButtonGeneral}"
 						Click="ButtonGetCount_Click" />
-				<Button DockPanel.Dock="Left"
+				
+				<!--<Button DockPanel.Dock="Left"
+						x:Name="buttonDelete"
 						Content="Delete All"
 						ToolTip="Deleting all points in the selected measurement"
-						x:Name="buttonDelete"
 						Style="{DynamicResource ButtonGeneral}"
 						Click="ButtonDeleteAllPoints_Click" />-->
 

@@ -16,6 +16,8 @@
 	{
 		#region Fields and Constants
 
+		private const int DefaultLimit = 100;
+
 		private InfluxDbType dbType;
 		private List<BucketDto> buckets;
 		private List<string> measurements;
@@ -33,6 +35,7 @@
 			InitializeComponent();
 			Loaded += this.SchemaDlg_Loaded;
 			this.dbType = dbType;
+			textBoxLimit.Text = DefaultLimit.ToString();
 		}
 
 
@@ -117,9 +120,10 @@
 
 		#region Helpers
 
-		private bool GetMainParams(out BucketDto bucket, out string measure)
+		private bool GetMainParams(out BucketDto bucket, out string measure, out int limit)
 		{
 			measure = null;
+			limit = DefaultLimit;
 			bucket = listBuckets.SelectedItem as BucketDto;
 			if (bucket == null)
 			{
@@ -132,7 +136,66 @@
 				return false;
 			}
 
+			if (!int.TryParse(textBoxLimit.Text, out limit))
+			{
+				limit = DefaultLimit;
+			}
+
 			return true;
+		}
+
+		private void ShowCsvResult(string csv, string measure)
+		{
+			textBoxSampleData.Text = csv;
+			if (string.IsNullOrEmpty(csv))
+			{
+				tabItemTable.Header = "Sample data";
+				return;
+			}
+
+			var trimmedCsv = DataParser.TrimTopCsv(csv, 3);
+			var dataTable = DataParser.MakeDataTableFromCsv(trimmedCsv);
+			Helper.UpgradeInfluxCsvTable(dataTable);
+
+			tabItemTable.Header = $"[{measure}] {dataTable.DefaultView.Count} row(s)";
+
+			dataGridData.ItemsSource = (dataTable == null) ? null : dataTable.DefaultView;
+		}
+
+		private async Task LoadSampleData(string measure, string flux)
+		{
+			IsInBusyState = true;
+			try
+			{
+				var api = Helper.CreateInfluxApi(dbType);
+				textBoxQuery.Text = flux;
+
+				var csv = await api.FluxQueryRawAsync(flux);
+				ShowCsvResult(csv, measure);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.GetType().Name);
+				return;
+			}
+			finally
+			{
+				IsInBusyState = false;
+			}
+		}
+
+		private async Task GetSingleRecord(string funcName, bool isFuncSelector)
+		{
+			if (!GetMainParams(out var bucket, out var measure, out var limit))
+			{
+				MessageBox.Show("Bad bucket and/or measure.", "Input parameters");
+				return;
+			}
+
+			var fieldKey = listFields.SelectedItem?.ToString();
+
+			var flux = InfluxApi.GetSingleRecordFlux(bucket?.Name, measure, funcName, isFuncSelector, fieldKey);
+			await LoadSampleData(measure, flux);
 		}
 
 		#endregion
@@ -196,7 +259,7 @@
 
 		private async void ListMeasurements_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			if (!GetMainParams(out var bucket, out var measure))
+			if (!GetMainParams(out var bucket, out var measure, out var limit))
 			{
 				ClearMeasureSelection();
 			}
@@ -219,50 +282,29 @@
 
 		private async void ButtonLoadSampleData_Click(object sender, RoutedEventArgs e)
 		{
-			if (!GetMainParams(out var bucket, out var measure))
+			if (!GetMainParams(out var bucket, out var measure, out var limit))
 			{
 				MessageBox.Show("Bad bucket and/or measure.", "Input parameters");
 				return;
 			}
 
-			if(!int.TryParse(textBoxLimit.Text, out var limit))
-			{
-				MessageBox.Show("Bad limit value. Must be number.", "Input parameters");
-				return;
-			}
+			var flux = InfluxApi.GetSampleDataFlux(bucket?.Name, measure, limit);
+			await LoadSampleData(measure, flux);
+		}
 
-			IsInBusyState = true;
-			try
-			{
-				var api = Helper.CreateInfluxApi(dbType);
-				var flux = api.GetSampleDataFlux(bucket.Name, measure, limit);
-				textBoxQuery.Text = flux;
+		private async void ButtonGetFirst_Click(object sender, RoutedEventArgs e)
+		{
+			await GetSingleRecord("first", true);
+		}
 
-				var csv = await api.FluxQueryRawAsync(flux);
-				textBoxSampleData.Text = csv;
-				if (string.IsNullOrEmpty(csv))
-				{
-					tabItemTable.Header = "Sample data";
-					return;
-				}
+		private async void ButtonGetLast_Click(object sender, RoutedEventArgs e)
+		{
+			await GetSingleRecord("last", true);
+		}
 
-				var trimmedCsv = DataParser.TrimTopCsv(csv, 3);
-				var dataTable = DataParser.MakeDataTableFromCsv(trimmedCsv);
-				Helper.UpgradeInfluxCsvTable(dataTable);
-
-				tabItemTable.Header = $"[{measure}] {dataTable.DefaultView.Count} row(s)";
-
-				dataGridData.ItemsSource = (dataTable == null) ? null : dataTable.DefaultView;
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, ex.GetType().Name);
-				return;
-			}
-			finally
-			{
-				IsInBusyState = false;
-			}
+		private async void ButtonGetCount_Click(object sender, RoutedEventArgs e)
+		{
+			await GetSingleRecord("count", false);
 		}
 
 		#endregion
