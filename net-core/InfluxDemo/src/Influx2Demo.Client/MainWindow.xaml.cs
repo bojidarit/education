@@ -87,6 +87,27 @@
 			MessageBox.Show(sb.ToString(), dbType.ToString());
 		}
 
+		private async void ServerDetailsButton_Click(object sender, RoutedEventArgs e)
+		{
+			textBoxData.Text = "Getting server details...";
+			busyMain.IsBusy = true;
+			try
+			{
+				var api = Helper.CreateInfluxApi(dbType);
+				var status = await api.ServerDetailsAsync();
+				textBoxData.Text = status;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.GetType().Name);
+				return;
+			}
+			finally
+			{
+				busyMain.IsBusy = false;
+			}
+		}
+
 		private void ShowSchemaButton_Click(object sender, RoutedEventArgs e)
 		{
 			var dlg = SchemaDlg.Create(dbType);

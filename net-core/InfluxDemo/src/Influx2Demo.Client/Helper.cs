@@ -12,8 +12,8 @@
 		public static InfluxApi CreateInfluxApi(InfluxDbType dbType)
 		{
 			var api = (dbType == InfluxDbType.OSS)
-				? new InfluxApi(ConfData.OssUrl, ConfData.OssFullAccessToken, ConfData.OssOrganizationId)
-				: new InfluxApi(ConfData.CloudUrl, ConfData.CloudFullAccessToken, ConfData.CloudOrganizationId);
+				? InfluxApi.Create(ConfData.OssUrl, ConfData.OssFullAccessToken, ConfData.OssOrganizationId, dbType)
+				: InfluxApi.Create(ConfData.CloudUrl, ConfData.CloudFullAccessToken, ConfData.CloudOrganizationId, dbType);
 
 			return api;
 		}

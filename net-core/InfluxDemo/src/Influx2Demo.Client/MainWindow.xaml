@@ -3,8 +3,10 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
 		Title="Influx 2.0 Menu"
-		Height="300"
-		Width="300"
+		MinHeight="360"
+		MinWidth="390"
+		Height="390"
+		Width="460"
 		WindowStartupLocation="CenterScreen">
 
 	<Window.Resources>
@@ -31,20 +33,26 @@
 
 			<!--Functional buttons-->
 			<Button DockPanel.Dock="Top"
-					Content="Heath Check"
-					Click="HeathButton_Click" />
-			<Button DockPanel.Dock="Top"
 					Content="Show Schema"
 					x:Name="buttonShowSchema"
 					Click="ShowSchemaButton_Click" />
+			<!--<Button DockPanel.Dock="Top"
+					Content="Heath Check"
+					Click="HeathButton_Click" />-->
+			<Button DockPanel.Dock="Top"
+					Content="Server Details"
+					Click="ServerDetailsButton_Click" />
 
 			<Button DockPanel.Dock="Bottom"
 					Content="Close"
 					Click="CloseButton_Click"
 					Margin="5" />
 
-			<TextBlock />
-
+			<!--Text Data container-->
+			<TextBox x:Name="textBoxData"
+					 Style="{DynamicResource DetailsTextBox}"
+					 Margin="5,5,5,0"
+					 IsReadOnly="True" />
 		</DockPanel>
 
 	</xceed:BusyIndicator>

@@ -1,6 +1,7 @@
 ﻿namespace Influx2Demo.Logic
 {
 	using Influx2Demo.Logic.DataStructures;
+	using Influx2Demo.Logic.DataStructures.Enumerations;
 	using InfluxDB.Client;
 	using InfluxDB.Client.Api.Domain;
 	using System;
@@ -42,7 +43,7 @@
 		#endregion
 
 
-		#region Constructors
+		#region Construction
 
 		public InfluxApi()
 		{
@@ -60,10 +61,20 @@
 			OrganizationId = orgId;
 		}
 
+		public static InfluxApi Create(string url, char[] token, string orgId, InfluxDbType dbType)
+		{
+			var api = new InfluxApi(url, token, orgId);
+			api.DbType = dbType;
+
+			return api;
+		}
+
 		#endregion
 
 
 		#region Properties
+
+		public InfluxDbType DbType { get; private set; }
 
 		public string Url { get; set; }
 
@@ -75,6 +86,48 @@
 
 
 		#region General Methods
+
+		public async Task<string> ServerDetailsAsync()
+		{
+			using (var influxDBClient = InfluxDBClientFactory.Create(Url, Token))
+			{
+				Debug.WriteLine($"==> Executing Health Check");
+				var health = await influxDBClient.HealthAsync();
+				var ready = await influxDBClient.ReadyAsync();
+
+				var me = await influxDBClient.GetUsersApi().MeAsync();
+
+				var organization = await influxDBClient.GetOrganizationsApi()
+											.FindOrganizationByIdAsync(OrganizationId);
+
+				var buckets = (await influxDBClient.GetBucketsApi().FindBucketsAsync())
+					.Where(b => b.Type == Bucket.TypeEnum.User)
+					.Select(b => b.ToJson());
+
+				var list = new List<string>();
+				list.Add($"DB Type: {DbType}");
+				list.Add($"URL: {Url}");
+				
+				list.Add($"{Environment.NewLine}[{health.GetType().Name}]");
+				list.Add($"{health.ToJson()}");
+				
+				if (ready != null)
+				{
+					list.Add($"{Environment.NewLine}[{ready.GetType().Name}]");
+					list.Add($"{ready.ToJson()}");
+				}
+
+				list.Add($"{Environment.NewLine}[Current {organization.GetType().Name}]");
+				list.Add($"{organization.ToJson()}");
+
+				list.Add($"{Environment.NewLine}[Current {me.GetType().Name}]");
+				list.Add($"{me.ToJson()}");
+				list.Add($"{Environment.NewLine}[{buckets.Count()} User Buckets]");
+				list.Add($"{string.Join(Environment.NewLine, buckets)}");
+
+				return string.Join(Environment.NewLine, list);
+			}
+		}
 
 		// Get the health of an instance anytime during execution
 		public async Task<HealthCheck> GetHealthAsync()
