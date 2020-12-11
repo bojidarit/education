@@ -1,0 +1,8 @@
+Source: https://blog.scottlogic.com/2012/02/06/a-simple-pattern-for-creating-re-useable-usercontrols-in-wpf-silverlight.html
+A Simple Pattern for Creating Re-useable UserControls in WPF / Silverlight
+
+This blog post provides step-by-step instructions for creating a user control, which exposes bindable properties, in WPF and Silverlight. The post covers dependency properties, and how to manage DataContext inheritance.
+
+When building user interfaces you will often find yourself repeating the same UI patterns across your application. After all, users like to be presented with a consistent interface, so re-use makes sense. The WPF and Silverlight frameworks provide custom controls and user controls as a mechanism for re-using blocks of UI elements. Custom controls are rather special, with the logic being de-coupled from the XAML in order to support templating. For most needs, the simpler user control is more appropriate.
+
+From participating in sites like StackOverflow I have noticed that whilst most people understand how to create a user control, which allows them to 'stamp out' the same XAML in multiple places, many struggle with how to make their user controls flexible by exposing properties that configure how it looks or behaves. This blog post will walk through a simple example, showing you how to create a user control, add dependency properties, wire them to the user control XAML and make a truly re-useable control.

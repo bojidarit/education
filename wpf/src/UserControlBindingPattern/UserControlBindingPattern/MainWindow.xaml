@@ -1,0 +1,75 @@
+﻿<Window x:Class="UserControlBindingPattern.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:UserControlBindingPattern"
+		Title="Re-useable UserControls Pattern"
+		Height="150"
+		Width="390"
+		WindowStartupLocation="CenterScreen">
+	<Window.Resources>
+		<Style x:Key="ValueTextBlock"
+			   TargetType="TextBlock">
+			<Setter Property="FontStyle"
+					Value="Italic" />
+			<Setter Property="FontWeight"
+					Value="Bold" />
+			<Setter Property="Background"
+					Value="DarkRed" />
+			<Setter Property="Foreground"
+					Value="WhiteSmoke" />
+			<Setter Property="Padding"
+					Value="3,1" />
+		</Style>
+	</Window.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<!-- Important: If UpdateSourceTrigger=PropertyChanged then one cannot enter decimal point, so use LostFocus instead-->
+		<local:FieldUserControl Grid.Row="1"
+								Label="Height"
+								Value="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+
+		<local:FieldUserControl Grid.Row="3"
+								Label="Width"
+								Value="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+
+		<StackPanel Grid.Row="5"
+					Orientation="Horizontal"
+					HorizontalAlignment="Center">
+			<TextBlock Text="Height: " />
+			<TextBlock Text="{Binding Height}"
+					   Style="{StaticResource ValueTextBlock}" />
+			<TextBlock Text=" Width: " />
+			<TextBlock Text="{Binding Width}"
+					   Style="{StaticResource ValueTextBlock}" />
+		</StackPanel>
+
+		<Border Grid.Row="7"
+				Grid.Column="0"
+				Grid.ColumnSpan="5"
+				Style="{DynamicResource FooterBorder}">
+			<DockPanel LastChildFill="True">
+				<Button DockPanel.Dock="Left"
+						Content="Simple Binding"
+						ToolTip="Simple Binding Exapmle"
+						Click="SimpleBinding_Click"
+						Style="{DynamicResource CommonButton}" />
+				<Button DockPanel.Dock="Right"
+						Content="Exit"
+						Click="ExitButton_Click"
+						Style="{DynamicResource CommonButton}" />
+				<TextBlock />
+			</DockPanel>
+		</Border>
+	</Grid>
+</Window>
