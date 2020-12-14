@@ -1,0 +1,4 @@
+Automatically Showing ToolTips on a Trimmed TextBlock (Silverlight + WPF)
+Source: https://blog.scottlogic.com/2011/01/31/automatically-showing-tooltips-on-a-trimmed-textblock-silverlight-wpf.html
+
+As an extra bonus there is Grid Utils for automatic RowDefinitions & ColumnDefinitions that gets a coma-separated string for the definitions... RowDefinitions & ColumnDefinitions are implemented with attached properties.

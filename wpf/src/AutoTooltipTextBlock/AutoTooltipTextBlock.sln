@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTooltipTextBlock", "AutoTooltipTextBlock\AutoTooltipTextBlock.csproj", "{D669AB1E-A1F7-4D3E-ABBE-CB1F4346CDB9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D669AB1E-A1F7-4D3E-ABBE-CB1F4346CDB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D669AB1E-A1F7-4D3E-ABBE-CB1F4346CDB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D669AB1E-A1F7-4D3E-ABBE-CB1F4346CDB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D669AB1E-A1F7-4D3E-ABBE-CB1F4346CDB9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53950510-9918-4B1D-B0B2-1480B97687A2}
+	EndGlobalSection
+EndGlobal
