@@ -13,7 +13,7 @@
 			InitializeComponent();
 		}
 
-		#region Dependancy Properties
+		#region Dependency Properties
 
 		public string Label
 		{

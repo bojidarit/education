@@ -61,7 +61,7 @@
 			<DockPanel LastChildFill="True">
 				<Button DockPanel.Dock="Left"
 						Content="Simple Binding"
-						ToolTip="Simple Binding Exapmle"
+						ToolTip="Simple Binding Example"
 						Click="SimpleBinding_Click"
 						Style="{DynamicResource CommonButton}" />
 				<Button DockPanel.Dock="Right"
