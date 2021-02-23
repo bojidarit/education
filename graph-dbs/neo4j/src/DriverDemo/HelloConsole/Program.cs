@@ -9,7 +9,7 @@
 	{
 		static async Task Main(string[] args)
 		{
-			Console.WriteLine("*** Hello Console Async App");
+			Console.WriteLine("*** Hello Console Async App ***");
 			var (flag, passResult) = Statics.AskForPassowrd();
 			if (!flag)
 			{
@@ -25,7 +25,7 @@
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"ERROR {ex.GetType().FullName}: {ex.Message}");
+				Statics.WriteException(ex);
 			}
 		}
 
