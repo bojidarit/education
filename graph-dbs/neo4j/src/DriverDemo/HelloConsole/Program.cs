@@ -1,5 +1,6 @@
 ﻿namespace HelloConsole
 {
+	using Neo4jLib;
 	using System;
 	using System.IO;
 	using System.Threading.Tasks;
@@ -8,17 +9,17 @@
 	{
 		static async Task Main(string[] args)
 		{
-			Console.Write("Enter password (:q to quit) -> ");
-			var pass = Console.ReadLine();
-
-			if (pass == ":q")
+			Console.WriteLine("*** Hello Console Async App");
+			var (flag, passResult) = Statics.AskForPassowrd();
+			if (!flag)
 			{
+				Console.WriteLine(passResult);
 				return;
 			}
 
 			try
 			{
-				var greetingWriter = new GreetingWriter(pass);
+				var greetingWriter = new GreetingWriter(passResult);
 				var result = await greetingWriter.WriteGreeting($"Hello {GetUniqueValue()}");
 				Console.WriteLine(result);
 			}

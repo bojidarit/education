@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloConsoleSync", "HelloCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoviesConsole", "MoviesConsole\MoviesConsole.csproj", "{94406A5F-6976-458D-8E95-D936F9D00D64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo4jLib", "Neo4jLib\Neo4jLib.csproj", "{492B493E-8DBA-4D9C-B12B-18AE5606D2CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{94406A5F-6976-458D-8E95-D936F9D00D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94406A5F-6976-458D-8E95-D936F9D00D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94406A5F-6976-458D-8E95-D936F9D00D64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{492B493E-8DBA-4D9C-B12B-18AE5606D2CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{492B493E-8DBA-4D9C-B12B-18AE5606D2CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{492B493E-8DBA-4D9C-B12B-18AE5606D2CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{492B493E-8DBA-4D9C-B12B-18AE5606D2CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

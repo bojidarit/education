@@ -1,18 +1,17 @@
 ﻿namespace HelloConsole
 {
 	using Neo4j.Driver;
+	using Neo4jLib;
 	using System;
 	using System.Threading.Tasks;
 
 	public class GreetingWriter : IDisposable
 	{
 		private readonly IDriver driver;
-		private readonly string defaultUri = "bolt://localhost:7687";
-		private readonly string defaultUser = "neo4j";
 
 		public GreetingWriter(string password)
 		{
-			driver = GraphDatabase.Driver(defaultUri, AuthTokens.Basic(defaultUser, password));
+			driver = GraphDatabase.Driver(Statics.DefaultUri, AuthTokens.Basic(Statics.DefaultUser, password));
 		}
 
 		public async ValueTask<string> WriteGreeting(string message)
