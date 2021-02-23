@@ -22,6 +22,7 @@
 			{
 				using (var driver = Statics.CreateDriver(passResult))
 				{
+					// Setting the default database for testing purposes only.
 					var session = driver.AsyncSession(SessionConfigBuilder.ForDatabase("neo4j"));
 					Console.WriteLine($"Session's Database is '{session.SessionConfig.Database}'");
 					
