@@ -22,7 +22,9 @@
 			{
 				using (var driver = Statics.CreateDriver(passResult))
 				{
-					var session = driver.AsyncSession();
+					var session = driver.AsyncSession(SessionConfigBuilder.ForDatabase("neo4j"));
+					Console.WriteLine($"Session's Database is '{session.SessionConfig.Database}'");
+					
 					try
 					{
 						var names = await session
