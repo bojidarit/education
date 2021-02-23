@@ -19,7 +19,7 @@
 			}
 
 			var message = $"Hello {GetUniqueValue()}";
-			using (var driver = GraphDatabase.Driver(Statics.DefaultUri, AuthTokens.Basic(Statics.DefaultUser, passResult)))
+			using (var driver = Statics.CreateDriver(passResult))
 			using (var session = driver.Session())
 			{
 				var greeting = session.WriteTransaction(tx =>

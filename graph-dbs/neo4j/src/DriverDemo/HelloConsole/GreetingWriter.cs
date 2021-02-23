@@ -11,7 +11,7 @@
 
 		public GreetingWriter(string password)
 		{
-			driver = GraphDatabase.Driver(Statics.DefaultUri, AuthTokens.Basic(Statics.DefaultUser, password));
+			driver = Statics.CreateDriver(password);
 		}
 
 		public async ValueTask<string> WriteGreeting(string message)

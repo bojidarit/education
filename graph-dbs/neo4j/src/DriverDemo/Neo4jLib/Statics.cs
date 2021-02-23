@@ -61,10 +61,27 @@
 		}
 
 		public static void WriteException(Exception ex) =>
-			Console.WriteLine($"ERROR {ex.GetType().FullName}: {ex.Message}");
+			Console.WriteLine($"{Environment.NewLine}*** ERROR {ex.GetType().FullName}: {ex.Message}");
 
 		static Task<string> GetDummyTextAsync(string text) =>
 			Task.FromResult(text);
+
+		public static void PrintList(List<string> list, string label)
+		{
+			WriteTitle($"List of {label}");
+			if (list.Count == 0)
+			{
+				Console.WriteLine($"*There are no {label}.");
+			}
+			else
+			{
+				var num = 1;
+				list.ForEach(i => WriteNumberedLine(num++, i));
+			}
+		}
+
+		public static IDriver CreateDriver(string password) =>
+			GraphDatabase.Driver(DefaultUri, AuthTokens.Basic(DefaultUser, password));
 
 		#endregion
 	}

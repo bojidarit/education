@@ -20,7 +20,7 @@
 
 		public MoviesReader(string password)
 		{
-			driver = GraphDatabase.Driver(Statics.DefaultUri, AuthTokens.Basic(Statics.DefaultUser, password));
+			driver = Statics.CreateDriver(password);
 		}
 
 		#endregion
@@ -79,13 +79,13 @@
 		{
 			var result = new List<string>();
 
-			var reared = await transaction
+			var reader = await transaction
 				.RunAsync(Statics.CypherGetAllRelationTypes)
 				.ConfigureAwait(false);
 
-			while (await reared.FetchAsync())
+			while (await reader.FetchAsync())
 			{
-				result.Add(reared.Current[0].ToString());
+				result.Add(reader.Current[0].ToString());
 			}
 
 			return result;
@@ -95,13 +95,13 @@
 		{
 			var result = new List<string>();
 
-			var reared = await transaction
+			var reader = await transaction
 				.RunAsync(Statics.CypherGetAllLabels)
 				.ConfigureAwait(false);
 
-			while (await reared.FetchAsync())
+			while (await reader.FetchAsync())
 			{
-				var node = reared.Current[0] as IEnumerable<object>;
+				var node = reader.Current[0] as IEnumerable<object>;
 				result.Add(Statics.FormatAsArray(node.Select(n => n.ToString())));
 			}
 
