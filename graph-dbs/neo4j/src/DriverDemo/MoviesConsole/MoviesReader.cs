@@ -33,6 +33,9 @@
 		public ValueTask<List<string>> ReadAllLabels() =>
 			ReadStringList(GetAllLabels);
 
+		public ValueTask<List<string>> ReadAllRelationTypes() =>
+			ReadStringList(GetAllRelationTypes);
+
 		public ValueTask<List<string>> ReadAllByLabel(string label)
 		{
 			if (!string.IsNullOrEmpty(label))
@@ -67,6 +70,22 @@
 			finally
 			{
 				await session?.CloseAsync();
+			}
+
+			return result;
+		}
+
+		private async Task<List<string>> GetAllRelationTypes(IAsyncTransaction transaction)
+		{
+			var result = new List<string>();
+
+			var reared = await transaction
+				.RunAsync(Statics.CypherGetAllRelationTypes)
+				.ConfigureAwait(false);
+
+			while (await reared.FetchAsync())
+			{
+				result.Add(reared.Current[0].ToString());
 			}
 
 			return result;

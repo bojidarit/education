@@ -16,6 +16,7 @@
 
 		public static string CypherGetAllLabels = "MATCH(node) RETURN distinct labels(node) as Label";
 		public static string CypherGetAllNodes = "MATCH (node:{0}) RETURN node as Node";
+		public static string CypherGetAllRelationTypes = "MATCH (n:Person)-[r]-(m:Movie) RETURN distinct type(r) as RelationType";
 
 		public static readonly string Line = new string('-', 50);
 

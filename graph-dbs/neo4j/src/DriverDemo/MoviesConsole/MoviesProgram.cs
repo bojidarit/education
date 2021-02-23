@@ -2,6 +2,8 @@
 {
 	using Neo4jLib;
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	class MoviesProgram
@@ -18,26 +20,24 @@
 
 			try
 			{
-				var reader = new MoviesReader(passResult);
-
-				var labels = await reader.ReadAllLabels().ConfigureAwait(false);
-				if (labels.Count == 0)
+				using (var reader = new MoviesReader(passResult))
 				{
-					Console.WriteLine("There are no nodes.");
+					var labels = await reader.ReadAllLabels().ConfigureAwait(false);
+					PrintObjectsList(labels, "labels");
+
+					Console.WriteLine();
+
+					var realations = await reader.ReadAllRelationTypes().ConfigureAwait(false);
+					PrintObjectsList(realations.Select(i => $"\"{i}\"").ToList(), "relation types");
+
+					WaitForKey();
+
+					await GetNodesByLabel(reader, "Movie");
+
+					WaitForKey();
+
+					await GetNodesByLabel(reader, "Person");
 				}
-				else
-				{
-					Statics.WriteTitle($"All Labels");
-					Console.WriteLine(Statics.FormatAsArray(labels));
-				}
-
-				Console.WriteLine();
-
-				await GetNodesByLabel(reader, "Movie");
-		
-				Console.WriteLine();
-
-				await GetNodesByLabel(reader, "Person");
 			}
 			catch (Exception ex)
 			{
@@ -45,10 +45,31 @@
 			}
 		}
 
+		private static void WaitForKey()
+		{
+			Console.WriteLine();
+			Console.Write("Press any key to continue...");
+			Console.ReadKey();
+			Console.WriteLine();
+		}
+
+		static void PrintObjectsList(List<string> list, string label)
+		{
+			Statics.WriteTitle($"All {label}");
+			if (list.Count == 0)
+			{
+				Console.WriteLine($"*There are no {label}.");
+			}
+			else
+			{
+				Console.WriteLine(Statics.FormatAsArray(list));
+			}
+		}
+
 		static async ValueTask GetNodesByLabel(MoviesReader reader, string label)
 		{
 			Statics.WriteTitle($"All ({label})");
-			
+
 			var num = 1;
 			var list = await reader.ReadAllByLabel(label).ConfigureAwait(false);
 
