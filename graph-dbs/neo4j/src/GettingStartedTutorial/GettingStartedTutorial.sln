@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo4jClientIntro", "Neo4jClientIntro\Neo4jClientIntro.csproj", "{A0DF4B1E-7232-4DF4-A527-DF59DFB56549}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo4jClientLatestDemo", "Neo4jClientLatestDemo\Neo4jClientLatestDemo.csproj", "{2D618F89-4C70-44A0-8591-C495E9DA610B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0DF4B1E-7232-4DF4-A527-DF59DFB56549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0DF4B1E-7232-4DF4-A527-DF59DFB56549}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0DF4B1E-7232-4DF4-A527-DF59DFB56549}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0DF4B1E-7232-4DF4-A527-DF59DFB56549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D618F89-4C70-44A0-8591-C495E9DA610B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D618F89-4C70-44A0-8591-C495E9DA610B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D618F89-4C70-44A0-8591-C495E9DA610B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D618F89-4C70-44A0-8591-C495E9DA610B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {427EEDBB-C95D-461A-A392-3A104A687D3A}
+	EndGlobalSection
+EndGlobal
