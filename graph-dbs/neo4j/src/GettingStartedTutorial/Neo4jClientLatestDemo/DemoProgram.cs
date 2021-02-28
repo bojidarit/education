@@ -4,6 +4,7 @@
 	using Neo4jClientLatestDemo.Dtos;
 	using Newtonsoft.Json;
 	using System;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	// ----------------------------------------------------------------------------------
@@ -25,18 +26,27 @@
 		static async Task Main(string[] args)
 		{
 			Console.WriteLine("Choose a Demo from the list:");
-			Console.WriteLine("\t1) All Movies.");
-			Console.WriteLine("\t2) All Persons.");
-			Console.WriteLine("\t3) Movies From 90's.");
-			Console.WriteLine("\t4) In which movies does Tom Hanks star?");
+			Console.WriteLine("\t1) All Movies;");
+			Console.WriteLine("\t2) All Persons;");
+			Console.WriteLine("\t3) Movies From 90's;");
+			Console.WriteLine("\t4) In which movies does Tom Hanks star;");
+			Console.WriteLine("\t5) Create Movie And Actor;");
+			Console.WriteLine("\t ... or negative number to quit.");
 			Console.Write("Enter the number of the demo here: ");
 			var text = Console.ReadLine();
+
 			if (!int.TryParse(text, out var number))
 			{
 				return;
 			}
 
 			Console.WriteLine();
+
+			if (number <= 0)
+			{
+				Console.WriteLine("You have quit. Bye...");
+				return;
+			}
 
 			try
 			{
@@ -56,6 +66,10 @@
 
 					case 4:
 						await DemoTomHanksMovies().ConfigureAwait(false);
+						break;
+
+					case 5:
+						await CreateMovieAndActor(insert: true).ConfigureAwait(false);
 						break;
 
 					default:
@@ -138,6 +152,80 @@
 
 					PrintNode(num++, item.Movie);
 				}
+			}
+		}
+
+		static async Task CreateMovieAndActor(bool insert)
+		{
+			var pressAnyKey = "Pres any key to continue.";
+
+			using (var client = CreateGraphClient())
+			{
+				await client.ConnectAsync();
+
+				var movieTitle = "Interstellar";
+				var personName = "Jessica Chastain";
+
+				if (insert)
+				{
+					// Create new movie
+					var movie = Movie.Create(
+						movieTitle,
+						"Mankind was born on Earth. It was never meant to die here.",
+						2014);
+
+					await client.Cypher
+						.Create("(m:Movie $movie)")
+						.WithParam("movie", movie)
+						.ExecuteWithoutResultsAsync();
+
+					Console.WriteLine($"Created movie with title '{movie.title}'" +
+						$"{Environment.NewLine}{pressAnyKey}");
+					Console.ReadKey();
+
+					// Create new actor
+					var person = Person.Create(personName, 1977);
+
+					await client.Cypher
+						.Create("(p:Person $person)")
+						.WithParam("person", person)
+						.ExecuteWithoutResultsAsync();
+
+					Console.WriteLine($"Created person with name '{personName}'" +
+						$"{Environment.NewLine}{pressAnyKey}");
+					Console.ReadKey();
+				}
+
+				// Query both movie and person
+
+				// MATCH(p:Person) WHERE p.name = 'Jessica Chastain' RETURN p
+				// MATCH(p:Person) WHERE p.name = 'Jessica Chastain' DETACH DELETE p
+
+				// MATCH (m:Movie) WHERE m.title = 'Interstellar' RETURN m
+				// MATCH (m:Movie) WHERE m.title = 'Interstellar' DETACH DELETE m
+
+				// MATCH(p:Person {name: 'Jessica Chastain'}) MATCH(m:Movie {title: 'Interstellar'}) RETURN m,p
+				var query = client.Cypher
+					.Match("(p:Person)")
+					.Where((Person p) => p.name == personName)
+					.Match("(m:Movie)")
+					.Where((Movie m) => m.title == movieTitle)
+					.Return((p, m) => new { Person = p.As<Person>(), Movie = m.As<Movie>() });
+
+				var result = await query.ResultsAsync;
+				var item = result.FirstOrDefault();
+				if (item != null)
+				{
+					Console.WriteLine("The nodes just created are: ");
+					PrintNode(0, item.Movie);
+					PrintNode(0, item.Person);
+				}
+
+				//foreach (var item in await query.ResultsAsync)
+				//{
+				//	PrintNode(0, item.Movie);
+				//	PrintNode(0, item.Person);
+				//}
 			}
 		}
 
