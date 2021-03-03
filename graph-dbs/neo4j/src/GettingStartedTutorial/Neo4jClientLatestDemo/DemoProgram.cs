@@ -18,6 +18,10 @@
 		private static readonly string user = "neo4j";
 		private static readonly string pass = "neo4j";
 
+		private static readonly string movieTitle = "Interstellar";
+		private static readonly string personName = "Jessica Chastain";
+
+
 		#endregion
 
 
@@ -31,6 +35,7 @@
 			Console.WriteLine("\t3) Movies From 90's;");
 			Console.WriteLine("\t4) In which movies does Tom Hanks star;");
 			Console.WriteLine("\t5) Create Movie And Actor;");
+			Console.WriteLine("\t6) Relate previously created Movie And Actor with ACTED_IN;");
 			Console.WriteLine("\t ... or negative number to quit.");
 			Console.Write("Enter the number of the demo here: ");
 			var text = Console.ReadLine();
@@ -70,6 +75,10 @@
 
 					case 5:
 						await CreateMovieAndActor(insert: true).ConfigureAwait(false);
+						break;
+
+					case 6:
+						await CreateActedInRelation(create: true).ConfigureAwait(false);
 						break;
 
 					default:
@@ -163,9 +172,6 @@
 			{
 				await client.ConnectAsync();
 
-				var movieTitle = "Interstellar";
-				var personName = "Jessica Chastain";
-
 				if (insert)
 				{
 					// Create new movie
@@ -229,13 +235,51 @@
 			}
 		}
 
+		static async Task CreateActedInRelation(bool create)
+		{
+			using (var client = CreateGraphClient())
+			{
+				await client.ConnectAsync();
+
+				if (create)
+				{
+					// MATCH(p:Person {name: 'Jessica Chastain'}) MATCH(m:Movie {title: 'Interstellar'}) RETURN m,p
+					await client.Cypher
+						.Match("(p:Person)")
+						.Where((Person p) => p.name == personName)
+						.Match("(m:Movie)")
+						.Where((Movie m) => m.title == movieTitle)
+						.Create("(p)-[:ACTED_IN {roles: ['Murphy Cooper']}]->(m)")
+						.ExecuteWithoutResultsAsync();
+				}
+
+				// MATCH(p:Person {name: 'Jessica Chastain'})-[r:ACTED_IN]->(m:Movie) RETURN p,r,m
+				var query = client.Cypher
+					.Match("(p:Person)-[r:ACTED_IN]->(m:Movie)")
+					.Where((Person p) => p.name == personName)
+					.Return((p, r, m) => new
+					{
+						Person = p.As<Person>(),
+						Relation = r.As<ActedIn>(),
+						Movie = m.As<Movie>()
+					});
+
+				foreach (var item in await query.ResultsAsync)
+				{
+					PrintNode(0, item.Person);
+					PrintNode(0, item.Relation);
+					PrintNode(0, item.Movie);
+				}
+			}
+		}
+
 		#endregion
 
 
 		#region Helpers
 
 		private static GraphClient CreateGraphClient() =>
-			new GraphClient(new Uri(address), user, pass);
+		new GraphClient(new Uri(address), user, pass);
 
 		private static void PrintNode(int num, object obj)
 		{
