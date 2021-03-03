@@ -4,6 +4,7 @@
 	using Neo4jClientLatestDemo.Dtos;
 	using Newtonsoft.Json;
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
 
@@ -21,6 +22,7 @@
 		private static readonly string movieTitle = "Interstellar";
 		private static readonly string personName = "Jessica Chastain";
 
+		private static readonly string Line = new string('-', 50);
 
 		#endregion
 
@@ -34,8 +36,9 @@
 			Console.WriteLine("\t2) All Persons;");
 			Console.WriteLine("\t3) Movies From 90's;");
 			Console.WriteLine("\t4) In which movies does Tom Hanks star;");
-			Console.WriteLine("\t5) Create Movie And Actor;");
-			Console.WriteLine("\t6) Relate previously created Movie And Actor with ACTED_IN;");
+			Console.WriteLine("\t5) Create (merge) Movie And Actor;");
+			Console.WriteLine("\t6) Relate (merge) previously created Movie And Actor with ACTED_IN;");
+			Console.WriteLine("\t7) Get Related Persons And Movies with ACTED_IN;");
 			Console.WriteLine("\t ... or negative number to quit.");
 			Console.Write("Enter the number of the demo here: ");
 			var text = Console.ReadLine();
@@ -74,11 +77,15 @@
 						break;
 
 					case 5:
-						await CreateMovieAndActor(insert: true).ConfigureAwait(false);
+						await CreateMovieAndActor().ConfigureAwait(false);
 						break;
 
 					case 6:
-						await CreateActedInRelation(create: true).ConfigureAwait(false);
+						await CreateActedInRelation().ConfigureAwait(false);
+						break;
+
+					case 7:
+						await GetRelatedPersonAndMovies().ConfigureAwait(false);
 						break;
 
 					default:
@@ -164,7 +171,7 @@
 			}
 		}
 
-		static async Task CreateMovieAndActor(bool insert)
+		static async Task CreateMovieAndActor()
 		{
 			var pressAnyKey = "Pres any key to continue.";
 
@@ -172,35 +179,38 @@
 			{
 				await client.ConnectAsync();
 
-				if (insert)
+				// Create new movie
+				var movieDict = new Dictionary<string, object>()
 				{
-					// Create new movie
-					var movie = Movie.Create(
-						movieTitle,
-						"Mankind was born on Earth. It was never meant to die here.",
-						2014);
+					{ "title", movieTitle },
+					{ "tagline", "Mankind was born on Earth. It was never meant to die here." },
+					{ "released", 2014 },
+				};
 
-					await client.Cypher
-						.Create("(m:Movie $movie)")
-						.WithParam("movie", movie)
-						.ExecuteWithoutResultsAsync();
+				await client.Cypher
+					.Merge("(m:Movie {title: $title, released: $released, tagline: $tagline})")
+					.WithParams(movieDict)
+					.ExecuteWithoutResultsAsync();
 
-					Console.WriteLine($"Created movie with title '{movie.title}'" +
-						$"{Environment.NewLine}{pressAnyKey}");
-					Console.ReadKey();
+				Console.WriteLine($"Created (Merged) movie with title '{movieTitle}'" +
+					$"{Environment.NewLine}{pressAnyKey}");
+				Console.ReadKey();
 
-					// Create new actor
-					var person = Person.Create(personName, 1977);
+				// Create new actor
+				var personDict = new Dictionary<string, object>() 
+				{
+					{ "name", personName },
+					{ "born", 1977 },
+				};
 
-					await client.Cypher
-						.Create("(p:Person $person)")
-						.WithParam("person", person)
-						.ExecuteWithoutResultsAsync();
+				await client.Cypher
+					.Merge("(p:Person {name: $name, born: $born})")
+					.WithParams(personDict)
+					.ExecuteWithoutResultsAsync();
 
-					Console.WriteLine($"Created person with name '{personName}'" +
-						$"{Environment.NewLine}{pressAnyKey}");
-					Console.ReadKey();
-				}
+				Console.WriteLine($"Merged person with name '{personName}'" +
+					$"{Environment.NewLine}{pressAnyKey}");
+				Console.ReadKey();
 
 				// Query both movie and person
 
@@ -218,40 +228,33 @@
 					.Where((Movie m) => m.title == movieTitle)
 					.Return((p, m) => new { Person = p.As<Person>(), Movie = m.As<Movie>() });
 
-				var result = await query.ResultsAsync;
-				var item = result.FirstOrDefault();
-				if (item != null)
+				Console.WriteLine("The nodes just created are: ");
+				var num = 1;
+				foreach (var item in await query.ResultsAsync)
 				{
-					Console.WriteLine("The nodes just created are: ");
+					Console.WriteLine(Line);
+					Console.WriteLine($"-- {num++}");
+					Console.WriteLine(Line);
 					PrintNode(0, item.Movie);
 					PrintNode(0, item.Person);
 				}
-
-				//foreach (var item in await query.ResultsAsync)
-				//{
-				//	PrintNode(0, item.Movie);
-				//	PrintNode(0, item.Person);
-				//}
 			}
 		}
 
-		static async Task CreateActedInRelation(bool create)
+		static async Task CreateActedInRelation()
 		{
 			using (var client = CreateGraphClient())
 			{
 				await client.ConnectAsync();
 
-				if (create)
-				{
-					// MATCH(p:Person {name: 'Jessica Chastain'}) MATCH(m:Movie {title: 'Interstellar'}) RETURN m,p
-					await client.Cypher
-						.Match("(p:Person)")
-						.Where((Person p) => p.name == personName)
-						.Match("(m:Movie)")
-						.Where((Movie m) => m.title == movieTitle)
-						.Create("(p)-[:ACTED_IN {roles: ['Murphy Cooper']}]->(m)")
-						.ExecuteWithoutResultsAsync();
-				}
+				// MATCH(p:Person {name: 'Jessica Chastain'}) MATCH(m:Movie {title: 'Interstellar'}) RETURN m,p
+				await client.Cypher
+					.Match("(p:Person)")
+					.Where((Person p) => p.name == personName)
+					.Match("(m:Movie)")
+					.Where((Movie m) => m.title == movieTitle)
+					.Merge("(p)-[:ACTED_IN {roles: ['Murphy Cooper']}]->(m)")
+					.ExecuteWithoutResultsAsync();
 
 				// MATCH(p:Person {name: 'Jessica Chastain'})-[r:ACTED_IN]->(m:Movie) RETURN p,r,m
 				var query = client.Cypher
@@ -264,11 +267,55 @@
 						Movie = m.As<Movie>()
 					});
 
+				var num = 1;
 				foreach (var item in await query.ResultsAsync)
 				{
+					Console.WriteLine(Line);
+					Console.WriteLine($"-- {num++}");
+					Console.WriteLine(Line);
 					PrintNode(0, item.Person);
 					PrintNode(0, item.Relation);
 					PrintNode(0, item.Movie);
+				}
+			}
+		}
+
+		static async Task GetRelatedPersonAndMovies()
+		{
+			using (var client = CreateGraphClient())
+			{
+				await client.ConnectAsync();
+
+				// MATCH(p:Person)-[r:ACTED_IN]->(m:Movie) RETURN p,r,m ORDER BY p.name, m.released
+				var query = client.Cypher
+					.Match("(p:Person)-[r:ACTED_IN]->(m:Movie)")
+					//.Where((Person p) => p.name == personName)
+					.Return((p, r, m) => new
+					{
+						Person = p.As<Person>(),
+						Relation = r.As<ActedIn>(),
+						Movie = m.As<Movie>()
+					})
+					.OrderBy("p.name, m.released");
+
+				var num = 1;
+				foreach (var item in await query.ResultsAsync)
+				{
+					Console.WriteLine(Line);
+					Console.WriteLine($"*** Relation {num++}");
+					Console.WriteLine($"{Line}{Environment.NewLine}");
+
+					var relations = (item.Relation.roles != null)
+						? string.Join(", ", item.Relation.roles)
+						: string.Empty;
+
+					Console.WriteLine($"({item.Person.name}) -- " +
+						$"[{typeof(ActedIn).Name} as [{relations}]] --> " +
+						$"({item.Movie.released}: {item.Movie.title})");
+
+					//PrintNode(0, item.Person);
+					//PrintNode(0, item.Relation);
+					//PrintNode(0, item.Movie);
 				}
 			}
 		}
