@@ -39,6 +39,7 @@
 			Console.WriteLine("\t5) Create (merge) Movie And Actor;");
 			Console.WriteLine("\t6) Relate (merge) previously created Movie And Actor with ACTED_IN;");
 			Console.WriteLine("\t7) Get Related Persons And Movies with ACTED_IN;");
+			Console.WriteLine("\t10) Show Query Object Debug Data;");
 			Console.WriteLine("\t ... or negative number to quit.");
 			Console.Write("Enter the number of the demo here: ");
 			var text = Console.ReadLine();
@@ -86,6 +87,10 @@
 
 					case 7:
 						await GetRelatedPersonAndMovies().ConfigureAwait(false);
+						break;
+
+					case 10:
+						await ShowQueryObjectDebugData().ConfigureAwait(false);
 						break;
 
 					default:
@@ -316,6 +321,43 @@
 					//PrintNode(0, item.Person);
 					//PrintNode(0, item.Relation);
 					//PrintNode(0, item.Movie);
+				}
+			}
+		}
+
+		static async Task ShowQueryObjectDebugData()
+		{
+			using (var client = CreateGraphClient())
+			{
+				await client.ConnectAsync();
+
+				// MATCH(p:Person)-[r:ACTED_IN]->(m:Movie) RETURN p,r,m ORDER BY p.name, m.released
+				var query = client.Cypher
+					.Match("(p:Person)-[r:ACTED_IN]->(m:Movie)")
+					.Where((Person p) => p.name == personName)
+					.Return((p) => p.As<Person>());
+
+				Console.WriteLine(Line);
+				Console.WriteLine($"Query Debug Info");
+				Console.WriteLine($"{Line}{Environment.NewLine}");
+
+				Console.WriteLine($"*** Query.DebugQueryText:{Environment.NewLine}{query.Query.DebugQueryText}");
+				Console.WriteLine(Line);
+				Console.WriteLine($"*** Query.QueryText:{Environment.NewLine} {query.Query.QueryText}");
+				Console.WriteLine(Line);
+				Console.WriteLine("*** Query Parameters:");
+				foreach (var param in query.Query.QueryParameters)
+				{
+					Console.WriteLine($"{{ {param.Key}, {param.Value} }}");
+				}
+
+				var num = 1;
+				Console.WriteLine($"{Environment.NewLine}{Line}");
+				Console.WriteLine($"*** Person with Relation");
+				Console.WriteLine($"{Line}{Environment.NewLine}");
+				foreach (var item in await query.ResultsAsync)
+				{
+					PrintNode(num++, item);
 				}
 			}
 		}
