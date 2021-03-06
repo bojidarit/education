@@ -39,6 +39,7 @@
 			Console.WriteLine("\t5) Create (merge) Movie And Actor;");
 			Console.WriteLine("\t6) Relate (merge) previously created Movie And Actor with ACTED_IN;");
 			Console.WriteLine("\t7) Get Related Persons And Movies with ACTED_IN;");
+			Console.WriteLine("\t8) Show Movie With Related Actor And Director;");
 			Console.WriteLine("\t10) Show Query Object Debug Data;");
 			Console.WriteLine("\t ... or negative number to quit.");
 			Console.Write("Enter the number of the demo here: ");
@@ -87,6 +88,10 @@
 
 					case 7:
 						await GetRelatedPersonAndMovies().ConfigureAwait(false);
+						break;
+
+					case 8:
+						await ShowMovieWithRelatedActorAndDirector().ConfigureAwait(false);
 						break;
 
 					case 10:
@@ -202,7 +207,7 @@
 				Console.ReadKey();
 
 				// Create new actor
-				var personDict = new Dictionary<string, object>() 
+				var personDict = new Dictionary<string, object>()
 				{
 					{ "name", personName },
 					{ "born", 1977 },
@@ -321,6 +326,46 @@
 					//PrintNode(0, item.Person);
 					//PrintNode(0, item.Relation);
 					//PrintNode(0, item.Movie);
+				}
+			}
+		}
+
+		static async Task ShowMovieWithRelatedActorAndDirector()
+		{
+			using (var client = CreateGraphClient())
+			{
+				await client.ConnectAsync();
+
+				// MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person) RETURN a, m, d
+				// Movies without director or actor are not presented!
+				var query = client.Cypher
+					.Match("(a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person)")
+					//.Where((Person a) => a.name == "Tom Hanks")
+					.Return((a, m, d) => new
+					{
+						Actor = a.As<Person>(),
+						Movie = m.As<Movie>(),
+						Director = d.As<Person>(),
+					})
+					.OrderBy("m.title");
+
+				Console.WriteLine(Line);
+				Console.WriteLine("-- Query.DebugQueryText");
+				Console.WriteLine(Line);
+				Console.WriteLine(query.Query.DebugQueryText);
+				Console.WriteLine();
+
+				var num = 1;
+				foreach (var item in await query.ResultsAsync)
+				{
+					Console.WriteLine(Line);
+					Console.WriteLine($"-- {num++}");
+					Console.WriteLine($"-- Movie: {item.Movie.title} ({item.Movie.released})");
+					Console.WriteLine(Line);
+					Console.WriteLine($"-- Actor");
+					PrintNode(1, item.Actor);
+					Console.WriteLine($"-- Director");
+					PrintNode(2, item.Director);
 				}
 			}
 		}
