@@ -1,0 +1,125 @@
+MigraDoc Foundation
+https://www.nuget.org/packages/PDFsharp-MigraDoc-WPF/1.50.5147
+https://github.com/empira/MigraDoc
+https://github.com/empira/MigraDoc-samples
+
+Creating documents on the fly
+MigraDoc Foundation the Open Source .NET library that easily creates documents based on an object model with 
+paragraphs, tables, styles, etc. and renders them into PDF or RTF.
+
+
+-----------------------------------------------------------------------------------------
+-- What is PDFsharp and MigraDoc?
+-----------------------------------------------------------------------------------------
+
+MigraDoc is a document generator. 
+It supports almost anything you find in any good word processor. 
+You just add paragraphs, tables, charts, arrange all this in sections, use bookmarks to create links, tables of contents, indexes, etc. 
+MigraDoc will do the layout creating page breaks as needed. MigraDoc will create PDF or RTF documents.
+
+PDFsharp is a .NET library for processing PDF file. 
+You create PDF pages using drawing routines known from GDI+. 
+Almost anything that can be done with GDI+ will also work with PDFsharp. 
+Only basic text layout is supported by PDFsharp, and page breaks are not created automatically. 
+The same drawing routines can be used for screen, PDF, or meta files.
+
+-----------------------------------------------------------------------------------------
+-- Use PDFsharp or MigraDoc?
+-----------------------------------------------------------------------------------------
+
+Use PDFsharp if you want to create PDF files only, but be able to control every pixel and every line that is drawn.
+Use MigraDoc if you need documents as PDF and RTF files and if you want to enjoy the comfort of a word processor.
+
+-----------------------------------------------------------------------------------------
+-- Mixing PDFsharp and MigraDoc
+-----------------------------------------------------------------------------------------
+
+If MigraDoc does almost anything you need, then you can use MigraDoc to create PDF files 
+and post-process them with PDFsharp to add some extra features.
+Soon you'll be able to use placeholders in MigraDoc and later on use PDFsharp to draw these placeholders.
+
+Or use PDFsharp to create the document but use MigraDoc to create individual pages. 
+This could be the best choice if your application uses lots of graphics, but also needs some layouted text.
+See the Mix MigraDoc and PDFsharp sample how to do this.
+
+Read more about the Features:
+http://www.pdfsharp.net/Features.ashx
+
+See the PDFsharp Overview and the MigraDoc Overview.
+
+-----------------------------------------------------------------------------------------
+-- Features
+-- http://www.pdfsharp.net/Features.ashx
+-----------------------------------------------------------------------------------------
+
+--> Information about PDFsharp’s features
+Key Features
+	Creates PDF documents on the fly from any .NET language
+	Easy to understand object model to compose documents
+	One source code for drawing on a PDF page as well as in a window or on the printer
+	Modify, merge, and split existing PDF files
+	Images with transparency (color mask, monochrome mask, alpha mask)
+	Newly designed from scratch and written entirely in C#
+	The graphical classes go well with .NET
+
+See the PDFsharp Features for further information.
+
+--> Information about MigraDoc’s features
+Key Features
+	Create perfect documents “on the fly”
+	Import data from various sources via XML files or direct interfaces (any data source that can be used with .NET)
+	Supports different output formats (PDF, Word, HTML, any printer supported by Windows)
+	Integrates easily with existing applications and systems
+	Various options for page layout, text formatting, and document design
+	Dynamic tables and business charts
+	Re-usable building blocks consisting of text and / or code
+	Documents with navigation (hyperlinks and / or bookmarks)
+
+See the MigraDoc Features for further information:
+http://www.pdfsharp.net/MigraDocFeatures.ashx
+
+-----------------------------------------------------------------------------------------
+-- Detailed information about MigraDoc’s features
+-- http://www.pdfsharp.net/MigraDocFeatures.ashx
+-----------------------------------------------------------------------------------------
+Key Features
+	Create perfect documents “on the fly”
+	Import data from various sources via XML files or direct interfaces (any data source that can be used with .NET)
+	Supports different output formats (PDF, Word, HTML, any printer supported by Windows)
+	Integrates easily with existing applications and systems
+	Various options for page layout, text formatting, and document design
+	Dynamic tables and business charts
+	Re-usable building blocks consisting of text and / or code
+	Documents with navigation (hyperlinks and / or bookmarks)
+
+Improvements of Version 1.50
+	GDI+ build running in Medium Trust on Web server: Works now for PDF files if your code uses a FontResolver that relies only on fonts included with your code (see PDFsharp Sample: Private Fonts)
+	Various bug fixes
+
+Improvements of Version 1.30
+	Private Font Collections for WPF version: load TrueType fonts (e. g. from embedded resources) and use them in PDF documents
+	Several bug fixes for WPF version
+	Help file for Visual Studio 2008 (and 2005): context help for PDFsharp and MigraDoc classes available if you hit F1
+	Standalone Help file for Windows: .CHM file that can be viewed without Visual Studio
+
+Improvements of Version 1.20
+	Can use either GDI+ or WPF
+	Includes preview of XPS to PDF converter
+	Includes binaries (DLL files, nowadays called Assemblies)
+	Please note: Developed for and tested with .NET 2.0 and Visual Studio 2005 and with .NET 2.0/3.0 and Visual Studio 2008.
+
+Improvements of Version 1.00
+	Improved support for Unicode
+	Font embedding and subsetting
+	Bug fixed in connection with Acrobat 8
+	New sample demonstrates using PDFsharp and MigraDoc to create a document
+	Please note: The support for .NET 1.1 and Visual Studio 2003 was dropped. Developed for and tested with .NET 2.0 and Visual Studio 2005.
+
+Improvements of beta 4
+	Support for Unicode
+	Various bug fixes
+	Many minor improvements
+
+Improvements of beta 3
+	Bug fixes
+	Many improvements
