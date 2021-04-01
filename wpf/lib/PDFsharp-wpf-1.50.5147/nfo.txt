@@ -1,0 +1,133 @@
+PDFsharp
+
+https://www.nuget.org/packages/PDFsharp-wpf/1.50.5147
+http://www.pdfsharp.net/
+
+https://github.com/empira/PDFsharp
+https://github.com/empira/PDFsharp-samples
+
+
+A .NET library for processing PDF
+
+PDFsharp is the Open Source .NET library that easily creates and processes PDF documents on the fly from any .NET language. 
+The same drawing routines can be used to create PDF documents, draw on the screen, or send output to any printer.
+
+This is the PDFsharp WPF package. See Project Information for details.
+
+-----------------------------------------------------------------------------------------
+-- Features
+-----------------------------------------------------------------------------------------
+
+
+Information about PDFsharp’s features
+Key Features
+Creates PDF documents on the fly from any .NET language
+Easy to understand object model to compose documents
+One source code for drawing on a PDF page as well as in a window or on the printer
+Modify, merge, and split existing PDF files
+Images with transparency (color mask, monochrome mask, alpha mask)
+Newly designed from scratch and written entirely in C#
+The graphical classes go well with .NET
+
+See the PDFsharp Features for further information:
+http://www.pdfsharp.net/PDFsharpFeatures.ashx
+
+
+-----------------------------------------------------------------------------------------
+-- Detailed information about PDFsharp’s features
+-----------------------------------------------------------------------------------------
+
+Key Features
+Creates PDF documents on the fly from any .NET language
+Easy to understand object model to compose documents
+One source code for drawing on a PDF page as well as in a window or on the printer
+Modify, merge, and split existing PDF files
+Images with transparency (color mask, monochrome mask, alpha mask)
+Newly designed from scratch and written entirely in C#
+The graphical classes go well with .NET
+
+Improvements of Version 1.50
+Support for Object Streams - the most wanted feature: works with some files while other files still cause problems
+GDI+ build running in Medium Trust on Web server: Works now for PDF files if your code uses a FontResolver that relies only on fonts included with your code (see PDFsharp Sample: Private Fonts)
+Various bug fixes
+
+Improvements of Version 1.30
+Private Font Collections for WPF version: load TrueType fonts (e. g. from embedded resources) and use them in PDF documents
+Several bug fixes for WPF version
+Help file for Visual Studio 2008 (and 2005): context help for PDFsharp and MigraDoc classes available if you hit F1
+Standalone Help file for Windows: .CHM file that can be viewed without Visual Studio
+
+Improvements of Version 1.20
+Can use either GDI+ or WPF
+Includes preview of XPS to PDF converter
+Includes binaries (DLL files, nowadays called Assemblies)
+Please note: Developed for and tested with .NET 2.0 and Visual Studio 2005 and with .NET 2.0/3.0 and Visual Studio 2008.
+
+Improvements of Version 1.00
+Improved support for Unicode
+Font embedding and subsetting
+Bug fixed in connection with Acrobat 8
+New sample demonstrates using PDFsharp and MigraDoc to create a document
+Please note: The support for .NET 1.1 and Visual Studio 2003 was dropped. Developed for and tested with .NET 2.0 and Visual Studio 2005.
+
+Improvements of beta 4
+Support for Unicode
+Advanced text layout with new TextFormatter class
+Three new C# samples
+Various bug fixes
+Many minor improvements
+
+Improvements of beta 3
+Two new samples: ConcatenateDocuments and XForms
+Bug fixes
+Many improvements
+
+Improvements of beta 2
+Linear gradient brushes
+XGraphics.Save/Restore now work properly with nested calls
+TextAnnotations, Rubber stamp annotations
+Read content of interactive form fields (AcroForms) (still under construction)
+Write interactive form fields (AcroForms) (still under construction)
+First two bar code types (Code2of5Interleaved and Code3of9Standard)
+XPdfForm objects as templates. Use XGraphics class to create PDF form objects.
+
+Graphics
+The graphical objects follow the design pattern of the .NET framework. With one set of functions you can draw on a PDF page as well as on a System.Drawing.Graphics object. Your application can render its output in a window, on the printer or in a PDF document.
+
+Lines, polylines, arcs, Bézier splines, canonical splines
+Rectangles, rounded rectangles, ellipses, polygons, pies, closed splines, paths
+RGB, CMYK, and gray scale colors with transparency
+Pens and brushes for drawing and filling
+GDI+ like predefined colors, pens and brushes
+Matrix transformations
+BMP, PNG, GIF, TIFF, and JPEG images
+Image masks and transparency
+Form XObjects
+Clipping through graphical path
+Linear gradient brushes
+First two bar code types (Code2of5Interleaved and Code3of9Standard)
+
+Text
+TrueType fonts / OpenType fonts with TrueType outline
+Matrix transformations
+Converting glyphs to a graphical path
+WinAnsi and Unicode encoding
+TextAnnotations, Rubber stamp annotations
+Unicode support in PDF files
+TextFormatter class for simple text layout
+
+Security
+Encryption with 40/128 bit with password
+Document access permissions
+
+PDF Features
+Supports PDF versions 1.2 through 1.4 (including the transparency features introduced with Adobe Reader 5.0); these files can be read and written
+Can create PDF files marked for PDF version 1.2 (Adobe Acrobat Reader 3) through 1.7 (Adobe Reader 8); newer Reader versions can always read the files
+Read content of interactive form fields (AcroForms) (still under construction)
+XPdfForm objects as templates. Use XGraphics class to create PDF form objects.
+
+See the PDFsharp Overview and the MigraDoc Overview.
+
+http://www.pdfsharp.net/PDFsharpOverview.ashx
+
+http://www.pdfsharp.net/MigraDocOverview.ashx
