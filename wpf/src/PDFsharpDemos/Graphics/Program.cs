@@ -8,6 +8,7 @@
 
     /// <summary>
     /// This sample shows some of the capabilities of the XGraphcis class.
+    /// Source: https://github.com/empira/PDFsharp-samples
     /// </summary>
     class Program
     {
