@@ -59,11 +59,12 @@ namespace Graphics
         public void BeginBox(XGraphics gfx, int number, string title)
         {
             const int dEllipse = 15;
-            var rect = new XRect(0, 20, 300, 200);
+            var rect = new XRect(x: 0, y: 20, width: 300, height: 200);
             if (number % 2 == 0)
                 rect.X = 300 - 5;
             rect.Y = 40 + ((number - 1) / 2) * (200 - 5);
             rect.Inflate(-10, -10);
+
             var rect2 = rect;
             rect2.Offset(BorderWidth, BorderWidth);
             gfx.DrawRoundedRectangle(new XSolidBrush(ShadowColor), rect2, new XSize(dEllipse + 8, dEllipse + 8));

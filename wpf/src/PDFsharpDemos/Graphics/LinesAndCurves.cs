@@ -16,10 +16,10 @@ namespace Graphics
 
             DrawLine(gfx, 1);
             DrawLines(gfx, 2);
-            DrawBezier(gfx, 3);
-            DrawBeziers(gfx, 4);
-            DrawCurve(gfx, 5);
-            DrawArc(gfx, 6);
+            DrawCurve(gfx, 3);
+            DrawArc(gfx, 4);
+            DrawBezier(gfx, 5);
+            DrawBeziers(gfx, 6);
         }
 
         /// <summary>
@@ -126,8 +126,9 @@ namespace Graphics
         {
             BeginBox(gfx, number, "DrawArc");
 
-            var pen = new XPen(XColors.Plum, 4.7);
-            gfx.DrawArc(pen, 0, 0, 250, 140, 190, 200);
+            var pen = new XPen(XColors.Plum, width: 4.7);
+            //gfx.DrawArc(pen, x: 0, y: 0, width: 250, height: 140, startAngle: 190, sweepAngle: 200);
+            gfx.DrawArc(pen, x: 18, y: 10, width: 210, height: 210, startAngle: 180, sweepAngle: 180);
 
             EndBox(gfx);
         }

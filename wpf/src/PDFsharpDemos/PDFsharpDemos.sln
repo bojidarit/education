@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphics", "Graphics\Graphi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiplePages", "MultiplePages\MultiplePages.csproj", "{4152AD6C-4214-40A1-8432-F52721EBC824}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PercentageArc", "PercentageArc\PercentageArc.csproj", "{66D70194-44B2-4D53-90BD-ACA330E03F60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFsharpLib", "PDFsharpLib\PDFsharpLib.csproj", "{6ED6AC7E-EAB0-49B3-BCE7-69D9789BA55F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{4152AD6C-4214-40A1-8432-F52721EBC824}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4152AD6C-4214-40A1-8432-F52721EBC824}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4152AD6C-4214-40A1-8432-F52721EBC824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66D70194-44B2-4D53-90BD-ACA330E03F60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66D70194-44B2-4D53-90BD-ACA330E03F60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66D70194-44B2-4D53-90BD-ACA330E03F60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66D70194-44B2-4D53-90BD-ACA330E03F60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ED6AC7E-EAB0-49B3-BCE7-69D9789BA55F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ED6AC7E-EAB0-49B3-BCE7-69D9789BA55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ED6AC7E-EAB0-49B3-BCE7-69D9789BA55F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ED6AC7E-EAB0-49B3-BCE7-69D9789BA55F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
