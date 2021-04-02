@@ -5,12 +5,13 @@
     using System.IO;
     using PdfSharp.Fonts;
     using PdfSharp.Pdf;
+	using PDFsharpLib;
 
-    /// <summary>
-    /// This sample shows some of the capabilities of the XGraphcis class.
-    /// Source: https://github.com/empira/PDFsharp-samples
-    /// </summary>
-    class Program
+	/// <summary>
+	/// This sample shows some of the capabilities of the XGraphcis class.
+	/// Source: https://github.com/empira/PDFsharp-samples
+	/// </summary>
+	class Program
     {
         static void Main()
         {
@@ -33,23 +34,7 @@
 
             // Save the document...
             const string filename = "HelloGraphics_tempfile.pdf";
-            var folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var path = Path.Combine(folder, filename);
-
-            Console.WriteLine($"Will save '{path}'.{Environment.NewLine}Do you want to start a viewer (Y/n)?");
-            var keyInfo = Console.ReadKey();
-            var key = keyInfo.KeyChar.ToString().ToUpper();
-
-            Document.Save(path);
-
-            if (key == "N")
-            {
-                Console.Clear();
-                return;
-            }
-
-            // ...and start a viewer.
-            Process.Start(path);
+            Helper.SaveAndOpenPdfDocument(filename, Document);
         }
 
         internal static PdfDocument Document;
