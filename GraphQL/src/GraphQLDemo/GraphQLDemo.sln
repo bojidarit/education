@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApsNetGQLWebApp", "ApsNetGQLWebApp\ApsNetGQLWebApp.csproj", "{DDA7AFF9-E580-4E7D-9009-6C7CEC10A950}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GQLConsoleDemo", "GQLConsoleDemo\GQLConsoleDemo.csproj", "{CD339433-7653-48AE-8200-99E2BF5F3365}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDA7AFF9-E580-4E7D-9009-6C7CEC10A950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDA7AFF9-E580-4E7D-9009-6C7CEC10A950}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDA7AFF9-E580-4E7D-9009-6C7CEC10A950}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDA7AFF9-E580-4E7D-9009-6C7CEC10A950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD339433-7653-48AE-8200-99E2BF5F3365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD339433-7653-48AE-8200-99E2BF5F3365}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD339433-7653-48AE-8200-99E2BF5F3365}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD339433-7653-48AE-8200-99E2BF5F3365}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC73FFC3-FA80-4CFE-84A6-4D0D96F8193B}
+	EndGlobalSection
+EndGlobal
