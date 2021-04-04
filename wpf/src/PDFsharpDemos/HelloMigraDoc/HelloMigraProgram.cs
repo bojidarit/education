@@ -34,11 +34,14 @@
 			"Aenean egestas eros ut sem semper blandit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam auctor ligula a erat dapibus pulvinar. Nulla in nisi in elit sodales interdum id sed diam. Sed rutrum tincidunt risus, vitae ullamcorper velit semper eget. Maecenas porttitor ex urna, vel euismod leo congue et. Sed volutpat non mi in tempus. Mauris sollicitudin rutrum augue imperdiet sollicitudin. Cras euismod, mauris in hendrerit bibendum, arcu felis vestibulum enim, sit amet rutrum dolor metus in augue. Etiam non pretium libero. Nulla blandit arcu vel commodo molestie.",
 			"Aliquam vitae augue fringilla, rutrum libero at, semper metus. Suspendisse et dolor nisi. Nam tristique ex a ex congue aliquam. Donec et efficitur velit. Integer maximus ipsum velit, in elementum dui finibus vitae. Sed vestibulum gravida urna at consequat. Quisque sagittis pulvinar sapien in vulputate. Donec a ex tempus, pretium dui ut, pretium mauris. Praesent nibh felis, vehicula non leo non, vulputate efficitur nulla. Maecenas elementum tortor eros, eu sollicitudin eros venenatis a. Duis egestas sed dui sit amet rutrum. Nunc sed venenatis velit, nec euismod leo.",
 			"Pellentesque id nisi at arcu luctus ullamcorper sed ac eros. Vestibulum imperdiet risus semper blandit hendrerit. Nullam sed lacinia nisi, eget lacinia augue. Nunc nec nisl ac elit accumsan malesuada. Fusce ex justo, efficitur id dapibus eu, volutpat eu justo. Integer velit turpis, malesuada mollis maximus eu, dapibus at leo. Aliquam a magna massa. Donec et vestibulum justo, ac semper turpis. Nunc et ultricies sem. Quisque faucibus ut lectus id condimentum. Quisque non urna sem. In auctor finibus molestie. Proin at nulla feugiat, maximus urna ac, placerat ligula. Nunc rutrum eget enim sit amet aliquet. Proin non tellus consectetur tellus feugiat semper quis ac est. Fusce facilisis nisl sit amet iaculis aliquam.",
-			"Donec ac massa velit. Vivamus dignissim velit ante, tempus commodo tellus euismod a. Nunc pulvinar nibh ut risus tempus tristique in sed tortor. Vestibulum vulputate purus quis imperdiet iaculis. Sed quis nulla tempor lorem finibus convallis. In eget interdum sem. Praesent sagittis tellus quis lorem venenatis, quis gravida erat placerat. Vivamus ipsum erat, dictum vehicula nisi vulputate, euismod rhoncus diam. Vivamus non metus tristique turpis suscipit mattis venenatis ut leo. Vivamus ut ultrices nisi. Etiam dolor diam, tincidunt et quam ut, tempus consequat neque. Donec quis ex leo. Aliquam erat volutpat. Vivamus ut sollicitudin odio, ut ullamcorper lorem.",
+			"Donec ac massa velit. Vivamus dignissim velit ante, tempus commodo tellus euismod a. Nunc pulvinar nibh ut risus tempus tristique in sed tortor. Vestibulum vulputate purus quis imperdiet iaculis. Sed quis nulla tempor lorem finibus convallis. In eget interdum sem.",
 		};
 
 		private static string HeaderFooterFontName = "Consolas";
 		private static Unit HeaderFooterFontSize = 10;
+		private static readonly string Dots = new string ('.', 33);
+
+		private static Row firstRow = null;
 
 		#endregion
 
@@ -86,7 +89,11 @@
 
 			CreateHeader(section, imageHeight: "2cm");
 
-			CreateFooter(section);
+			var sectionWidth = section.PageSetup.PageWidth - section.PageSetup.LeftMargin - section.PageSetup.RightMargin;
+
+			CreateFooter(section, sectionWidth);
+
+			CreateSignature(section, sectionWidth);
 		}
 
 		private static void CreateContent(Section section)
@@ -148,9 +155,8 @@
 			paragraph.AddText(contacts);
 		}
 
-		static void CreateFooter(Section section)
+		static void CreateFooter(Section section, float sectionWidth)
 		{
-			var sectionWidth = section.PageSetup.PageWidth - section.PageSetup.LeftMargin - section.PageSetup.RightMargin;
 			var columnWidth = sectionWidth / 4.0;
 
 			// Create and style the primary footer.
@@ -188,6 +194,67 @@
 			paragraph.Add(new PageField());
 			paragraph.AddText(" of ");
 			paragraph.Add(new NumPagesField());
+		}
+
+		private static void CreateSignature(Section section, float sectionWidth)
+		{
+			var columnWidth = sectionWidth / 4.0;
+
+			var paragraph = section.AddParagraph();
+
+			// Set table structure
+			var table = section.AddTable();
+			table.Format.KeepTogether = true;
+			table.Borders.Visible = false;
+
+			for (var i = 0; i < 4; i++)
+			{
+				var column = table.AddColumn();
+				column.Width = columnWidth;
+			}
+
+			// Empty row for signatures table separation
+			firstRow = table.AddRow();
+
+			// Add table content
+			AddSignatureData(table, "Created from", "Approved from", "administrator", "manager");
+			AddSignatureData(table, "First check", "Second check", "supervisor 1", "supervisor 2");
+			AddSignatureData(table, "Third check", "Fourth check", "supervisor 3", "supervisor 4");
+
+			firstRow.KeepWith = table.Rows.Count - 1;
+		}
+
+		static void AddSignatureData(
+			Table table,
+			string from1,
+			string from2,
+			string position1,
+			string position2)
+		{
+			var row = table.AddRow();
+
+			row.Cells[0].Format.Alignment = ParagraphAlignment.Right;
+			row.Cells[0].AddParagraph().AddText(from1);
+
+			row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
+			row.Cells[1].AddParagraph().AddText(Dots);
+
+			row.Cells[2].Format.Alignment = ParagraphAlignment.Right;
+			row.Cells[2].AddParagraph().AddText(from2);
+
+			row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
+			row.Cells[3].AddParagraph().AddText(Dots);
+
+			row = table.AddRow();
+
+			row.Cells[1].Format.Alignment = ParagraphAlignment.Center;
+			row.Cells[1].AddParagraph().AddText($"/{position1}/");
+
+			row.Cells[3].Format.Alignment = ParagraphAlignment.Center;
+			row.Cells[3].AddParagraph().AddText($"/{position2}/");
+
+			// Empty row for signature group separation
+			table.AddRow();
 		}
 
 		static PdfDocument RenderMigraDocument(bool unicode = true)
