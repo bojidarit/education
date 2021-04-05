@@ -59,5 +59,9 @@
       <Name>PDFsharpLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\CityLogo.png" />
+    <EmbeddedResource Include="Images\LogoLandscape.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

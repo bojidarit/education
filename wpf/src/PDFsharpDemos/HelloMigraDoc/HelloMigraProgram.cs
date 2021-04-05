@@ -8,16 +8,13 @@
 	using PdfSharp.Pdf;
 	using PDFsharpLib;
 	using System;
+	using System.Reflection;
 
 	class HelloMigraProgram
 	{
 		#region Fields
 
 		private static Document document;
-
-		private const string LogoLandscapePath = "../../../../../assets/images/Logo landscape.png";
-		private const string MigraDocPath = "../../../../../assets/images/MigraDoc.png";
-		private const string CityLogoPath = "../../../../../assets/images/CityLogo.png";
 
 		private static string[] Contacts = new[]
 		{
@@ -128,23 +125,31 @@
 		{
 			var header = section.Headers.Primary;
 
-			var image = header.AddImage(LogoLandscapePath);
-			image.Height = imageHeight;
-			image.LockAspectRatio = true;
-			image.RelativeVertical = RelativeVertical.Line;
-			image.RelativeHorizontal = RelativeHorizontal.Margin;
-			image.Top = ShapePosition.Top;
-			image.Left = ShapePosition.Left;
-			image.WrapFormat.Style = WrapStyle.Through;
+			var imageName = GetImageFromResource("Images.LogoLandscape.png");
+			if (!string.IsNullOrEmpty(imageName))
+			{
+				var image = header.AddImage(imageName);
+				image.Height = imageHeight;
+				image.LockAspectRatio = true;
+				image.RelativeVertical = RelativeVertical.Line;
+				image.RelativeHorizontal = RelativeHorizontal.Margin;
+				image.Top = ShapePosition.Top;
+				image.Left = ShapePosition.Left;
+				image.WrapFormat.Style = WrapStyle.Through;
+			}
 
-			image = header.AddImage(CityLogoPath);
-			image.Height = imageHeight;
-			image.LockAspectRatio = true;
-			image.RelativeVertical = RelativeVertical.Line;
-			image.RelativeHorizontal = RelativeHorizontal.Margin;
-			image.Top = ShapePosition.Top;
-			image.Left = ShapePosition.Center;
-			image.WrapFormat.Style = WrapStyle.Through;
+			imageName = GetImageFromResource("Images.CityLogo.png");
+			if (!string.IsNullOrEmpty(imageName))
+			{
+				var image = header.AddImage(imageName);
+				image.Height = imageHeight;
+				image.LockAspectRatio = true;
+				image.RelativeVertical = RelativeVertical.Line;
+				image.RelativeHorizontal = RelativeHorizontal.Margin;
+				image.Top = ShapePosition.Top;
+				image.Left = ShapePosition.Center;
+				image.WrapFormat.Style = WrapStyle.Through;
+			}
 
 			var paragraph = header.AddParagraph();
 			paragraph.Format.Font.Name = HeaderFooterFontName;
@@ -269,6 +274,48 @@
 			pdfRenderer.RenderDocument();
 
 			return pdfRenderer.PdfDocument;
+		}
+
+		static string GetImageFromResources(Assembly assembly, string name)
+		{
+			using (var stream = assembly.GetManifestResourceStream(name))
+			{
+				if (stream == null)
+				{
+					return null;
+				}
+
+				var lenght = (int)stream.Length;
+				var buffer = new byte[lenght];
+				stream.Read(buffer, 0, lenght);
+
+				if (buffer == null)
+				{
+					return null;
+				}
+
+				return Convert.ToBase64String(buffer);
+			}
+		}
+
+		/// <summary>
+		/// Get image from embedded resources.
+		/// </summary>
+		/// <param name="imageFithFolderName">Must contain the path to the image delimited with dots instead of slash.</param>
+		static string GetImageFromResource(string imageFithFolderName)
+		{
+			try
+			{
+				var assembly = Assembly.GetExecutingAssembly();
+				var assemblyName = assembly.GetName().Name;
+				var data = GetImageFromResources(assembly, $"{assemblyName}.{imageFithFolderName}");
+				return !string.IsNullOrEmpty(data) ? $"base64:{data}" : null;
+			}
+			catch (Exception ex)
+			{
+				Helper.WriteError(ex, $"Getting Image From Resource ({imageFithFolderName}).");
+				return null;
+			}
 		}
 
 		#endregion
