@@ -57,7 +57,6 @@
   <div class="col-md-3">
     <h2>Application uses</h2>
     <ul>
-      <li><button class="btn btn-info btn-lg" data-toggle="modal" data-target="#testModal">Show modal pop-up</button></li>
       <li>Sample pages using ASP.NET Core MVC</li>
       <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
     </ul>
@@ -65,7 +64,12 @@
   <div class="col-md-3">
     <h2>How to</h2>
     <ul>
-      <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
+      @* Demo link for showing modal *@
+      <li><a class="mark h4" data-toggle="modal" href="#testModal">Open the modal pop-up</a></li>
+      @* Demo button for showing modal *@
+      <li><button class="btn btn-info my-2" data-toggle="modal" data-target="#testModal">Show modal pop-up</button></li>
+
+      <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600" class="mark" data-toggle="tooltip" data-placement="right" title="Add a Controller and View">Add a Controller and View</a></li>
       <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
       <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
       <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
@@ -95,13 +99,15 @@
 </div>
 
 <div id="testModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-sm">
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header bg-info">
-        @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+      <!-- Header -->
+      <div class="modal-header bg-custom-modal-accent modal-header-round-corners">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title font-weight-bold">Just navigation list</h4>
       </div>
+      <!-- Body -->
       <div class="modal-body">
         <div class="row">
           <div class="col-md-12 modal_body_map">
@@ -116,7 +122,8 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer bg-info">
+      <!-- Footer -->
+      <div class="modal-footer bg-custom-modal-accent modal-footer-round-corners">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
