@@ -1,0 +1,64 @@
+https://stackoverflow.com/questions/32612690/bootstrap-4-glyphicons-migration
+
+You can use both Font Awesome and Github Octicons as a free alternative for Glyphicons.
+
+Bootstrap 4 also switched from Less to Sass, so you might integerate the font's Sass (SCSS) into you build process, to create a single CSS file for your projects.
+
+Also see https://getbootstrap.com/docs/4.1/getting-started/build-tools/ to find out how to set up your tooling:
+
+Download and install Node, which we use to manage our dependencies.
+Navigate to the root /bootstrap directory and run npm install to install our local dependencies listed in package.json.
+Install Ruby, install Bundler with gem install bundler, and finally run bundle install. This will install all Ruby dependencies, such as Jekyll and plugins.
+Font Awesome
+
+Download the files at https://github.com/FortAwesome/Font-Awesome/tree/fa-4
+Copy the font-awesome/scss folder into your /bootstrap folder
+Open your SCSS /bootstrap/bootstrap.scss and write down the following SCSS code at the end of this file:
+
+$fa-font-path: "../fonts";
+@import "../font-awesome/scss/font-awesome.scss";
+
+Notice that you also have to copy the font file from font-awesome/fonts to dist/fonts or any other public folder set by $fa-font-path in the previous step
+
+Run: npm run dist to recompile your code with Font-Awesome
+Github Octicons
+
+Download the files at https://github.com/github/octicons/
+Copy the octicons folder into your /bootstrap folder
+Open your SCSS /bootstrap/bootstrap.scss and write down the following SCSS code at the end of this file:
+
+$fa-font-path: "../fonts";
+@import "../octicons/octicons/octicons.scss";
+
+Notice that you also have to copy the font file from font-awesome/fonts to dist/fonts or any other public folder set by $fa-font-path in the previous step
+
+Run: npm run dist to recompile your code with Octicons
+Glyphicons
+
+On the Bootstrap website you can read:
+
+Includes over 250 glyphs in font format from the Glyphicon Halflings set. Glyphicons Halflings are normally not available for free, but their creator has made them available for Bootstrap free of cost. As a thank you, we only ask that you include a link back to Glyphicons whenever possible.
+
+As I understand you can use these 250 glyphs free of cost restricted for Bootstrap but not limited to version 3 exclusive. So you can use them for Bootstrap 4 too.
+
+Copy the fonts files from: https://github.com/twbs/bootstrap-sass/tree/master/assets/fonts/bootstrap
+Copy the https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_glyphicons.scss file into your bootstrap/scss folder
+Open your scss /bootstrap/bootstrap.scss and write down the following SCSS code at the end of this file:
+$bootstrap-sass-asset-helper: false;
+$icon-font-name: 'glyphicons-halflings-regular';
+$icon-font-svg-id: 'glyphicons_halflingsregular';
+$icon-font-path: '../fonts/';
+@import "glyphicons";
+Run: npm run dist to recompile your code with Glyphicons
+Notice that Bootstrap 4 requires the post CSS Autoprefixer for compiling. When you are using a static Sass compiler to compile your CSS you should have to run the Autoprefixer afterwards.
+
+You can find out more about mixing with the Bootstrap 4 SCSS in here.
+
+You can also use Bower to install the fonts above. Using Bower Font Awesome installs your files in bower_components/components-font-awesome/ also notice that Github Octicons sets the octicons/octicons/octicons-.scss as the main file whilst you should use octicons/octicons/sprockets-octicons.scss.
+
+All the above will compile all your CSS code including into a single file, which requires only one HTTP request. Alternatively you can also load the Font-Awesome font from CDN, which can be fast too in many situations. Both fonts on CDN also include the font files (using data-uri's, possible not supported for older browsers). So consider which solution best fits your situation depending on among others browsers to support.
+
+For Font Awesome paste the following code into the <head> section of your site's HTML:
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+Also try Yeoman generator to scaffold out a front-end Bootstrap 4 Web app to test Bootstrap 4 with Font Awesome or Github Octicons.
