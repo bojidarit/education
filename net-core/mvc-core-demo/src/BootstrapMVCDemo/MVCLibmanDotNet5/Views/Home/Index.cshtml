@@ -4,31 +4,52 @@
 
 <div class="text-center">
   <h1 class="display-4">Welcome to <strong>LibMan</strong> world</h1>
-  <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-  <p>
-    <span class="badge bg-info">
-      <i class="bi bi-asterisk"></i>
-      @($"Environment: v.{System.Environment.Version}")
-    </span>
-    <span class="badge bg-info">
-      <i class="bi bi-asterisk"></i>
-      @($"Framework: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}")
-    </span>
-    <span class="badge bg-info">
-      <i class="bi bi-asterisk"></i>
-      @($"Target: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}")
-    </span>
-    <span class="badge bg-info">
-      <i class="bi bi-asterisk"></i>
-      <a href="#" class="text-primary" onclick="openBootstrapPage();">Bootstrap v5.0.1</a>
-    </span>
-    <span class="badge bg-info">
-      <i class="bi bi-asterisk"></i>
-      <a href="#" class="text-primary" onclick="openBootstrapIconsPage();">Bootstrap icons 1.5.0</a>
-      (<a href="#" class="text-primary" onclick="openAllIconsLocal();">local copy list</a>)
-    </span>
+  <div class="container">
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+  </div>
+  
+  <!--  Empty row instead of margins -->
+  <div class="container">&nbsp;</div>
+  
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col-md-3 badge bg-info">
+        <i class="bi bi-asterisk"></i>
+        @($"Environment: v.{System.Environment.Version}")
+      </div>
 
-  </p>
+      <!--  Empty column instead of margins -->
+      <div class="col-md-1"></div>
+
+      <div class="col-md-3 badge bg-info">
+        <i class="bi bi-asterisk"></i>
+        @($"Framework: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}")
+      </div>
+
+      <!--  Empty column instead of margins -->
+      <div class="col-md-1"></div>
+
+      <div class="col-md-4 badge bg-info">
+        <i class="bi bi-asterisk"></i>
+        @($"Target: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}")
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-5 badge bg-info">
+        <i class="bi bi-asterisk"></i>
+        <a href="#" class="text-primary" onclick="openBootstrapPage();">Bootstrap v5.0.1</a>
+      </div>
+
+      <!--  Empty column instead of margins -->
+      <div class="col-md-2"></div>
+
+      <div class="col-md-5 badge bg-info">
+        <i class="bi bi-asterisk"></i>
+        <a href="#" class="text-primary" onclick="openBootstrapIconsPage();">Bootstrap icons 1.5.0</a>
+        (<a href="#" class="text-primary" onclick="openAllIconsLocal();">local copy list</a>)
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="text/javascript">
