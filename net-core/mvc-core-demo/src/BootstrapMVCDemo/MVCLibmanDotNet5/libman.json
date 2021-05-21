@@ -1,0 +1,22 @@
+{
+	"version": "1.0",
+	"defaultProvider": "cdnjs",
+	"defaultDestination": "wwwroot/lib/",
+	"libraries": [
+		{
+			"library": "jquery@3.6.0",
+			"destination": "wwwroot/lib/jquery/dist/",
+			"files": [ "jquery.js", "jquery.min.js" ]
+		},
+		{
+			"library": "twitter-bootstrap@5.0.1",
+			"destination": "wwwroot/lib/bootstrap/dist/"
+		},
+		{
+			"library": "bootstrap-icons@1.5.0",
+			"destination": "wwwroot/lib/bootstrap-icons/dist/",
+			// Missing "./fonts/bootstrap-icons.woff2" ?!?
+			"files": [ "font/bootstrap-icons.css", "font/bootstrap-icons.min.css", "font/fonts/bootstrap-icons.woff", "font/bootstrap-icons.json" ]
+		}
+	]
+}

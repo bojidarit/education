@@ -1,0 +1,44 @@
+﻿@{
+  ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+  <h1 class="display-4">Welcome to <strong>LibMan</strong> world</h1>
+  <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+  <p>
+    <span class="badge bg-info">
+      <i class="bi bi-asterisk"></i>
+      @($"Environment: v.{System.Environment.Version}")
+    </span>
+    <span class="badge bg-info">
+      <i class="bi bi-asterisk"></i>
+      @($"Framework: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}")
+    </span>
+    <span class="badge bg-info">
+      <i class="bi bi-asterisk"></i>
+      @($"Target: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}")
+    </span>
+    <span class="badge bg-info">
+      <i class="bi bi-asterisk"></i>
+      <a href="#" class="text-primary" onclick="openBootstrapPage();">Bootstrap v5.0.1</a>
+    </span>
+    <span class="badge bg-info">
+      <i class="bi bi-asterisk"></i>
+      <a href="#" class="text-primary" onclick="openBootstrapIconsPage();">Bootstrap icons 1.5.0</a>
+      (<a href="#" class="text-primary" onclick="openAllIconsLocal();">local copy list</a>)
+    </span>
+
+  </p>
+</div>
+
+<script type="text/javascript">
+  function openBootstrapPage() {
+    window.open('https://getbootstrap.com/', '_blank').focus();
+  };
+  function openBootstrapIconsPage() {
+    window.open('https://icons.getbootstrap.com/', '_blank').focus();
+  };
+  function openAllIconsLocal() {
+    window.open('/lib/bootstrap-icons/dist/font/bootstrap-icons.json', '_blank').focus();
+  };
+</script>
