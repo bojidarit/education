@@ -61,6 +61,7 @@
 				   LastChildFill="True"
 				   Background="LightSteelBlue">
 			<Button DockPanel.Dock="Right"
+					Padding="3"
 					Content="Close"
 					IsCancel="True"
 					MinWidth="70"
