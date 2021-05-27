@@ -1,0 +1,72 @@
+﻿<Window x:Class="WPFTextBoxBehaviorDemo.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+		xmlns:local="clr-namespace:WPFTextBoxBehaviorDemo"
+		Title="TextBox Behavior Demo"
+		Height="250"
+		Width="360"
+		WindowStartupLocation="CenterScreen">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="10" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="3*" />
+			<ColumnDefinition Width="5" />
+		</Grid.ColumnDefinitions>
+
+		<!--Input Type-->
+		<TextBlock Grid.Row="1"
+				   Grid.Column="1"
+				   HorizontalAlignment="Right"
+				   Text="Input Type" />
+		<ComboBox Grid.Row="1"
+				  Grid.Column="3"
+				  x:Name="comboType"
+				  SelectionChanged="ComboType_SelectionChanged"
+				  VerticalAlignment="Center"
+				  HorizontalAlignment="Stretch" />
+
+		<!--Write here-->
+		<TextBlock Grid.Row="3"
+				   Grid.Column="1"
+				   VerticalAlignment="Center"
+				   HorizontalAlignment="Right"
+				   Text="Write here" />
+		<TextBox Grid.Row="3"
+				 Grid.Column="3"
+				 x:Name="textInput"
+				 FontSize="21"
+				 VerticalAlignment="Center"
+				 HorizontalAlignment="Stretch">
+			<i:Interaction.Behaviors>
+				<local:TextBoxInputBehavior InputMode="{Binding ElementName=comboType, Path=SelectedItem}" />
+			</i:Interaction.Behaviors>
+		</TextBox>
+
+		<!--General Buttons-->
+		<DockPanel Grid.Row="5"
+				   Grid.Column="0"
+				   Grid.ColumnSpan="5"
+				   LastChildFill="True"
+				   Background="LightSteelBlue">
+			<Button DockPanel.Dock="Right"
+					Content="Close"
+					IsCancel="True"
+					MinWidth="70"
+					Margin="10"
+					Click="ButtonClose_Click" />
+			<TextBlock />
+		</DockPanel>
+	</Grid>
+</Window>
