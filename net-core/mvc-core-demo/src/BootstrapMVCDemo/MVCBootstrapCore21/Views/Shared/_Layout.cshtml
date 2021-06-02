@@ -8,12 +8,16 @@
   <environment include="Development">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
   </environment>
   <environment exclude="Development">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
           asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
           asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+          asp-fallback-href="~/lib/font-awesome/css/all.min.css"
+          asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
   </environment>
 </head>
 <body>
@@ -46,17 +50,17 @@
     <footer>
       <p>&copy; 2021 - MVCDemoNetCore21</p>
       <p>
-        <span class="glyphicon glyphicon-asterisk"></span>
+        <span class="fas fa-asterisk"></span>
         @($"Environment Version: {System.Environment.Version}")
         &nbsp;
-        <span class="glyphicon glyphicon-asterisk"></span>
+        <span class="fas fa-asterisk"></span>
         @($"Framework Description: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}")
       </p>
       <p>
-        <span class="glyphicon glyphicon-asterisk"></span>
+        <span class="fas fa-asterisk"></span>
         <span>Bootstrap v3.4.1 (Default for asp.net core 2.1 project)</span>
         &nbsp;
-        <span class="glyphicon glyphicon-asterisk"></span>
+        <span class="fas fa-asterisk"></span>
         <span>Bootstrap's embedded glyph icons (Using Glyphicons Halflings font)</span>
       </p>
     </footer>
