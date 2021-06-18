@@ -1,31 +1,57 @@
 ﻿@{
   ViewData["Title"] = "Home Page";
+
+  var envVersion = $"Env.: v.{System.Environment.Version}";
+  var frameworkDescription = $"Framework: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}";
+  var bootstrapVer = "Bootstrap v3.4.1";
+  var icons = "Bootstrap's embedded glyph icons";
+  var flexBoxTutorial = "https://css-tricks.com/snippets/css/a-guide-to-flexbox/";
 }
 
+<h2>Bootstrap's Grid System</h2>
 <div class="container">
   <div class="row my-3">
     <div class="col-sm-4 col-md-6 badge progress-bar-success">
       <i class="bi bi-asterisk"></i>
-      @($"Env.: v.{System.Environment.Version}")
+      @(envVersion)
     </div>
 
     <div class="col-sm-8 col-md-6 badge progress-bar-success">
       <i class="bi bi-asterisk"></i>
-      @($"Framework: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}")
+      @(frameworkDescription)
     </div>
   </div>
 
   <div class="row">
     <div class="col-sm-4 col-md-6 badge progress-bar-info">
       <i class="bi bi-asterisk"></i>
-      <a href="#" class="text-primary" onclick="openBootstrapPage();">Bootstrap v5.0.1</a>
+      <a href="#" class="text-primary" onclick="openBootstrapPage();">@(bootstrapVer)</a>
     </div>
 
     <div class="col-sm-8 col-md-6 badge progress-bar-info">
       <i class="bi bi-asterisk"></i>
-      <a href="#" class="text-primary" onclick="openBootstrapIconsPage();">Bootstrap icons 1.5.0</a>
-      (<a href="#" class="text-primary" onclick="openAllIconsLocal();">local copy list</a>)
+      <span>@(icons)</span>
     </div>
+  </div>
+</div>
+
+<h2>Custom <a href="#" class="text-primary" onclick="openLinkNewTab('@flexBoxTutorial');">Flex-box</a> wrap container</h2>
+<div class="flex-container">
+  <div class="flex-item label label-success">
+    <i class="bi bi-asterisk"></i>
+    <span>@(envVersion)</span>
+  </div>
+  <div class="flex-item label label-success">
+    <i class="bi bi-asterisk"></i>
+    <span>@(frameworkDescription)</span>
+  </div>
+  <div class="flex-item label label-info">
+    <i class="bi bi-asterisk"></i>
+    <a href="#" class="text-primary" onclick="openBootstrapPage();">@(bootstrapVer)</a>
+  </div>
+  <div class="flex-item label label-warning">
+    <i class="bi bi-asterisk"></i>
+    <span>@(icons)</span>
   </div>
 </div>
 
@@ -156,3 +182,12 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  function openLinkNewTab(url) {
+    window.open(url, '_blank').focus();
+  };
+  function openBootstrapPage() {
+    openLinkNewTab('https://getbootstrap.com/docs/3.4/');
+  };
+</script>
