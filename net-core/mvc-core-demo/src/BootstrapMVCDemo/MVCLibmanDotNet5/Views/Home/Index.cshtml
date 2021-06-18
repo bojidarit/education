@@ -8,47 +8,37 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
   </div>
   
-  <!--  Empty row instead of margins -->
-  <div class="container">&nbsp;</div>
-  
-  <div class="container">
+  <div class="container mt-5">
     <div class="row mb-3">
-      <div class="col-md-3 badge bg-info">
+      <div class="col-sm-3 badge bg-info">
         <i class="bi bi-asterisk"></i>
         @($"Environment: v.{System.Environment.Version}")
       </div>
 
-      <!--  Empty column instead of margins -->
-      <div class="col-md-1"></div>
-
-      <div class="col-md-3 badge bg-info">
+      <div class="col-sm-3 badge bg-info">
         <i class="bi bi-asterisk"></i>
         @($"Framework: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}")
       </div>
 
-      <!--  Empty column instead of margins -->
-      <div class="col-md-1"></div>
-
-      <div class="col-md-4 badge bg-info">
+      <div class="col-sm-6 badge bg-info">
         <i class="bi bi-asterisk"></i>
         @($"Target: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}")
       </div>
     </div>
+
     <div class="row">
-      <div class="col-md-5 badge bg-info">
+      <div class="col-sm-4 col-md-6 badge bg-info">
         <i class="bi bi-asterisk"></i>
         <a href="#" class="text-primary" onclick="openBootstrapPage();">Bootstrap v5.0.1</a>
       </div>
 
-      <!--  Empty column instead of margins -->
-      <div class="col-md-2"></div>
-
-      <div class="col-md-5 badge bg-info">
+      <div class="col-sm-8 col-md-6 badge bg-info">
         <i class="bi bi-asterisk"></i>
         <a href="#" class="text-primary" onclick="openBootstrapIconsPage();">Bootstrap icons 1.5.0</a>
         (<a href="#" class="text-primary" onclick="openAllIconsLocal();">local copy list</a>)
       </div>
     </div>
+
   </div>
 </div>
 
