@@ -1,8 +1,38 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Home Page";
+
+  var envVersion = $"Environment.: v.{System.Environment.Version}";
+  var frameworkDescription = $"Framework: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}";
+  var targetFramework = $"Target: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}";
+  var bootstrapVer = "Bootstrap v4.3.1 (asp.net core 3.1 project default)";
+  var fontAwesomeVer = "Font Awesome Free 5.15.3";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+  <h1 class="display-4">Welcome</h1>
+  <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web applications with ASP.NET Core</a>.</p>
+
+  <h2>Bootstrap 4 Flex wrapped</h2>
+  <div class="flex-container d-flex flex-wrap justify-content-sm-center justify-content-lg-around align-content-center">
+    <div class="badge badge-info py-1">
+      <i class="fas fa-asterisk"></i>
+      <span>@envVersion</span>
+    </div>
+    <div class="badge badge-primary py-1">
+      <i class="fas fa-asterisk"></i>
+      <span>@targetFramework</span>
+    </div>
+    <div class="badge badge-dark py-1">
+      <i class="fas fa-asterisk"></i>
+      <span>@frameworkDescription</span>
+    </div>
+    <div class="badge badge-light py-1">
+      <i class="fas fa-asterisk"></i>
+      <a href="#" class="text-primary" onclick="openBootstrap4Tutorial();">@bootstrapVer</a>
+    </div>
+    <div class="badge badge-light py-1">
+      <i class="fas fa-asterisk"></i>
+      <a href="#" onclick="openAllFontAwesomeIcons();">@fontAwesomeVer</a>
+    </div>
+  </div>
 </div>
