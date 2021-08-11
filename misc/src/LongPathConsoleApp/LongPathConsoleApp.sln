@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LongPathConsoleApp", "LongP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pri.LongPath.ConsoleApp", "Pri.LongPath.ConsoleApp\Pri.LongPath.ConsoleApp.csproj", "{23231167-2F01-4719-8EEB-37826FE2986F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LongPathNetCoreApp", "LongPathNetCoreApp\LongPathNetCoreApp.csproj", "{EDE9A3B3-52EE-4A6C-89CE-7B25ED4693FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{23231167-2F01-4719-8EEB-37826FE2986F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23231167-2F01-4719-8EEB-37826FE2986F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23231167-2F01-4719-8EEB-37826FE2986F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE9A3B3-52EE-4A6C-89CE-7B25ED4693FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE9A3B3-52EE-4A6C-89CE-7B25ED4693FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE9A3B3-52EE-4A6C-89CE-7B25ED4693FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE9A3B3-52EE-4A6C-89CE-7B25ED4693FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
