@@ -1,5 +1,6 @@
 ﻿namespace MVCWebAppNginxIPReal.Dtos
 {
+	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.AspNetCore.Http;
 	using System;
 	using System.Runtime.InteropServices;
@@ -8,7 +9,7 @@
 	public class DebugInfo
 	{
 		#region Constructor
-		public DebugInfo(ConnectionInfo connection)
+		public DebugInfo(ConnectionInfo connection, IWebHostEnvironment env)
 		{
 			if (connection != null)
 			{
@@ -17,6 +18,13 @@
 				LocalIp = connection.LocalIpAddress.ToString();
 				LocalPort = connection.LocalPort;
 			}
+
+			if (env != null)
+			{
+				EnvironmentName = env.EnvironmentName;
+				WebRootPath = env.WebRootPath;
+			}
+
 			TargetFramework = AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
 			EnvironmentVersion = Environment.Version.ToString();
 			FrameworkDescription = RuntimeInformation.FrameworkDescription;
@@ -34,6 +42,10 @@
 		public int RemotePort { get; set; }
 		public string LocalIp { get; set; }
 		public int LocalPort { get; set; }
+
+		public string EnvironmentName { get; set; }
+		public string WebRootPath { get; set; }
+
 		public string TargetFramework { get; set; }
 		public string EnvironmentVersion { get; set; }
 		public string FrameworkDescription { get; set; }

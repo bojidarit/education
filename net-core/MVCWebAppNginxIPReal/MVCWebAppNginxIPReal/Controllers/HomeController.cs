@@ -1,5 +1,6 @@
 ﻿namespace MVCWebAppNginxIPReal.Controllers
 {
+	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.Extensions.Logging;
@@ -10,15 +11,17 @@
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
+		private readonly IWebHostEnvironment _env;
 
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger, IWebHostEnvironment env)
 		{
 			_logger = logger;
+			_env = env;
 		}
 
 		public IActionResult Index()
 		{
-			var debug = new DebugInfo(HttpContext?.Connection);
+			var debug = new DebugInfo(HttpContext?.Connection, _env);
 			ViewData["DebugInfo"] = debug.ToString();
 
 			return View();
@@ -38,7 +41,7 @@
 		[Route("debug")]
 		public IActionResult Debug()
 		{
-			var debug = new DebugInfo(HttpContext?.Connection);
+			var debug = new DebugInfo(HttpContext?.Connection, _env);
 			return Ok(debug);
 		}
 	}
