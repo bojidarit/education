@@ -21,7 +21,7 @@
 
 		public IActionResult Index()
 		{
-			var debug = new DebugInfo(HttpContext?.Connection, _env);
+			var debug = new DebugInfo(HttpContext, _env);
 			ViewData["DebugInfo"] = debug.ToString();
 
 			return View();
@@ -41,7 +41,7 @@
 		[Route("debug")]
 		public IActionResult Debug()
 		{
-			var debug = new DebugInfo(HttpContext?.Connection, _env);
+			var debug = new DebugInfo(HttpContext, _env);
 			return Ok(debug);
 		}
 	}

@@ -2,6 +2,7 @@
 {
 	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.AspNetCore.Http;
+	using Microsoft.AspNetCore.Http.Extensions;
 	using System;
 	using System.Runtime.InteropServices;
 	using System.Text.Json;
@@ -9,8 +10,11 @@
 	public class DebugInfo
 	{
 		#region Constructor
-		public DebugInfo(ConnectionInfo connection, IWebHostEnvironment env)
+		public DebugInfo(HttpContext httpContext, IWebHostEnvironment env)
 		{
+			var connection = httpContext?.Connection;
+			var request = httpContext?.Request;
+
 			if (connection != null)
 			{
 				RemoteIp = connection.RemoteIpAddress.ToString();
@@ -19,10 +23,17 @@
 				LocalPort = connection.LocalPort;
 			}
 
+			if (request != null)
+			{
+				DisplayUrl = request.GetDisplayUrl();
+				BaseUrl = DisplayUrl.TrimEnd(request.Path.ToString().ToCharArray()) + "/";
+			}
+
 			if (env != null)
 			{
 				EnvironmentName = env.EnvironmentName;
 				WebRootPath = env.WebRootPath;
+				ContentRootPath = env.ContentRootPath;
 			}
 
 			TargetFramework = AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName;
@@ -42,8 +53,11 @@
 		public int RemotePort { get; set; }
 		public string LocalIp { get; set; }
 		public int LocalPort { get; set; }
+		public string DisplayUrl { get; set; }
+		public string BaseUrl { get; set; }
 
 		public string EnvironmentName { get; set; }
+		public string ContentRootPath { get; set; }
 		public string WebRootPath { get; set; }
 
 		public string TargetFramework { get; set; }
@@ -63,7 +77,7 @@
 			var options = new JsonSerializerOptions
 			{
 				WriteIndented = true,
-				PropertyNameCaseInsensitive = true,
+				IgnoreReadOnlyProperties = true,
 				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
 			};
 			var json = JsonSerializer.Serialize(this, options);
