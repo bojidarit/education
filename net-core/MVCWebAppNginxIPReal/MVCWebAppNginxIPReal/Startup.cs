@@ -1,15 +1,11 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace MVCWebAppNginxIPReal
 {
+	using Microsoft.AspNetCore.Builder;
+	using Microsoft.AspNetCore.Hosting;
+	using Microsoft.Extensions.Configuration;
+	using Microsoft.Extensions.DependencyInjection;
+	using Microsoft.Extensions.Hosting;
+
 	public class Startup
 	{
 		public Startup(IConfiguration configuration)
@@ -23,6 +19,7 @@ namespace MVCWebAppNginxIPReal
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
+
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
