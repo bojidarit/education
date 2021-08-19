@@ -4,6 +4,7 @@
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Http.Extensions;
 	using System;
+	using System.Collections.Generic;
 	using System.Runtime.InteropServices;
 
 	public class DebugInfo
@@ -13,6 +14,12 @@
 		{
 			var connection = httpContext?.Connection;
 			var request = httpContext?.Request;
+
+			var hostInfo = Helpers.GetHostInfo();
+			HostName = hostInfo.Item1;
+			ActiveHostIp = Helpers.GetActiveHostIp();
+			DhcpHostIp = Helpers.GetHostDhspIpAddress();
+			HostIPs = hostInfo.Item2;
 
 			if (connection != null)
 			{
@@ -52,6 +59,10 @@
 		public int RemotePort { get; set; }
 		public string LocalIp { get; set; }
 		public int LocalPort { get; set; }
+		public string HostName { get; set; }
+		public string DhcpHostIp { get; set; }
+		public string ActiveHostIp { get; set; }
+		public IEnumerable<string> HostIPs { get; set; }
 		public string DisplayUrl { get; set; }
 		public string BaseUrl { get; set; }
 
