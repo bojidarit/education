@@ -7,6 +7,7 @@
 	using MVCWebAppNginxIPReal.Dtos;
 	using MVCWebAppNginxIPReal.Models;
 	using System.Diagnostics;
+	using System.Linq;
 
 	public class HomeController : Controller
 	{
@@ -43,6 +44,21 @@
 		{
 			var debug = new DebugInfo(HttpContext, _env);
 			return Ok(debug);
+		}
+
+		[Route("headers")]
+		public IActionResult Headers()
+		{
+			var dict = Request.Headers.ToDictionary(h => h.Key, h => h.Value);
+			return Ok(dict);
+		}
+
+		[Route("query")]
+		public IActionResult Query()
+		{
+			// Example: localhost:48411/query?foo=bar&name=john&family=doe
+			var dict = Request.Query.ToDictionary(q => q.Key, q => q.Value);
+			return Ok(dict);
 		}
 	}
 }

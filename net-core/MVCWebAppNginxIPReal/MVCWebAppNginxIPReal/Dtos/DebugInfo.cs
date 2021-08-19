@@ -5,7 +5,6 @@
 	using Microsoft.AspNetCore.Http.Extensions;
 	using System;
 	using System.Runtime.InteropServices;
-	using System.Text.Json;
 
 	public class DebugInfo
 	{
@@ -70,20 +69,9 @@
 		#endregion
 
 
-		#region Helpers
+		#region Overrides
 
-		public override string ToString()
-		{
-			var options = new JsonSerializerOptions
-			{
-				WriteIndented = true,
-				IgnoreReadOnlyProperties = true,
-				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-			};
-			var json = JsonSerializer.Serialize(this, options);
-
-			return json;
-		}
+		public override string ToString() => Helpers.ToJsonString(this);
 
 		#endregion
 	}
