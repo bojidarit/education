@@ -1,4 +1,4 @@
-﻿namespace MVCWebAppNginxIPReal
+﻿namespace HelperLib
 {
 	using System;
 	using System.Collections.Generic;
@@ -8,7 +8,7 @@
 	using System.Net.Sockets;
 	using System.Text.Json;
 
-	public static class Helpers
+	public static class Util
 	{
 		/// <summary>
 		/// Source: https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-how-to?pivots=dotnet-core-3-1

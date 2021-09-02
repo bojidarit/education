@@ -1,4 +1,4 @@
-﻿namespace MVCWebAppNginxIPReal.Dtos
+﻿namespace MVCWebApp5.Dtos
 {
 	using HelperLib;
 	using Microsoft.AspNetCore.Hosting;
