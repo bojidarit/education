@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializerConsoleApp", "SerializerConsoleApp\SerializerConsoleApp.csproj", "{63CC4DB7-705C-4144-9D9E-510757B90089}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XDocConsoleApp", "XDocConsoleApp\XDocConsoleApp.csproj", "{6098E685-5066-4292-A01D-7CEBF7966552}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{63CC4DB7-705C-4144-9D9E-510757B90089}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63CC4DB7-705C-4144-9D9E-510757B90089}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63CC4DB7-705C-4144-9D9E-510757B90089}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6098E685-5066-4292-A01D-7CEBF7966552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6098E685-5066-4292-A01D-7CEBF7966552}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6098E685-5066-4292-A01D-7CEBF7966552}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6098E685-5066-4292-A01D-7CEBF7966552}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
