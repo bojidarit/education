@@ -12,6 +12,10 @@
 	{
 		static string line = new string('-', 60);
 		static string nl = Environment.NewLine;
+		static string nameName = "name";
+		static string valueName = "value";
+		static string typeName = "type";
+		static string itemName = "item";
 
 		static void Main(string[] args)
 		{
@@ -23,52 +27,102 @@
 			AppendListOfDicts(root, "ListOfDicts");
 
 			SerializeXDoc(doc);
-
-			//var list = new List<string>();
-			//var dict = new Dictionary<string, object>();
-			//Console.WriteLine($"{nameof(list)} is IEnumerable: {list is IEnumerable}{nl}Type = {list.GetType().FullName}");
-			//Console.WriteLine($"{nameof(dict)} is IDictionary: {dict is IDictionary}{nl}Type = {dict.GetType().FullName}");
 		}
 
 		static void AppendListOfDicts(XElement root, string name)
 		{
 			var list = new List<Dictionary<string, string>>();
 			list.Add(new Dictionary<string, string> { { "Column 1", "12345" }, { "Column 2", "54321" }, { "Column 3", "00000" } });
-			list.Add(new Dictionary<string, string> { { "Column 1", "12345" }, { "Column 2", "54321" } });
+			//list.Add(new Dictionary<string, string> { { "Column 1", "12345" }, { "Column 2", "54321" } });
 			list.Add(new Dictionary<string, string> { { "Column 3", "00000" } });
 
-			var child = new XElement("itemsSource", new XAttribute("name", name));
-			AppendChildren(child, list.Select(i => new XElement("item", new XAttribute("type", i.GetType().Name), i)));
-
-			AppendChild(root, child);
+			AppendChild(root, ObjectToNode(list.ToList(), "itemsSource", name));
 		}
 
 		static void AppendSimpleList(XElement root, string name)
 		{
-			//var list = new List<object> { "Title", "X", "Y" };
-			//var list = Enumerable.Range(1, 10);
+			//var list = new string[] { "Title", "X", "Y" };
+			//var list = Enumerable.Range(1, 10).ToList();
 
 			//var morning = DateTime.Today.AddHours(7);
-			//var list = Enumerable.Range(1, 10).Select(n => morning.AddHours(n));
+			//var list = Enumerable.Range(1, 10).Select(n => morning.AddHours(n)).ToList();
 
-			var rnd = new Random();
-			var list = Enumerable.Range(1, 10).Select(n => Math.Round(rnd.NextDouble() * 100.0, 5));
+			//var rnd = new Random();
+			//var list = Enumerable.Range(1, 10).Select(n => Math.Round(rnd.NextDouble() * 100.0, 3)).ToList();
 
-			var child = new XElement("argumentList", new XAttribute("name", name));
-			AppendChildren(child, list.Select(i => new XElement("item", new XAttribute("type", i.GetType().Name), i)));
+			var list = new List<object> {
+				Enumerable.Range(1, 3).ToArray(),
+				new string[] { "Title", "X", "Y" },
+				new double[] { 1.23, 2.34, 3.45 } };
 
-			AppendChild(root, child);
+			AppendChild(root, ObjectToNode(list, "argumentList", name));
 		}
 
-		static void AppendChildren(XElement root, IEnumerable<XElement> children)
+		static object ObjectToNode(object o, string nodeName, string attrName = null)
 		{
-			if (children != null && children.Any())
+			if (string.IsNullOrEmpty(nodeName))
 			{
-				root.Add(children);
+				throw new ArgumentException($"{nameof(nodeName)} is mandatory.");
 			}
+
+			var node = CreateNode(nodeName, attrName, o);
+
+			var handled = true;
+			var type = o.GetType();
+
+			if (o is string || (type.IsValueType && type.IsPrimitive))
+			{
+				node.Add(new XAttribute(valueName, o));
+			}
+			else if (o is IEnumerable)
+			{
+				((IEnumerable)o)
+					.Cast<object>()
+					.Select(i => ObjectToNode(i, itemName))
+					.ToList()
+					.ForEach(i => AppendChild(node, i));
+			}
+			else
+			{
+				handled = false;
+			}
+
+			if (!handled)
+			{
+				node.Add(o);
+			}
+
+			return node;
 		}
 
-		static void AppendChild(XElement root, XElement child)
+		static object GetTypeAttribute(object typeObject) =>
+			new XAttribute(typeName, typeObject.GetType().Name);
+
+		static XElement CreateSimpleNode(string nodeName, string attrName)
+		{
+			var node = new XElement(nodeName);
+
+			if (!string.IsNullOrEmpty(attrName))
+			{
+				node.Add(new XAttribute(nameName, attrName));
+			}
+
+			return node;
+		}
+
+		static XElement CreateNode(string nodeName, string attrName, object typeObject)
+		{
+			var node = CreateSimpleNode(nodeName, attrName);
+
+			if (typeObject != null)
+			{
+				node.Add(GetTypeAttribute(typeObject));
+			}
+
+			return node;
+		}
+
+		static void AppendChild(XElement root, object child)
 		{
 			if (child != null)
 			{

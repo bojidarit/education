@@ -119,105 +119,105 @@
 			{
 				return new XElement(name, o);
 			}
-			}
-
-			static List<XElement> HashtableToXElements(Hashtable table, bool toOrder = true)
-			{
-				var xElements = HashtableToList(table, toOrder)
-					.Select(pair => new XElement("KeyValuePair", new XAttribute("Key", pair.Key), ObjectToXElement(pair.Value, "Value")))
-					.ToList();
-
-				return xElements;
-			}
-
-			static void SerializeListOfXElements(IList xElements)
-			{
-				PrintTitle($"Serialized HashTable with XDocumet");
-				PrintSubTitle("Using XDocument.ToString()");
-				var doc = new XDocument(new XElement("HashTable", xElements));
-
-				// Returns the indented XML for this node.
-				Console.WriteLine(doc.ToString());
-				PrintSubTitle("Using XmlWriter");
-
-				var sb = new StringBuilder();
-				var xws = new XmlWriterSettings();
-				xws.OmitXmlDeclaration = false;
-				xws.Indent = true;
-
-				using (var xw = XmlWriter.Create(sb, xws))
-				{
-					doc.Save(xw);
-				}
-
-				Console.WriteLine(sb.ToString());
-				Console.WriteLine();
-			}
-
-			static void PrintSubTitle(string title) => Console.WriteLine($"{Environment.NewLine} ***{title}: ");
-
-			static void PrintTitle(string title) => Console.WriteLine($"{line}{Environment.NewLine}{title}{Environment.NewLine}{line}");
-
-			static void SerializeItContract(Hashtable table, IEnumerable<Type> knownTypes)
-			{
-				var sb = new StringBuilder();
-				var serializer = new DataContractSerializer(typeof(Hashtable), knownTypes);
-				using (var writer = new StringWriter(sb))
-				using (var xmlWriter = XmlWriter.Create(writer))
-				{
-					serializer.WriteObject(xmlWriter, table);
-				}
-
-				Console.WriteLine(FormatXml(sb.ToString()));
-				Console.WriteLine();
-
-				using (var reader = new StringReader(sb.ToString()))
-				using (var xmlReader = XmlReader.Create(reader))
-				{
-					table = (Hashtable)serializer.ReadObject(xmlReader);
-					PrintHashtable(table);
-				}
-			}
-
-			static void PrintHashtable(Hashtable table)
-			{
-				foreach (DictionaryEntry item in table)
-				{
-					Console.WriteLine($"DictionaryEntry['{item.Key}'] = '{ObjectToString(item.Value)}'");
-				}
-			}
-
-			static void PrintHashtableOrdered(Hashtable table)
-			{
-				var keyTypes = table.Keys
-					.Cast<object>()
-					.Select(o => o.GetType())
-					.Distinct();
-
-				if (keyTypes.Count() == 1 && keyTypes.First() == typeof(int))
-				{
-					foreach (var key in table.Keys.Cast<int>().OrderBy(i => i))
-					{
-						Console.WriteLine($"DictionaryEntry[{key}] = '{ObjectToString(table[key])}'");
-					}
-				}
-			}
-
-			static string FormatXml(string xml)
-			{
-				try
-				{
-					var doc = XDocument.Parse(xml);
-					return doc.ToString();
-				}
-				catch (Exception)
-				{
-					// Handle and throw if fatal exception here; don't just ignore them
-					return xml;
-				}
-			}
-
-			static string ObjectToString(object obj, Newtonsoft.Json.Formatting formatting = Newtonsoft.Json.Formatting.None) =>
-				obj.GetType().IsValueType ? obj.ToString() : JsonConvert.SerializeObject(obj, formatting);
 		}
+
+		static List<XElement> HashtableToXElements(Hashtable table, bool toOrder = true)
+		{
+			var xElements = HashtableToList(table, toOrder)
+				.Select(pair => new XElement("KeyValuePair", new XAttribute("Key", pair.Key), ObjectToXElement(pair.Value, "Value")))
+				.ToList();
+
+			return xElements;
+		}
+
+		static void SerializeListOfXElements(IList xElements)
+		{
+			PrintTitle($"Serialized HashTable with XDocumet");
+			PrintSubTitle("Using XDocument.ToString()");
+			var doc = new XDocument(new XElement("HashTable", xElements));
+
+			// Returns the indented XML for this node.
+			Console.WriteLine(doc.ToString());
+			PrintSubTitle("Using XmlWriter");
+
+			var sb = new StringBuilder();
+			var xws = new XmlWriterSettings();
+			xws.OmitXmlDeclaration = false;
+			xws.Indent = true;
+
+			using (var xw = XmlWriter.Create(sb, xws))
+			{
+				doc.Save(xw);
+			}
+
+			Console.WriteLine(sb.ToString());
+			Console.WriteLine();
+		}
+
+		static void PrintSubTitle(string title) => Console.WriteLine($"{Environment.NewLine} ***{title}: ");
+
+		static void PrintTitle(string title) => Console.WriteLine($"{line}{Environment.NewLine}{title}{Environment.NewLine}{line}");
+
+		static void SerializeItContract(Hashtable table, IEnumerable<Type> knownTypes)
+		{
+			var sb = new StringBuilder();
+			var serializer = new DataContractSerializer(typeof(Hashtable), knownTypes);
+			using (var writer = new StringWriter(sb))
+			using (var xmlWriter = XmlWriter.Create(writer))
+			{
+				serializer.WriteObject(xmlWriter, table);
+			}
+
+			Console.WriteLine(FormatXml(sb.ToString()));
+			Console.WriteLine();
+
+			using (var reader = new StringReader(sb.ToString()))
+			using (var xmlReader = XmlReader.Create(reader))
+			{
+				table = (Hashtable)serializer.ReadObject(xmlReader);
+				PrintHashtable(table);
+			}
+		}
+
+		static void PrintHashtable(Hashtable table)
+		{
+			foreach (DictionaryEntry item in table)
+			{
+				Console.WriteLine($"DictionaryEntry['{item.Key}'] = '{ObjectToString(item.Value)}'");
+			}
+		}
+
+		static void PrintHashtableOrdered(Hashtable table)
+		{
+			var keyTypes = table.Keys
+				.Cast<object>()
+				.Select(o => o.GetType())
+				.Distinct();
+
+			if (keyTypes.Count() == 1 && keyTypes.First() == typeof(int))
+			{
+				foreach (var key in table.Keys.Cast<int>().OrderBy(i => i))
+				{
+					Console.WriteLine($"DictionaryEntry[{key}] = '{ObjectToString(table[key])}'");
+				}
+			}
+		}
+
+		static string FormatXml(string xml)
+		{
+			try
+			{
+				var doc = XDocument.Parse(xml);
+				return doc.ToString();
+			}
+			catch (Exception)
+			{
+				// Handle and throw if fatal exception here; don't just ignore them
+				return xml;
+			}
+		}
+
+		static string ObjectToString(object obj, Newtonsoft.Json.Formatting formatting = Newtonsoft.Json.Formatting.None) =>
+			obj.GetType().IsValueType ? obj.ToString() : JsonConvert.SerializeObject(obj, formatting);
 	}
+}
