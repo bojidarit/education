@@ -13,6 +13,7 @@
 		static string line = new string('-', 60);
 		static string nl = Environment.NewLine;
 		static string nameName = "name";
+		static string keyName = "key";
 		static string valueName = "value";
 		static string typeName = "type";
 		static string itemName = "item";
@@ -31,12 +32,33 @@
 
 		static void AppendListOfDicts(XElement root, string name)
 		{
-			var list = new List<Dictionary<string, string>>();
-			list.Add(new Dictionary<string, string> { { "Column 1", "12345" }, { "Column 2", "54321" }, { "Column 3", "00000" } });
-			//list.Add(new Dictionary<string, string> { { "Column 1", "12345" }, { "Column 2", "54321" } });
-			list.Add(new Dictionary<string, string> { { "Column 3", "00000" } });
+			var list = new List<Dictionary<string, object>>();
+			list.Add(new Dictionary<string, object> { { "Column 1", "12345" }, { "Column 2", "54321" }, { "Column 3", "00000" } });
+			list.Add(new Dictionary<string, object> { { "Column 1", "12345" }, { "Column 2", "54321" } });
+			list.Add(new Dictionary<string, object> { { "Column 3", "00000" } });
 
-			AppendChild(root, ObjectToNode(list.ToList(), "itemsSource", name));
+			//var list = new List<Dictionary<string, object>>();
+			//list.Add(new Dictionary<string, object> {
+			//	{ "Item 1", Enumerable.Range(1, 3).ToArray() },
+			//	{ "Item 2", new double[] { 1.23, 4.56 } } });
+
+			AppendChild(root, ObjectToNode(list.Select(i => ToUniversalDict(i)).ToList(), "itemsSource", name));
+		}
+
+		static Dictionary<object, object> ToUniversalDict(IDictionary iDict)
+		{
+			var dict = new Dictionary<object, object>();
+
+			if (iDict != null && iDict.Count > 0)
+			{
+				var er = iDict.GetEnumerator();
+				while (er.MoveNext())
+				{
+					dict.Add(er.Key, er.Value);
+				}
+			}
+
+			return dict;
 		}
 
 		static void AppendSimpleList(XElement root, string name)
@@ -81,6 +103,12 @@
 					.Select(i => ObjectToNode(i, itemName))
 					.ToList()
 					.ForEach(i => AppendChild(node, i));
+			}
+			else if (o is KeyValuePair<object, object>)
+			{
+				var pair = (KeyValuePair<object, object>)o;
+				node.Add(ObjectToNode(pair.Key, keyName));
+				node.Add(ObjectToNode(pair.Value, valueName));
 			}
 			else
 			{
