@@ -12,11 +12,11 @@
 	{
 		static string line = new string('-', 60);
 		static string nl = Environment.NewLine;
-		static string nameName = "name";
-		static string keyName = "key";
-		static string valueName = "value";
-		static string typeName = "type";
-		static string itemName = "item";
+		static string nameTagName = "name";
+		static string keyTagName = "key";
+		static string valueTagName = "value";
+		static string typeTagName = "type";
+		static string itemTagName = "item";
 
 		static void Main(string[] args)
 		{
@@ -94,21 +94,21 @@
 
 			if (o is string || (type.IsValueType && type.IsPrimitive))
 			{
-				node.Add(new XAttribute(valueName, o));
+				node.Add(new XAttribute(valueTagName, o));
 			}
 			else if (o is IEnumerable)
 			{
 				((IEnumerable)o)
 					.Cast<object>()
-					.Select(i => ObjectToNode(i, itemName))
+					.Select(i => ObjectToNode(i, itemTagName))
 					.ToList()
 					.ForEach(i => AppendChild(node, i));
 			}
 			else if (o is KeyValuePair<object, object>)
 			{
 				var pair = (KeyValuePair<object, object>)o;
-				node.Add(ObjectToNode(pair.Key, keyName));
-				node.Add(ObjectToNode(pair.Value, valueName));
+				node.Add(ObjectToNode(pair.Key, keyTagName));
+				node.Add(ObjectToNode(pair.Value, valueTagName));
 			}
 			else
 			{
@@ -124,7 +124,7 @@
 		}
 
 		static object GetTypeAttribute(object typeObject) =>
-			new XAttribute(typeName, typeObject.GetType().Name);
+			new XAttribute(typeTagName, typeObject.GetType().Name);
 
 		static XElement CreateSimpleNode(string nodeName, string attrName)
 		{
@@ -132,7 +132,7 @@
 
 			if (!string.IsNullOrEmpty(attrName))
 			{
-				node.Add(new XAttribute(nameName, attrName));
+				node.Add(new XAttribute(nameTagName, attrName));
 			}
 
 			return node;
@@ -175,6 +175,6 @@
 			Console.WriteLine();
 		}
 
-		static void PrintTitle(string title) => Console.WriteLine($"{line}{Environment.NewLine}{title}{Environment.NewLine}{line}");
+		static void PrintTitle(string title) => Console.WriteLine($"{line}{nl}{title}{nl}{line}");
 	}
 }
