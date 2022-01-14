@@ -4,7 +4,7 @@
 
 	public static class XmlExtentions
 	{
-		public static XElement AppendAttribute(this XElement element, string name, object value)
+		public static XElement AddAttribute(this XElement element, string name, object value)
 		{
 			element.Add(new XAttribute(name, value));
 			return element;

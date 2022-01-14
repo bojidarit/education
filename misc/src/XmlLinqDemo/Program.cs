@@ -37,26 +37,26 @@
                 .AddPrefixedAttribute(nsXsd, xsdPrefix)
                 .AddPrefixedAttribute(nsGml, gmlPrefix)
                 .AddPrefixedAttribute(nsWfs, wfsPrefix)
-                .AppendAttribute("elementFormDefault", "qualified")
-                .AppendAttribute("targetNamespace", nsDemo.NamespaceName);
+                .AddAttribute("elementFormDefault", "qualified")
+                .AddAttribute("targetNamespace", nsDemo.NamespaceName);
 
             var import = CreatePrefixedElement(nsXsd, "import")
-                .AppendAttribute("namespace", nsGml.NamespaceName)
-                .AppendAttribute("schemaLocation", "http://schemas.opengis.net/wfs/2.0/wfs.xsd");
+                .AddAttribute("namespace", nsGml.NamespaceName)
+                .AddAttribute("schemaLocation", "http://schemas.opengis.net/wfs/2.0/wfs.xsd");
             root.Add(import);
 
             var feature = CreatePrefixedElement(nsXsd, "element")
-                .AppendAttribute("name", featureName)
-                .AppendAttribute("type", $"{demoPrefix}:{featureType}")
-                .AppendAttribute("substitutionGroup", $"{gmlPrefix}:_Feature");
+                .AddAttribute("name", featureName)
+                .AddAttribute("type", $"{demoPrefix}:{featureType}")
+                .AddAttribute("substitutionGroup", $"{gmlPrefix}:_Feature");
             root.Add(feature);
 
             var type = CreatePrefixedElement(nsXsd, "complexType")
-                .AppendAttribute("name", featureType);
+                .AddAttribute("name", featureType);
             root.Add(type);
 
             var sequence = type.AppendAndGetChild(CreatePrefixedElement(nsXsd, "complexContent"))
-                .AppendAndGetChild(CreatePrefixedElement(nsXsd, "extension").AppendAttribute("base", $"{gmlPrefix}:AbstractFeatureType"))
+                .AppendAndGetChild(CreatePrefixedElement(nsXsd, "extension").AddAttribute("base", $"{gmlPrefix}:AbstractFeatureType"))
                 .AppendAndGetChild(CreatePrefixedElement(nsXsd, "sequence"));
 
             Enumerable
@@ -94,12 +94,12 @@
             KeyValuePair<string, string> info1,
             KeyValuePair<string, string> info2) =>
             CreatePrefixedElement(nsXsd, "element")
-                .AppendAttribute("maxOccurs", 1)
-                .AppendAttribute("minOccurs", 0)
-                .AppendAttribute(info1.Key, info1.Value)
-                .AppendAttribute(info2.Key, info2.Value)
-                .AppendAttribute("nillable", value.GetType().IsNullable().ToString().ToLower())
-                .AppendAttribute("type", value.GetType().GetGmlType());
+                .AddAttribute("maxOccurs", 1)
+                .AddAttribute("minOccurs", 0)
+                .AddAttribute(info1.Key, info1.Value)
+                .AddAttribute(info2.Key, info2.Value)
+                .AddAttribute("nillable", value.GetType().IsNullable().ToString().ToLower())
+                .AddAttribute("type", value.GetType().GetGmlType());
 
         public static XElement CreateEnumerableElement(
             string title,
