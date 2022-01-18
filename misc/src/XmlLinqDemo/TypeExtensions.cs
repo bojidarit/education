@@ -2,7 +2,7 @@
 {
 	using System;
 
-	public static class CommonExtensions
+	public static class TypeExtensions
 	{
 		public static bool IsNullable(this Type type) =>
 			Nullable.GetUnderlyingType(type) != null;
