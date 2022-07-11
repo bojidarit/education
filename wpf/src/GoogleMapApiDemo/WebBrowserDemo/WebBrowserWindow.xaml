@@ -1,0 +1,11 @@
+﻿<Window x:Class="WebBrowserDemo.WebBrowserWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:WebBrowserDemo"
+		Title="WebBrowser Demo"
+		Height="900"
+		Width="1500">
+	<DockPanel Margin="3">
+		<WebBrowser x:Name="webBrowser"/>
+	</DockPanel>
+</Window>
