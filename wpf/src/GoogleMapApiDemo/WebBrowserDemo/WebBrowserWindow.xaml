@@ -6,6 +6,7 @@
 		Height="900"
 		Width="1500">
 	<DockPanel Margin="3">
-		<WebBrowser x:Name="webBrowser"/>
+		<WebBrowser x:Name="WebBrowser"
+					Loaded="WebBrowser_Loaded"/>
 	</DockPanel>
 </Window>

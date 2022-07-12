@@ -1,20 +1,17 @@
 ﻿namespace WebBrowserDemo
 {
-    using CommonLib;
     using System.Windows;
     using System.Windows.Input;
 
     public partial class WebBrowserWindow : Window
     {
+        private string dummyHtml = "<html><body><h1>test</h1></body></html>";
+
         public WebBrowserWindow()
         {
             InitializeComponent();
 
             KeyUp += MainWindow_KeyUp;
-
-            var html = Common.GetHtmlFromResource("google-map-edge.html");
-
-            webBrowser.NavigateToString(html);
         }
 
 
@@ -26,6 +23,14 @@
             {
                 Application.Current.Shutdown();
             }
+        }
+
+        private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
+        {
+            // NOT Working in this control
+            //var html = Common.GetHtmlFromResource("google-map-ie10.html");
+
+            WebBrowser.NavigateToString(dummyHtml);
         }
 
         #endregion
