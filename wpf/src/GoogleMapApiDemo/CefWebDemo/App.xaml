@@ -1,0 +1,9 @@
+﻿<Application x:Class="CefWebDemo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CefWebDemo"
+			 StartupUri="CefWebWindow.xaml">
+    <Application.Resources>
+		<local:EnvironmentConverter x:Key="EnvironmentConverter" />
+	</Application.Resources>
+</Application>
