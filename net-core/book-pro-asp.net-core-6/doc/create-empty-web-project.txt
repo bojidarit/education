@@ -1,0 +1,26 @@
+dotnet new globaljson --sdk-version 6.0.100 --output MySolution/MyProject
+dotnet new web --no-https --output MySolution/MyProject --framework net6.0
+dotnet new sln -o MySolution
+dotnet sln MySolution add MySolution/MyProject
+
+
+
+The first command creates a MySolution/MyProject folder that contains a global.json file, which
+specifies that the project will use .NET version 6. The top-level folder, named MySolution, is used to group
+multiple projects. The nested MyProject folder will contain a single project.
+I use the globaljson template to help ensure you get the expected results when following the examples
+in this book. Microsoft is good at ensuring backward compatibility with .NET releases, but breaking changes
+do occur, and it is a good idea to add a global.json file to projects so that everyone in the development
+team is using the same version.
+
+The second command creates the project using the "web" template, which I use for most of the examples
+in this book. As noted in Table 4-3, this template creates a project with the minimum content required for
+ASP.NET Core development. Each template has its own set of arguments that influence the project that
+is created. The --no-https argument creates a project without support for HTTPS. (I explain how to use
+HTTPS in Chapter 16.) The --framework argument selects the .NET runtime that will be used for the project.
+
+The other commands create a solution file that references the new project. Solution files are a
+convenient way of opening multiple related files at the same time. A MySolution.sln file is created in the
+MySolution folder, and opening this file in Visual Studio will load the project created with the web template.
+This is not essential, but it stops Visual Studio from prompting you to create the file when you exit the
+code editor.
