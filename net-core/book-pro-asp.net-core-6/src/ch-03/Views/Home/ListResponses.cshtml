@@ -1,0 +1,45 @@
+@model IEnumerable<PartyInvites.Models.GuestResponse>
+
+@using PartyInvites.Models;
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css">
+    <title>Positrive Responses</title>
+</head>
+
+<body>
+    <div class="p-3 text-center">
+        <h5 class="bg-primary text-white text-center p-2 mb-3">Here is the list of people attending the party</h2>
+        <table class="table table-bordered table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>E-mail</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (GuestResponse item in Model!)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Email</td>
+                        <td>@item.Phone</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <a class="btn btn-primary" asp-action="Index">Go Home</a>
+        </div>
+    </div>
+</body>
+
+</html>

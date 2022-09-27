@@ -1,0 +1,31 @@
+Pro ASP.NET Core 6: Develop Cloud-Ready Web Applications Using MVC, Blazor, and Razor Pages
+Adam Freeman
+
+https://bg.b-ok.xyz/book/21415652/ebc30b
+
+Professional developers will produce leaner applications for the ASP.NET Core platform using the guidance in this best-selling book, now in its 9th edition and updated for ASP.NET Core for .NET 6. It contains detailed explanations of the ASP.NET Core platform and the application frameworks it supports. This cornerstone guide puts ASP.NET Core for .NET 6 into context and dives deep into the tools and techniques required to build modern, extensible web applications. New features and capabilities such as MVC, Razor Pages, Blazor Server, and Blazor WebAssembly are covered, along with demonstrations of how they are applied.
+
+ASP.NET Core for .NET 6 is the latest evolution of Microsoft’s ASP.NET web platform and provides a “host-agnostic” framework and a high-productivity programming model that promotes cleaner code architecture, test-driven development, and powerful extensibility.
+
+Author Adam Freeman has thoroughly revised this market-leading book and explains how to get the most from ASP.NET Core for .NET 6. He starts with the nuts-and-bolts topics, teaching you about middleware components, built-in services, request model binding, and more. As you gain knowledge and confidence, he introduces increasingly more complex topics and advanced features, including endpoint routing and dependency injection. He goes in depth to give you the knowledge you need.
+
+This book follows the same format and style as the popular previous editions but brings everything up to date for the new ASP.NET Core for .NET 6 release and broadens the focus to include all of the ASP.NET Core platform. You will appreciate the fully worked case study of a functioning ASP.NET Core application that you can use as a template for your own projects.
+
+Source code for this book can be found at https://github.com/Apress/pro-asp.net-core-6.
+
+What You Will Learn
+• Explore the entire ASP.NET Core platform
+• Apply the new ASP.NET Core for .NET 6 features in your developer environment
+• See how to create RESTful web services, web applications, and client-side applications
+• Build on your existing knowledge to get up and running with new programming models quickly and effectively
+
+Категории:
+Computers - Web Development
+
+Година: 2022
+Издание: 9
+Издателство: Apress
+Език: English
+ISBN 10: 1484279573
+ISBN 13: 9781484279571
+Файл: EPUB, 86.36 MB
