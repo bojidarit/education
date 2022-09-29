@@ -2,14 +2,27 @@ namespace LanguageFeatures.Models;
 
 public class Product
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     public decimal? Price { get; set; }
 
-    public static Product[] GetProducts() =>
-        new Product[]
+    public Product() { }
+
+    public Product(string name, decimal? price = null)
+    {
+        Name = name;
+        Price = price;
+    }
+
+    public static Product?[] GetProducts() =>
+        new Product?[]
         {
-            new Product { Name = "Kayak", Price = 275M },
-            new Product { Name = "Life Jacket", Price = 48.95M },
+            new("Kayak", 275M),
+            new("Life Jacket", 48.95M),
+            new("Soccer Ball", 19.50M),
+            new("Corner Flag", 34.95M),
+            new("Priceless one"),
+            new(),
+            null,
         };
 }

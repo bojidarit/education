@@ -15,9 +15,14 @@
 <body>
     <ul>
         @foreach (string s in Model)
-        {
-            <li>@s</li>
-        }
+            if (s.StartsWith("Total"))
+            {
+                <li><strong>@s</strong></li>
+            }
+            else
+            {
+                <li>@s</li>
+            }
     </ul>
 </body>
 
