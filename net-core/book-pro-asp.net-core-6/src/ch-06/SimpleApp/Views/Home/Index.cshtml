@@ -1,0 +1,24 @@
+@model IEnumerable<Product>
+@{
+  Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Index</title>
+</head>
+
+<body>
+  <ul>
+    @foreach (Product p in Model ?? Enumerable.Empty<Product>())
+    {
+      <li>@nameof(p.Name): [@p.Name], @nameof(p.Price): @($"{p.Price:C2}")</li>
+    }
+  </ul>
+</body>
+
+</html>
