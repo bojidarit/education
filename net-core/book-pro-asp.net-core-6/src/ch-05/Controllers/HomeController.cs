@@ -2,7 +2,7 @@ namespace LanguageFeatures.Controllers;
 
 public class HomeController : Controller
 {
-    public async Task<ViewResult> Index()
+    public async Task<ViewResult> IndexPageLengths()
     {
         var output = new List<string>();
 
@@ -33,9 +33,9 @@ public class HomeController : Controller
         return View(new string[] { $"Page length = {length}" });
     }
 
-    public ViewResult IndexProducts()
+    public ViewResult Index()
     {
-        var allProducts = Product.GetProducts().Select(p => FormatProduct(p));
+        var allProducts = Product.GetProducts().Select(p => FormatProductInfo(p));
         var list = new List<string>(allProducts);
 
         var products = Product.GetProducts();
@@ -65,14 +65,14 @@ public class HomeController : Controller
     private string FormatTotal(string subTitle, decimal price) =>
         $"Total ({subTitle}): {price:C2}";
 
-    private string FormatProduct(Product? product)
+    private string FormatProductInfo(Product? product)
     {
         if (product == null)
         {
             return "'<NULL>'";
         }
 
-        return $"Name: '{product.Name}', Price: {product.Price:C2}";
+        return $"{nameof(product.Name)}: '{product.Name}', {nameof(product.Price)}: {product.Price:C2}";
     }
 
     #endregion
