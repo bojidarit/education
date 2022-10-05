@@ -1,3 +1,4 @@
+using System.Globalization;
 using EntityFrameworkDemo.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,5 +16,8 @@ app.UseStaticFiles();
 app.MapDefaultControllerRoute();
 
 SeedData.EnsurePopulated(app);
+
+CultureInfo.CurrentCulture = new CultureInfo("en-US");
+CultureInfo.CurrentUICulture = new CultureInfo("en-US");
 
 app.Run();

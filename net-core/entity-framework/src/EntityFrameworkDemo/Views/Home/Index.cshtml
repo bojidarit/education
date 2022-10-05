@@ -1,3 +1,4 @@
+@using System.Globalization
 @model IQueryable<Product>
 
 @{
@@ -15,6 +16,8 @@
 </head>
 
 <body>
+    <h2>UI Culture: @CultureInfo.CurrentUICulture.DisplayName</h2>
+
     <ul>
         @foreach (var p in Model ?? Enumerable.Empty<Product>())
         {
@@ -22,7 +25,7 @@
                 <h3>@p.Name</h3>
                 <div><strong>@p.Category</strong></div>
                 <span>@p.Description</span>
-                <h4>@p.Price.ToString("C2")</h4>
+                <h4>@p.Price.ToString("C2", CultureInfo.CurrentUICulture)</h4>
             </li>
         }
     </ul>
