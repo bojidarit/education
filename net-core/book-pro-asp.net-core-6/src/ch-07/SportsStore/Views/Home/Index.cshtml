@@ -1,1 +1,30 @@
-<h4>Welcome to Sports Store</h4>
+@model IQueryable<Product>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+</head>
+
+<body>
+    <ul>
+        @foreach (var p in Model ?? Enumerable.Empty<Product>())
+        {
+            <li>
+                <h3>@p.Name</h3>
+                <div><strong>@p.Category</strong></div>
+                <span>@p.Description</span>
+                <h4>@p.Price.ToString("C2")</h4>
+            </li>
+        }
+    </ul>
+</body>
+
+</html>
