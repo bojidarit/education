@@ -17,6 +17,8 @@ public class PageLinkTagHelper : TagHelper
         urlHelperFactory = helperFactory;
     }
 
+    #region Properties
+
     [ViewContext]
     [HtmlAttributeNotBound]
     public ViewContext? ViewContext { get; set; }
@@ -24,6 +26,16 @@ public class PageLinkTagHelper : TagHelper
     public PagingInfo? PageModel { get; set; }
 
     public string? PageAction { get; set; }
+
+    public bool PageClassesEnabled { get; set; } = false;
+
+    public string PageClass { get; set; } = String.Empty;
+
+    public string PageClassNormal { get; set; } = String.Empty;
+
+    public string PageClassSelected { get; set; } = String.Empty;
+
+    #endregion
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
@@ -38,6 +50,12 @@ public class PageLinkTagHelper : TagHelper
 
                 tag.Attributes["href"] =
                     urlHelper.Action(PageAction, new { productPage = i });
+
+                if (PageClassesEnabled)
+                {
+                    tag.AddCssClass(PageClass);
+                    tag.AddCssClass(i == PageModel.CurrentPage ? PageClassSelected : PageClassNormal);
+                }
 
                 tag.InnerHtml.Append(i.ToString());
 

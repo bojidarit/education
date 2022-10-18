@@ -1,33 +1,26 @@
 @model ProductsListViewModel
 
-@{
-    Layout = null;
+<div page-model="@Model?.PagingInfo" page-action="Index" page-classes-enabled="true"
+    page-class="btn" page-class-normal="btn-outline-dark"
+    page-class-selected="btn-primary" class="btn-group pull-right m-1">
+</div>
+
+@foreach (var p in Model?.Products ?? Enumerable.Empty<Product>())
+{
+    <div class="card card-otline-primary m-1 p-1">
+        <div class="bg-faded p-1">
+            <h4>
+                @p.Name
+                <span class="badge rounded-pill bg-primary text-white" style="float: right;">
+                    <small>@p.Price.ToString("C2")</small>
+                </span>
+            </h4>
+        </div>
+        <div class="card-text p-1">
+            @p.Description
+            <span class="badge rounded-pill bg-info" style="float: right;">
+                <small>@p.Category</small>
+            </span>
+        </div>
+    </div>
 }
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-</head>
-
-<body>
-    <h2>Current Page: @Model.PagingInfo.CurrentPage</h2>
-    <ul>
-        @foreach (var p in Model?.Products ?? Enumerable.Empty<Product>())
-        {
-            <li>
-                <h3>@p.Name</h3>
-                <div><strong>@p.Category</strong></div>
-                <span>@p.Description</span>
-                <h4>@p.Price.ToString("C2")</h4>
-            </li>
-        }
-    </ul>
-
-    <div page-model="@Model?.PagingInfo" page-action="Index"></div>
-</body>
-
-</html>
