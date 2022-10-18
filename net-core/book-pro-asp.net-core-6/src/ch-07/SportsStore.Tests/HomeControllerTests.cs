@@ -34,4 +34,30 @@ public class HomeControllerTests
         Assert.Equal("P1", productsArray[0].Name);
         Assert.Equal("P2", productsArray[1].Name);
     }
+
+    [Fact]
+    public void Can_Paginate()
+    {
+        // Arrange
+        var products = Enumerable
+            .Range(1, 5)
+            .Select(n => new Product { Id = n, Name = $"P{n}" })
+            .ToArray();
+        var mock = new Mock<IStoreRepository>();
+        mock.Setup(m => m.Products)
+            .Returns(products.AsQueryable<Product>());
+
+        var controller = new HomeController(mock.Object);
+        controller.PageSize = 3;
+
+        // Act
+        var result = (controller.Index(2) as ViewResult)?.ViewData.Model as IEnumerable<Product>
+            ?? Enumerable.Empty<Product>();
+
+        // Assert
+        var productsArray = result.ToArray();
+        Assert.True(productsArray.Length == 2);
+        Assert.Equal("P4", productsArray[0].Name);
+        Assert.Equal("P5", productsArray[1].Name);
+    }
 }
