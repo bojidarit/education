@@ -6,6 +6,7 @@ using Moq;
 using SportsStore.Models;
 using SportsStore.Controllers;
 using Xunit;
+using SportsStore.Models.ViewModels;
 
 namespace SportsStore.Tests;
 
@@ -23,13 +24,16 @@ public class HomeControllerTests
         mock.Setup(m => m.Products)
             .Returns(products.AsQueryable<Product>());
 
-        var controller = new HomeController(mock.Object);
+        var controller = new HomeController(mock.Object)
+        {
+            PageSize = 3
+        };
 
-        // Act
-        var result = (controller.Index() as ViewResult)?.ViewData.Model as IEnumerable<Product>;
+        // Act - Using the default controller that returns all products
+        var result = (controller.Index(1) as ViewResult)?.ViewData.Model as ProductsListViewModel ?? new();
 
         // Assert
-        var productsArray = result?.ToArray() ?? Array.Empty<Product>();
+        var productsArray = result.Products.ToArray();
         Assert.True(productsArray.Length == 2);
         Assert.Equal("P1", productsArray[0].Name);
         Assert.Equal("P2", productsArray[1].Name);
@@ -51,13 +55,41 @@ public class HomeControllerTests
         controller.PageSize = 3;
 
         // Act
-        var result = (controller.Index(2) as ViewResult)?.ViewData.Model as IEnumerable<Product>
-            ?? Enumerable.Empty<Product>();
+        var result = (controller.Index(2) as ViewResult)?.ViewData.Model as ProductsListViewModel ?? new();
 
         // Assert
-        var productsArray = result.ToArray();
+        var productsArray = result.Products.ToArray();
         Assert.True(productsArray.Length == 2);
         Assert.Equal("P4", productsArray[0].Name);
         Assert.Equal("P5", productsArray[1].Name);
+    }
+
+    [Fact]
+    public void Can_Send_Pagination_View_Model()
+    {
+        // Arrange
+        var products = Enumerable
+            .Range(1, 5)
+            .Select(n => new Product { Id = n, Name = $"P{n}" })
+            .ToArray();
+        var mock = new Mock<IStoreRepository>();
+        mock.Setup(m => m.Products)
+            .Returns(products.AsQueryable<Product>());
+
+        var controller = new HomeController(mock.Object)
+        {
+            PageSize = 3
+        };
+
+        // Act
+        var result = (controller.Index(2) as ViewResult)?.ViewData.Model as ProductsListViewModel ?? new();
+
+        // Assert
+        var pagingInfo = result.PagingInfo;
+
+        Assert.Equal(2, pagingInfo.CurrentPage);
+        Assert.Equal(3, pagingInfo.ItemsPerPage);
+        Assert.Equal(5, pagingInfo.TotalItems);
+        Assert.Equal(2, pagingInfo.TotalPages);
     }
 }

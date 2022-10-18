@@ -1,4 +1,4 @@
-@model IQueryable<Product>
+@model ProductsListViewModel
 
 @{
     Layout = null;
@@ -15,7 +15,7 @@
 
 <body>
     <ul>
-        @foreach (var p in Model ?? Enumerable.Empty<Product>())
+        @foreach (var p in Model?.Products ?? Enumerable.Empty<Product>())
         {
             <li>
                 <h3>@p.Name</h3>
@@ -25,6 +25,8 @@
             </li>
         }
     </ul>
+
+    <div page-model="@Model?.PagingInfo" page-action="Index"></div>
 </body>
 
 </html>

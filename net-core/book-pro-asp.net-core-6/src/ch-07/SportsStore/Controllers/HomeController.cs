@@ -12,9 +12,24 @@ public class HomeController : Controller
     public HomeController(IStoreRepository repo) =>
         repository = repo;
 
-    public IActionResult Index(int productPage = 1) =>
-        View(repository.Products
+    public IActionResult Index(int productPage = 1)
+    {
+        var products = repository.Products
             .OrderBy(p => p.Id)
             .Skip((productPage - 1) * PageSize)
-            .Take(PageSize));
+            .Take(PageSize);
+
+        var pagingInfo = new PagingInfo
+        {
+            CurrentPage = productPage,
+            ItemsPerPage = PageSize,
+            TotalItems = repository.Products.Count(),
+        };
+
+        return View(new ProductsListViewModel()
+        {
+            Products = products,
+            PagingInfo = pagingInfo,
+        });
+    }
 }
