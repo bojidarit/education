@@ -1,9 +1,9 @@
 import manageWiFi as net
-print("Connected: ", net.connect())
+print("Connected: ", net.connect('mapex', 'zdraveimapex'))
 # net.disconnect(True)
 
 import ntptime
-print("Seting time from NTP server...")
+print("Setting time from NTP server...")
 ntptime.settime() # this queries the time from an NTP server
 
 import time
@@ -12,7 +12,13 @@ months = {1:"January", 2:"February", 3:"March", 4:"April", 5:"May", 6:"June", 7:
 UTC_OFFSET = 2 * 60 * 60   # East Europe Time Zone
 local_time = time.localtime(time.time() + UTC_OFFSET);
 (year, month, mday, hour, minute, second, weekday, yearday) = local_time
-print('-' * 36)
+print('-' * 77)
 # print("Local time in format (year, month, month-day, hour, min, second, weekday [Monday=0], year-day): ", local_time)
 print(str(mday) + "." + months[month] + "." + str(year) + " " + str(hour) + ":" + str(minute) + ":" + str(second), end=", ")
 print(days[weekday] + ", " + str(yearday) + " day of the year.")
+
+
+def leadingZeroes(num):
+    return '{:02d}'.format(num)
+
+print(leadingZeroes(local_time[3]) + ":" + leadingZeroes(local_time[4]))

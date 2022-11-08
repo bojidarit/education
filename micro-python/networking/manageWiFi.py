@@ -19,11 +19,8 @@ def decode_status(status_code):
         
     return 'Status Code: ' + str(status_code)
 
-def connect(number_of_attempts = 15):
+def connect(ssid, key, number_of_attempts = 15):
     counter = 0;
-
-    ssid = 'mapex'
-    key = 'zdraveimapex'
 
     # STA_IF - Station Mode
     wifi = network.WLAN(network.STA_IF)
@@ -32,9 +29,6 @@ def connect(number_of_attempts = 15):
         if wifi.isconnected():
             print("Already connected to Access-Point [" + wifi.config('essid') + "].")
             return True
-#         print("Re-activating Wi-Fi...")
-#         wifi.active(False)
-#         time.sleep(1)
     else:
         print("Activating Wi-Fi...")
         wifi.active(True)
