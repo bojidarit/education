@@ -1,10 +1,3 @@
-import manageWiFi as net
-print("Connected: ", net.connect('mapex', 'zdraveimapex'))
-
-import ntptime
-print("Setting time from NTP server...")
-ntptime.settime() # this queries the time from an NTP server
-
 import tm1637
 import machine
 import time
@@ -12,18 +5,35 @@ import time
 dio = machine.Pin(21)
 clk = machine.Pin(22)
 
-# rtc = machine.RTC()
-# rtc.datetime((2022, 11, 5, 5, 23, 33, 0, 0))
-# rtc.datetime((YYYY, MM, DD, WD, HH, MM, SS, MS))
-# WD 1 = Monday
-# WD 7 = Sunday
-
-UTC_OFFSET = 2 * 60 * 60   # East Europe Time Zone
-
 tm = tm1637.TM1637(clk = clk, dio = dio)
 tm.brightness(0)
 
+
+def tm_show(text):
+    tm.show(text)
+    time.sleep(1)
+
+
+tm_show("init")
+
+import manageWiFi as net
+wifi_result = net.connect('mapex', 'zdraveimapex')
+print("Connected: ", wifi_result)
+if wifi_result:
+    tm_show("ch01")
+else:
+    tm_show("er01")
+
+
+import ntptime
+print("Setting time from NTP server...")
+ntptime.settime() # this queries the time from an NTP server
+tm_show("ch02")
+
+UTC_OFFSET = 2 * 60 * 60   # East Europe Time Zone
+
 print("Display initialized.")
+print("Showing time loop...")
 
 colon = True
 while True:
