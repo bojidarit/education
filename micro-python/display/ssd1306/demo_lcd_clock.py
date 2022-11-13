@@ -39,7 +39,7 @@ print(text)
 font_show_text(text, 3, 3, 16, True)
 # time.sleep(1)
 
-wifi_result = net.connect('mapex', 'zdraveimapex')
+wifi_result = net.connect('VIVACOM_FiberNet_D439', '3HTpF2Gpk2')
 text = "Wi-Fi Connected: " + str(wifi_result);
 print(text)
 oled.invert(True)
@@ -56,10 +56,16 @@ print(text)
 font_show_text(text, 3, 29, 16, False)
 # time.sleep(1)
 
-ntptime.settime() # this queries the time from an NTP server
+try:
+    # this queries the time from an NTP server
+    ntptime.settime()
+except:
+    print("NTP's settime() rised an error, querying again...")
+    time.sleep(1)
+    ntptime.settime()
 
 text = "NTP: Time set"
-print(text)
+print("We hope that the " + text)
 font_show_text(text, 3, 46, 16, False)
 # time.sleep(1)
 
@@ -72,6 +78,9 @@ months = {1:"January", 2:"February", 3:"March", 4:"April", 5:"May", 6:"June", 7:
 
 def is_day_time(local_time):
     return local_time[3] >= 7 and local_time[3] < 19
+
+def is_active_time(local_time):
+    return local_time[3] >= 7 and local_time[3] < 23
 
 # Contrast value must be between 0 and 255
 def set_contrast(local_time):
@@ -122,15 +131,33 @@ utc_offset = 2 * 60 * 60   # East Europe Time Zone
 local_time = time.localtime(0)
 
 flag = True
+active_time = True
 while True:
     old_time = local_time
     local_time = time.localtime(time.time() + utc_offset)
-    if date_changed(old_time, local_time):
+
+    # when changing from active time to non-active
+    if active_time and (not is_active_time(local_time)):
+        oled.fill(0)
+        
+    date_changed_flag = date_changed(old_time, local_time)
+
+    # when changing from non-active time to active - show date immediately
+    if (not active_time) and is_active_time(local_time):
+        date_changed_flag = True
+        
+    active_time = is_active_time(local_time)
+
+    if active_time and date_changed_flag:
         show_date(local_time)
     daytime = is_day_time(local_time)
+    
     if time_changed(old_time, local_time):
         show_time(local_time, not daytime)
     if daytime:
         show_time_colon(flag)
+    
     time.sleep_ms(500)
     flag = not flag
+
+
