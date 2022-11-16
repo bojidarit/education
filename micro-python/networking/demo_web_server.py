@@ -73,21 +73,28 @@ s.bind(('', PORT_NUMBER))
 print("Listenning for requests with maximum number of queued connections = " + str(MAX_QUEUED_CONNECTIONS_NUM))
 s.listen(MAX_QUEUED_CONNECTIONS_NUM)
 
-while True:
-    # Getting request
-    print_line()
-    conn, addr = s.accept()
-    print('Got a connection from ' + str(addr))
-    request = conn.recv(1024)
-    request = str(request)
-    # print('Content = ' + request)
-    manage_request(request)
-    # Returning the response page
-    response = web_page()
-    conn.send('HTTP/1.1 200 OK\n')
-    conn.send('Content-Type: text/html\n')
-    conn.send('Connection: close\n\n')
-    conn.sendall(response)
-    conn.close()
-    
-
+ok = True
+while ok:
+    try:
+        if gc.mem_free() < 102000:
+          gc.collect()
+        # Getting request
+        print_line()
+        conn, addr = s.accept()
+        print('Got a connection from ' + str(addr))
+        request = conn.recv(1024)
+        request = str(request)
+        # print('Content = ' + request)
+        manage_request(request)
+        # Returning the response page
+        response = web_page()
+        conn.send('HTTP/1.1 200 OK\n')
+        conn.send('Content-Type: text/html\n')
+        conn.send('Connection: close\n\n')
+        conn.sendall(response)
+        conn.close()
+    except OSError as ex:
+        print("OSError:", ex)
+        print("Closing connection and terminating the Web server...")
+        conn.close()
+        ok = False
