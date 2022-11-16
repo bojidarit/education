@@ -34,6 +34,7 @@ def connect(ssid, key, led_pin_no=2, number_of_attempts=10):
         if wifi.isconnected():
             led.value(1)
             print("Already connected to Access-Point [" + wifi.config('essid') + "].")
+            print("('IP', 'subnet mask', 'gateway', 'DNS'):", wifi.ifconfig())
             return True
     else:
         print("Activating Wi-Fi...")
