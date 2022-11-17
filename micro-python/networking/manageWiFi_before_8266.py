@@ -2,7 +2,6 @@ import network
 import time
 import machine
 
-# Led Pin: '2' for general ESP 2, '15' for S2-Mini. '2' and '16' on the ESP8266 (Inverted!!!)
 
 def decode_status(status_code):
     if status_code == network.STAT_IDLE:
@@ -22,8 +21,8 @@ def decode_status(status_code):
         
     return 'Status Code: ' + str(status_code)
 
-
-def connect(ssid, key, led_pin_no=2, led_flag=True, number_of_attempts=10):
+# Led Pin: '2' for gemeral ESP 2, '15' for S2-Mini
+def connect(ssid, key, led_pin_no=2, number_of_attempts=10):
     led = machine.Pin(led_pin_no, machine.Pin.OUT)
     
     counter = 0;
@@ -45,12 +44,12 @@ def connect(ssid, key, led_pin_no=2, led_flag=True, number_of_attempts=10):
 
     if not wifi.isconnected():
         print('Connetcting to Access-Point [' + ssid + ']...')
-        flag = led_flag
+        flag = True
         while (not wifi.isconnected() and counter < number_of_attempts):
             print(str(number_of_attempts - counter - 1), decode_status(wifi.status()))
             counter = counter + 1
             time.sleep(1)
-            led.value(flag)
+            led.value(1 if flag else 0)
             flag = not flag
 
     print("-" * 36)
@@ -59,17 +58,18 @@ def connect(ssid, key, led_pin_no=2, led_flag=True, number_of_attempts=10):
         print("Connected to Access-Point [" + ssid + "].")
         print("('IP', 'subnet mask', 'gateway', 'DNS'):", wifi.ifconfig())
         # print("RSSI:", wifi.status("rssi"), " with max transmit power ", wifi.config('txpower'), "dBm") # Do not wotk on S2-Mini
-        led.value(led_flag)
+        led.value(1)
         return True
     else:
         print("Still no connection after " + str(number_of_attempts) + " attempt(s)")
-        led.value(not led_flag)
+        led.value(0)
         return False
 
 
-def disconnect(led_pin_no=2, led_flag=False, decativate=True):
+# Led Pin: '2' for gemeral ESP 2, '15' for S2-Mini
+def disconnect(led_pin_no=2, decativate=True):
     led = machine.Pin(led_pin_no, machine.Pin.OUT)
-    led.value(led_flag)
+    led.value(0)
     wifi = network.WLAN(network.STA_IF)
     
     if (not wifi.active()):
@@ -89,7 +89,8 @@ def disconnect(led_pin_no=2, led_flag=False, decativate=True):
         print("... Wi-Fi is active: " + str(wifi.active()))
 
 
-def connect_in_loop(ssid, key, led_pin_no=2, interations_count=-1, led_stay_on=False, led_flag=True):
+# Led Pin: '2' for gemeral ESP 2, '15' for S2-Mini
+def connect_in_loop(ssid, key, led_pin_no=2, interations_count=-1, led_stay_on=False):
     result = False
     counter = 1
     while (not result) or (interations_count > 0 and counter <= interations_count):
@@ -101,12 +102,11 @@ def connect_in_loop(ssid, key, led_pin_no=2, interations_count=-1, led_stay_on=F
     if result:
         time.sleep(1)
         led = machine.Pin(led_pin_no, machine.Pin.OUT)
-        led.value(not led_flag)
-        flag = led_flag
+        led.value(0)
+        flag = True
         for i in range (0, 6):
             time.sleep_ms(300)
             led.value(flag)
             flag = not flag
 
-    led.value(led_flag if led_stay_on else not led_flag)
-
+    led.value(led_stay_on)
