@@ -22,14 +22,15 @@ print("Default I2C_0:", oled_i2c)
 oled_i2c_1 = machine.I2C(1)
 print("Secondary I2C_1:", oled_i2c_1)
 
-used_i2c = oled_i2c_1
-used_i2c_id = str(oled_i2c_1)[4:5]
+used_i2c = oled_i2c
+used_i2c_id = str(used_i2c)[4:5]
 
 print_line()
 try:
     oled_ssd1306 = ssd1306.SSD1306_I2C(LCD_WIDTH, LCD_HEIGHT, used_i2c)
     print("SSD1306 I2C_"+used_i2c_id+" address:", oled_ssd1306.addr, "/", hex(oled_ssd1306.addr))
-    oled_ssd1306.text('Hello, World!', 0, 0, 1)
+    # oled_ssd1306.invert(1)
+    oled_ssd1306.text("Hello I2C - "+used_i2c_id, 10, 10, 1)
     oled_ssd1306.show()
 except OSError as exc:
     print_line()
@@ -38,4 +39,5 @@ except OSError as exc:
         print("No such device")
     print_line()
 
+print_line()
 print('-= END =-')
