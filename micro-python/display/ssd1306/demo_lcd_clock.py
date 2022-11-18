@@ -4,13 +4,15 @@ import font
 import time
 import manageWiFi as net
 
+SCL_PIN = 22 # S2-Mini: 35, 9; Regular ESP32: 22
+SDA_PIN = 21 # S2-Mini: 34, 8; Regular ESP32: 21
 
 lcd_width = 128 # pixels
 lcd_height = 64 # 0.91 inch with 32 and 0.96 inch with 64 pixels
 lcd_address = 0x3c
 
-scl = machine.Pin(22, machine.Pin.OUT, machine.Pin.PULL_UP)
-sda = machine.Pin(21, machine.Pin.OUT, machine.Pin.PULL_UP)
+scl = machine.Pin(SCL_PIN, machine.Pin.OUT, machine.Pin.PULL_UP)
+sda = machine.Pin(SDA_PIN, machine.Pin.OUT, machine.Pin.PULL_UP)
 
 i2c = machine.SoftI2C(scl=scl, sda=sda)
 oled = ssd1306.SSD1306_I2C(lcd_width, lcd_height, i2c, addr=lcd_address)
